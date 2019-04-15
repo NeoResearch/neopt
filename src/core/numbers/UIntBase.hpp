@@ -8,6 +8,7 @@
 #include<ISerializable.h>
 #include<IEquatable.h>
 #include<IObject.h>
+#include<vhelper.h>
 
 namespace neopt
 {
@@ -17,7 +18,7 @@ namespace neopt
    /// </summary>
    class UIntBase : public IEquatable<UIntBase>, public ISerializable //, public IObject (TODO: add only if very necessary)
    {
-   private:
+   protected: // TODO: make private?
       /// <summary>
       /// Storing unsigned int in a little-endian byte array.
       /// </summary>
@@ -36,7 +37,7 @@ namespace neopt
    protected:
 
       // data it's automatically initialized with given size.
-      UIntBase(int bytes)
+      UIntBase(int bytes = 0)
          : data_bytes(vbyte(bytes))
       {
       }

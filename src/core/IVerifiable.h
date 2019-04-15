@@ -5,7 +5,6 @@
 #include<vector>
 
 // neopt core part
-#include<numbers/UIntBase.hpp> // TODO: remove
 #include<ISerializable.h>
 #include<IScriptContainer.h>
 #include<ISnapshot.h> // TODO: remove if possible
@@ -25,7 +24,7 @@ public:
    virtual vector<Witness> getWitnesses() = 0;
 
    // TODO: if possible, remove ISnapshot from here
-   virtual vector<UIntBase> GetScriptHashesForVerifying(ISnapshot snapshot) = 0;
+   virtual vector<UInt160> GetScriptHashesForVerifying(ISnapshot snapshot) = 0;
 
    virtual void DeserializeUnsigned(IBinaryReader& reader) = 0;
 

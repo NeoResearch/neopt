@@ -5,7 +5,7 @@
 #include<vector>
 
 // core includes
-#include<vhelper.h> // TODO: verify if it's nice here or not
+// ... none
 
 namespace neopt
 {
@@ -15,7 +15,7 @@ namespace neopt
 typedef unsigned char byte;
 
 // byte array definition
-typedef vector<byte> vbyte;
+typedef std::vector<byte> vbyte;
 
 #define NEOPT_EXCEPTION(str) { printf("neopt error: %s\n", str); exit(1); }
 

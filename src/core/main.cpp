@@ -11,6 +11,7 @@
 // neopt core includes
 #include<IEquatable.h>
 #include<numbers/UIntBase.hpp>
+#include<numbers/UInt160.hpp>
 #include<IScriptContainer.h>
 #include<IVerifiable.h>
 
@@ -21,6 +22,7 @@ int main()
 {
    IEquatable<int>* ieq = nullptr;
    UIntBase* uint = nullptr;
+   UInt160 uint160;
    IScriptContainer* iscript = nullptr;
    IVerifiable* iverifiable = nullptr;
 
