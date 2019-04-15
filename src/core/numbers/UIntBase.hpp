@@ -5,9 +5,9 @@
 #include<vector>
 
 // neopt core part
-#include<ISerializable.h>
-#include<IEquatable.h>
-#include<IObject.h>
+#include<system/ISerializable.h>
+#include<system/IEquatable.h>
+#include<system/IObject.h>
 #include<vhelper.h>
 
 namespace neopt

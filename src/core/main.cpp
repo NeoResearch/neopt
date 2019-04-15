@@ -9,7 +9,7 @@
 #include<vector>
 
 // neopt core includes
-#include<IEquatable.h>
+#include<system/IEquatable.h>
 #include<numbers/UIntBase.hpp>
 #include<numbers/UInt160.hpp>
 #include<IScriptContainer.h>

@@ -5,7 +5,7 @@
 #include<vector>
 
 // neopt core part
-#include<ISerializable.h>
+#include<system/ISerializable.h>
 #include<IScriptContainer.h>
 #include<ISnapshot.h> // TODO: remove if possible
 

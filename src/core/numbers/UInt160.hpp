@@ -5,9 +5,9 @@
 #include<vector>
 
 // neopt core part
-#include<ISerializable.h>
-#include<IEquatable.h>
-#include<IComparable.h>
+#include<system/ISerializable.h>
+#include<system/IEquatable.h>
+#include<system/IComparable.h>
 #include<numbers/UIntBase.hpp>
 #include<shelper.h>
 
