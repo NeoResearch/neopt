@@ -5,6 +5,7 @@ namespace neopt
 {
 // basic types for Neo core
 
+// the simplest chunk of information
 typedef unsigned char byte;
 
 }

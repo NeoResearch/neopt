@@ -10,6 +10,7 @@
 
 // neopt core includes
 #include<IScriptContainer.h>
+#include<IVerifiable.h>
 
 using namespace std;
 using namespace neopt;
@@ -17,6 +18,7 @@ using namespace neopt;
 int main()
 {
    IScriptContainer* iscript = nullptr;
+   IVerifiable* iverifiable = nullptr;
 
    return 0;
 }

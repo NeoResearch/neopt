@@ -15,7 +15,8 @@ namespace neopt
 class IScriptContainer
 {
 public:
-  virtual vector<byte> GetMessage() = 0;
+   // use move semantics for "move-based" return (similar to "copy-based")
+   virtual vector<byte> GetMessage() = 0;
 
 };
 
