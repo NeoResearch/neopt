@@ -11,6 +11,8 @@
 // neo core
 #include<Types.h>
 
+using namespace std; // TODO: avoid!
+
 namespace neopt
 {
 

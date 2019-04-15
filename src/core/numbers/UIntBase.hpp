@@ -8,7 +8,6 @@
 #include<ISerializable.h>
 #include<IEquatable.h>
 #include<IObject.h>
-#include<vhelper.h>
 
 namespace neopt
 {
@@ -22,7 +21,7 @@ namespace neopt
       /// <summary>
       /// Storing unsigned int in a little-endian byte array.
       /// </summary>
-      vector<byte> data_bytes;
+      vbyte data_bytes;
 
    public:
       /// <summary>
@@ -38,14 +37,14 @@ namespace neopt
 
       // data it's automatically initialized with given size.
       UIntBase(int bytes)
-         : data_bytes(vector<byte>(bytes))
+         : data_bytes(vbyte(bytes))
       {
       }
 
       /// <summary>
       /// Base constructor receives the intended number of bytes and a byte array.
       /// </summary>
-      UIntBase(int bytes, vector<byte> value)
+      UIntBase(int bytes, vbyte value)
       {
          if (value.size() != (unsigned)bytes)
             NEOPT_EXCEPTION("ArgumentException");//throw new ArgumentException(); // TODO: throw or NOT? exceptions are not good for performance...
@@ -129,7 +128,7 @@ namespace neopt
       /// <summary>
       /// Method ToArray() returns the byte array data_bytes, which stores the little-endian unsigned int
       /// </summary>
-      vector<byte> ToArray()
+      vbyte ToArray()
       {
          return data_bytes; // TODO: ensure move semantics
       }
