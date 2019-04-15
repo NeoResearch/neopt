@@ -1,10 +1,13 @@
 #ifndef IBINARYREADER_H
 #define IBINARYREADER_H
 
-using namespace std; // TODO: do not use that in the future... prefer std::vector instead
+// system includes
+#include<vector>
 
 // neopt core part
 #include<Types.h>
+
+using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 
 namespace neopt
 {
@@ -12,8 +15,8 @@ namespace neopt
 class IBinaryReader
 {
 public:
-   // TODO: what's the best serialization format?
-
+   // read data directly on vector
+   virtual void Read(vector<byte>& data, int begin, int readsize) = 0;
 };
 
 }

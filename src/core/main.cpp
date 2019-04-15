@@ -9,6 +9,8 @@
 #include<vector>
 
 // neopt core includes
+#include<IEquatable.h>
+#include<numbers/UIntBase.hpp>
 #include<IScriptContainer.h>
 #include<IVerifiable.h>
 
@@ -17,6 +19,8 @@ using namespace neopt;
 
 int main()
 {
+   IEquatable<int>* ieq = nullptr;
+   UIntBase* uint = nullptr;
    IScriptContainer* iscript = nullptr;
    IVerifiable* iverifiable = nullptr;
 

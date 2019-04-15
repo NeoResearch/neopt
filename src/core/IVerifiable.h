@@ -5,8 +5,13 @@
 #include<vector>
 
 // neopt core part
+#include<numbers/UIntBase.hpp> // TODO: remove
 #include<ISerializable.h>
 #include<IScriptContainer.h>
+#include<ISnapshot.h> // TODO: remove if possible
+
+#include<numbers/UInt160.hpp>
+#include<Witness.h>
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 
@@ -17,10 +22,14 @@ class IVerifiable : public IScriptContainer, public ISerializable
 {
 public:
 
+   virtual vector<Witness> getWitnesses() = 0;
 
-   virtual void DeserializeUnsigned(IBinaryReader reader) = 0;
+   // TODO: if possible, remove ISnapshot from here
+   virtual vector<UIntBase> GetScriptHashesForVerifying(ISnapshot snapshot) = 0;
 
-   virtual void SerializeUnsigned(IBinaryWriter writer) = 0;
+   virtual void DeserializeUnsigned(IBinaryReader& reader) = 0;
+
+   virtual void SerializeUnsigned(IBinaryWriter& writer) = 0;
 
 };
 

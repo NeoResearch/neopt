@@ -12,8 +12,8 @@ namespace neopt
 class IBinaryWriter
 {
 public:
-   // TODO: what's the best serialization format?
-
+   // writes data directly from vector
+   virtual void Write(const vector<byte>& data) = 0;
 };
 
 }
