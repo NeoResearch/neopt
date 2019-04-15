@@ -5,7 +5,7 @@
 #include<vector>
 
 // neopt core part
-#include<Types.h>
+#include<system/types.h>
 
 namespace neopt
 {

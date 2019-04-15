@@ -4,7 +4,7 @@
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 
 // neopt core part
-#include<Types.h>
+#include<system/types.h>
 
 namespace neopt
 {

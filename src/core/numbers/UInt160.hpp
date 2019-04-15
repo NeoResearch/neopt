@@ -9,7 +9,7 @@
 #include<system/IEquatable.h>
 #include<system/IComparable.h>
 #include<numbers/UIntBase.hpp>
-#include<shelper.h>
+#include<system/shelper.h>
 
 namespace neopt
 {

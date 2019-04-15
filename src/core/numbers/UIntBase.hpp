@@ -8,7 +8,7 @@
 #include<system/ISerializable.h>
 #include<system/IEquatable.h>
 #include<system/IObject.h>
-#include<vhelper.h>
+#include<system/vhelper.h>
 
 namespace neopt
 {
