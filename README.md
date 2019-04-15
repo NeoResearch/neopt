@@ -39,6 +39,15 @@ The object is to build:
 4. **mempool**
 5. **consensus**
 
+### How to accomplish that?
+Ok, it's a lot of stuff to build, so we need to focus on:
+1. Implement complete specification in a portable manner
+2. Code optimization
+
+So, it doesn't matter if it's not being build in the most efficient way,
+as long as this job is done **as quickly as possible**, in a **portable** and **testable** manner.
+If not fully efficient, at least it should be perfectly safe for use.
+
 ### License
 
 MIT License (for now, perhaps migrate to Apache 2.0?)
