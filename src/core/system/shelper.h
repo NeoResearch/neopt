@@ -24,18 +24,21 @@ public:
    static bool StartsWith(const string& v, string value)
    {
       // TODO: implement
+      NEOPT_EXCEPTION("Not implemented yet: StartsWith");
       return false;
    }
 
    static string Substring(const string& v, int from)
    {
       // TODO: implement
+      NEOPT_EXCEPTION("Not implemented yet: Substring");
       return "";
    }
 
    static vbyte HexToBytes(const string& v)
    {
       // TODO: implement
+      NEOPT_EXCEPTION("Not implemented yet: HexToBytes");
       return vbyte(0);
    }
 
