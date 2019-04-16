@@ -14,6 +14,7 @@
 #include<numbers/UInt160.hpp>
 #include<IScriptContainer.h>
 #include<IVerifiable.h>
+#include<IInventory.h>
 
 using namespace std;
 using namespace neopt;
@@ -25,6 +26,7 @@ int main()
    UInt160 uint160;
    IScriptContainer* iscript = nullptr;
    IVerifiable* iverifiable = nullptr;
+   IInventory* iinventory = nullptr;
 
    return 0;
 }
