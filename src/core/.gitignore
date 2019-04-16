@@ -3,3 +3,4 @@ neopt-core-test
 *.tar.gz
 tmp_build
 openssl_src
+libcrypto_openssl.a

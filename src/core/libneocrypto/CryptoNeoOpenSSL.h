@@ -21,7 +21,8 @@
 namespace neopt
 {
 
-class libcrypto : public ICrypto
+// cryptography for Neo using openssl
+class CryptoNeoOpenSSL : public ICrypto
 {
 public:
    vbyte Hash160(const vbyte& message);

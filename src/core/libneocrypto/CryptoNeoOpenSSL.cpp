@@ -1,4 +1,4 @@
-#include <libcrypto/libcrypto.h>
+#include <libneocrypto/CryptoNeoOpenSSL.h>
 
 using namespace neopt;
 
@@ -6,17 +6,17 @@ using namespace neopt;
 // external functions
 // ==================
 
-vbyte libcrypto::Hash160(const vbyte& message)
+vbyte CryptoNeoOpenSSL::Hash160(const vbyte& message)
 {
 	return vbyte(0);
 }
 
-vbyte libcrypto::Hash256(const vbyte& message)
+vbyte CryptoNeoOpenSSL::Hash256(const vbyte& message)
 {
 	return vbyte(0);
 }
 
-bool libcrypto::VerifySignature(const vbyte& message, const byte& signature, const byte& pubkey)
+bool CryptoNeoOpenSSL::VerifySignature(const vbyte& message, const byte& signature, const byte& pubkey)
 {
 	return false;
 }
@@ -26,31 +26,31 @@ bool libcrypto::VerifySignature(const vbyte& message, const byte& signature, con
 // =========================
 
 
-const byte libcrypto::EMPTY_SHA1[] =
+const byte CryptoNeoOpenSSL::EMPTY_SHA1[] =
 {
 	0xda,0x39,0xa3,0xee,0x5e,0x6b,0x4b,0x0d,0x32,0x55,
 	0xbf,0xef,0x95,0x60,0x18,0x90,0xaf,0xd8,0x07,0x09
 };
 
-const byte libcrypto::EMPTY_HASH160[] =
+const byte CryptoNeoOpenSSL::EMPTY_HASH160[] =
 {
 	0xb4,0x72,0xa2,0x66,0xd0,0xbd,0x89,0xc1,0x37,0x06,
 	0xa4,0x13,0x2c,0xcf,0xb1,0x6f,0x7c,0x3b,0x9f,0xcb
 };
 
-const byte libcrypto::EMPTY_SHA256[] =
+const byte CryptoNeoOpenSSL::EMPTY_SHA256[] =
 {
 	0xe3,0xb0,0xc4,0x42,0x98,0xfc,0x1c,0x14,0x9a,0xfb,0xf4,0xc8,0x99,0x6f,0xb9,0x24,
 	0x27,0xae,0x41,0xe4,0x64,0x9b,0x93,0x4c,0xa4,0x95,0x99,0x1b,0x78,0x52,0xb8,0x55
 };
 
-const byte libcrypto::EMPTY_HASH256[] =
+const byte CryptoNeoOpenSSL::EMPTY_HASH256[] =
 {
 	0x5d,0xf6,0xe0,0xe2,0x76,0x13,0x59,0xd3,0x0a,0x82,0x75,0x05,0x8e,0x29,0x9f,0xcc,
 	0x03,0x81,0x53,0x45,0x45,0xf5,0x5c,0xf4,0x3e,0x41,0x98,0x3f,0x5d,0x4c,0x94,0x56
 };
 
-int16 libcrypto::lVerifySignature
+int16 CryptoNeoOpenSSL::lVerifySignature
 (
 	byte* data, int32 dataLength,
 	byte* signature, int32 signatureLength,
@@ -119,9 +119,9 @@ int16 libcrypto::lVerifySignature
 					{
 						if (gen_status == 0x01)
 						{
-							byte hash[libcrypto::SHA256_LENGTH];
+							byte hash[CryptoNeoOpenSSL::SHA256_LENGTH];
 							lComputeSHA256(data, dataLength, hash);
-							ret = ECDSA_do_verify(hash, libcrypto::SHA256_LENGTH, sig, eckey);
+							ret = ECDSA_do_verify(hash, CryptoNeoOpenSSL::SHA256_LENGTH, sig, eckey);
 						}
 
 						// Free r,s and sig
@@ -155,11 +155,11 @@ int16 libcrypto::lVerifySignature
 	return ret == 0x01 ? 0x01 : 0x00;
 }
 
-void libcrypto::lComputeHash160(byte* data, int32 length, byte* output)
+void CryptoNeoOpenSSL::lComputeHash160(byte* data, int32 length, byte* output)
 {
 	if (length <= 0)
 	{
-		memcpy(output, libcrypto::EMPTY_HASH160, libcrypto::HASH160_LENGTH);
+		memcpy(output, CryptoNeoOpenSSL::EMPTY_HASH160, CryptoNeoOpenSSL::HASH160_LENGTH);
 		return;
 	}
 
@@ -179,11 +179,11 @@ void libcrypto::lComputeHash160(byte* data, int32 length, byte* output)
 	OPENSSL_cleanse(&c, sizeof(c));
 }
 
-void libcrypto::lComputeHash256(byte* data, int32 length, byte* output)
+void CryptoNeoOpenSSL::lComputeHash256(byte* data, int32 length, byte* output)
 {
 	if (length <= 0)
 	{
-		memcpy(output, libcrypto::EMPTY_HASH256, libcrypto::HASH256_LENGTH);
+		memcpy(output, CryptoNeoOpenSSL::EMPTY_HASH256, CryptoNeoOpenSSL::HASH256_LENGTH);
 		return;
 	}
 
@@ -198,11 +198,11 @@ void libcrypto::lComputeHash256(byte* data, int32 length, byte* output)
 	lComputeSHA256(digest, SHA256_LENGTH, output);
 }
 
-void libcrypto::lComputeSHA256(byte* data, int32 length, byte* output)
+void CryptoNeoOpenSSL::lComputeSHA256(byte* data, int32 length, byte* output)
 {
 	if (length <= 0)
 	{
-		memcpy(output, libcrypto::EMPTY_SHA256, libcrypto::SHA256_LENGTH);
+		memcpy(output, CryptoNeoOpenSSL::EMPTY_SHA256, CryptoNeoOpenSSL::SHA256_LENGTH);
 		return;
 	}
 
@@ -213,11 +213,11 @@ void libcrypto::lComputeSHA256(byte* data, int32 length, byte* output)
 	OPENSSL_cleanse(&c, sizeof(c));
 }
 
-void libcrypto::lComputeSHA1(byte* data, int32 length, byte* output)
+void CryptoNeoOpenSSL::lComputeSHA1(byte* data, int32 length, byte* output)
 {
 	if (length <= 0)
 	{
-		memcpy(output, libcrypto::EMPTY_SHA1, libcrypto::SHA1_LENGTH);
+		memcpy(output, CryptoNeoOpenSSL::EMPTY_SHA1, CryptoNeoOpenSSL::SHA1_LENGTH);
 		return;
 	}
 

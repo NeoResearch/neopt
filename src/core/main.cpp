@@ -17,7 +17,7 @@
 #include<IInventory.h>
 #include<Transaction.hpp>
 #include<crypto/ICrypto.h>
-#include<libcrypto/libcrypto.h>
+#include<libneocrypto/CryptoNeoOpenSSL.h>
 
 using namespace std;
 using namespace neopt;
@@ -32,7 +32,7 @@ int main()
    IInventory* iinventory = nullptr;
    Transaction* tx = nullptr;
 
-   libcrypto lib;
+   CryptoNeoOpenSSL lib;
    vbyte v;
    v = lib.Hash160(v);
 
