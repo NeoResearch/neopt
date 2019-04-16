@@ -15,6 +15,7 @@
 #include<IScriptContainer.h>
 #include<IVerifiable.h>
 #include<IInventory.h>
+#include<Transaction.hpp>
 
 using namespace std;
 using namespace neopt;
@@ -27,6 +28,7 @@ int main()
    IScriptContainer* iscript = nullptr;
    IVerifiable* iverifiable = nullptr;
    IInventory* iinventory = nullptr;
+   Transaction* tx = nullptr;
 
    return 0;
 }
