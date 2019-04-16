@@ -39,6 +39,13 @@ public:
          ss << v[i];
       return ss.str();
    }
+
+   static int GetVarSize(const vbyte& v)
+   {
+      // TODO: implement
+      NEOPT_EXCEPTION("Not implemented GetVarSize");
+      return 0;
+   }
 };
 
 // TODO: define all operators here that are necessary

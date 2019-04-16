@@ -14,6 +14,9 @@ class IBinaryWriter
 public:
    // writes data directly from vector
    virtual void Write(const vector<byte>& data) = 0;
+
+   // writes var bytes on vector
+   virtual void WriteVarBytes(vbyte& v) = 0;
 };
 
 }
