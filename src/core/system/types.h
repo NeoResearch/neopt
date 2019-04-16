@@ -14,6 +14,12 @@ namespace neopt
 // the simplest chunk of information
 typedef unsigned char byte;
 
+// signed short int
+typedef short  int16;
+
+// signed int
+typedef int int32;
+
 // byte array definition
 typedef std::vector<byte> vbyte;
 

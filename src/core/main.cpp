@@ -16,6 +16,8 @@
 #include<IVerifiable.h>
 #include<IInventory.h>
 #include<Transaction.hpp>
+#include<crypto/ICrypto.h>
+#include<libcrypto/libcrypto.h>
 
 using namespace std;
 using namespace neopt;
@@ -29,6 +31,12 @@ int main()
    IVerifiable* iverifiable = nullptr;
    IInventory* iinventory = nullptr;
    Transaction* tx = nullptr;
+
+   libcrypto lib;
+   vbyte v;
+   v = lib.Hash160(v);
+
+   cout << "Finished sucessfully" << endl;
 
    return 0;
 }
