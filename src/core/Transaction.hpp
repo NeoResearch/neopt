@@ -9,6 +9,7 @@
 #include<system/IEquatable.h>
 #include<system/IComparable.h>
 #include<numbers/UIntBase.hpp>
+#include<numbers/BigInteger.h>
 #include<system/shelper.h>
 
 namespace neopt
@@ -18,7 +19,7 @@ namespace neopt
    {
    public:
       // TODO: finally fill here with transaction info
-      
+
       bool Equals(const Transaction* other)
       {
          if(other == nullptr)

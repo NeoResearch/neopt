@@ -16,7 +16,7 @@ namespace neopt
       // This class can be used as CRTP: the Curiously Recurring Template Pattern
 
       // CompareTo: compares and returns an integer
-      virtual int CompareTo(const T& other) = 0;
+      virtual int CompareTo(const T& other) const = 0;
    };
 }
 

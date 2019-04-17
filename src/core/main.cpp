@@ -18,6 +18,7 @@
 #include<Transaction.hpp>
 #include<crypto/ICrypto.h>
 #include<crypto/CryptoNeoOpenSSL.h>
+#include<numbers/Fixed8.hpp>
 
 using namespace std;
 using namespace neopt;

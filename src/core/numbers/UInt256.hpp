@@ -46,10 +46,10 @@ namespace neopt
       /// Method CompareTo returns 1 if this UInt256 is bigger than other UInt256; -1 if it's smaller; 0 if it's equals
       /// Example: assume this is 01ff00ff00ff00ff00ff00ff00ff00ff00ff00a4, this.CompareTo(02ff00ff00ff00ff00ff00ff00ff00ff00ff00a3) returns 1
       /// </summary>
-      int CompareTo(const UInt256& other)
+      int CompareTo(const UInt256& other) const
       {
          const vbyte& vother = other.data_bytes;
-         vbyte& vthis  = this->data_bytes;
+         const vbyte& vthis  = this->data_bytes;
          if(vother.size() != vthis.size())
             return 1; // or -1 or 0 (TODO ?)
          // TODO: implement and verify this logic (must be little endian!)

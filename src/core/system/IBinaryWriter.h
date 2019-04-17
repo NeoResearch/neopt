@@ -15,6 +15,8 @@ public:
    // writes data directly from vector
    virtual void Write(const vector<byte>& data) = 0;
 
+   virtual void Write(long v) = 0;
+
    // writes var bytes on vector
    virtual void WriteVarBytes(vbyte& v) = 0;
 };
