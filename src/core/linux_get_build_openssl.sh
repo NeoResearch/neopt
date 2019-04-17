@@ -21,10 +21,9 @@ make && make test
 cd ..
 echo "# Finished building $OPENSSL_VER (for Linux)"
 
-mkdir openssl
-mv openssl_src/include openssl/   # include files
-mv tmp_build/include/openssl/* openssl/include/openssl/
-mv tmp_build/libcrypto.a openssl/liblinux-openssl-crypto-x86_64.a
+mkdir libneocrypto/openssl
+mv openssl_src/include libneocrypto/openssl/   # include files
+mv tmp_build/include/openssl/* libneocrypto/openssl/include/openssl/
+mv tmp_build/libcrypto.a libneocrypto/openssl/liblinux-openssl-crypto-x86_64.a
 rm -rf openssl_src
 rm -rf tmp_build
-

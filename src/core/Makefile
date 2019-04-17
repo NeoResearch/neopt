@@ -1,5 +1,5 @@
 all: #simple testing
-	g++ -Ofast --std=c++11 -I. -Iopenssl/include libneocrypto/CryptoNeoOpenSSL.cpp -Lopenssl -llinux-openssl-crypto-x86_64 -lpthread -ldl main.cpp -o neopt-core-test
+	g++ -Ofast --std=c++11 -I. -Ilibneocrypto/openssl/include libneocrypto/CryptoNeoOpenSSL.cpp -Llibneocrypto/openssl -llinux-openssl-crypto-x86_64 -lpthread -ldl main.cpp -o neopt-core-test
 
 # no need to build external lib for now
 #all: libcrypto_openssl.a
