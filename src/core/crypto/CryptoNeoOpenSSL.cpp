@@ -22,8 +22,10 @@ vbyte CryptoNeoOpenSSL::Hash256(const vbyte& message)
 
 bool CryptoNeoOpenSSL::VerifySignature(const vbyte& message, const vbyte& signature, const vbyte& pubkey)
 {
-	return false;
-
+	int16 ret = lVerifySignature(message.data(), message.size(), signature.data(), signature.size(), pubkey.data(), pubkey.size());
+	if (ret==-1)
+		NEOPT_EXCEPTION("ERROR ON VerifySignature");
+	return ret == 1;
 }
 
 vbyte CryptoNeoOpenSSL::SHA256(const vbyte& message)
@@ -64,9 +66,9 @@ const byte CryptoNeoOpenSSL::EMPTY_HASH256[] =
 
 int16 CryptoNeoOpenSSL::lVerifySignature
 (
-	byte* data, int32 dataLength,
-	byte* signature, int32 signatureLength,
-	byte* pubKey, int32 pubKeyLength
+	const byte* data, int32 dataLength,
+	const byte* signature, int32 signatureLength,
+	const byte* pubKey, int32 pubKeyLength
 )
 {
 	if (signatureLength != 64)
@@ -77,13 +79,15 @@ int16 CryptoNeoOpenSSL::lVerifySignature
 
 	if (pubKeyLength == 33 && (pubKey[0] == 0x02 || pubKey[0] == 0x03))
 	{
-		realPubKey = pubKey;
+		// remove const from array: must make sure realPubKey data is never changed
+		realPubKey = const_cast<byte*>(pubKey);
 		realPublicKeyLength = 33;
 	}
 	else if (pubKeyLength == 64)
 	{
 		// 0x04 first
 
+		// TODO: verify if no leak happens in this case
 		realPubKey = new byte[65];
 		realPubKey[0] = 0x04;
 
@@ -94,7 +98,8 @@ int16 CryptoNeoOpenSSL::lVerifySignature
 		if (pubKey[0] != 0x04)
 			return -1;
 
-		realPubKey = data;
+		// remove const from array: must make sure realPubKey data is never changed
+		realPubKey = const_cast<byte*>(data);
 	}
 	else if (pubKeyLength != 65)
 	{

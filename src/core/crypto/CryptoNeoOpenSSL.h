@@ -55,7 +55,7 @@ public:
 	static void lComputeHash256(const byte* data, int32 length, byte* output);
 
 	// -1=ERROR , 0= False , 1=True
-	static int16 lVerifySignature(byte* data, int32 dataLength, byte* signature, int32 signatureLength, byte* pubKey, int32 pubKeyLength);
+	static int16 lVerifySignature(const byte* data, int32 dataLength, const byte* signature, int32 signatureLength, const byte* pubKey, int32 pubKeyLength);
 
 private:
 	static const int32 _curve = NID_X9_62_prime256v1;
