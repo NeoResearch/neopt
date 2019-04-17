@@ -1,4 +1,4 @@
-#include <libneocrypto/CryptoNeoOpenSSL.h>
+#include <crypto/CryptoNeoOpenSSL.h>
 
 using namespace neopt;
 
@@ -8,7 +8,10 @@ using namespace neopt;
 
 vbyte CryptoNeoOpenSSL::Hash160(const vbyte& message)
 {
-	return vbyte(0);
+	vbyte voutput(HASH160_LENGTH);
+	lComputeHash160(message.data(), message.size(), voutput.data());
+	return voutput;
+	//return vbyte(output, output+HASH160_LENGTH);
 }
 
 vbyte CryptoNeoOpenSSL::Hash256(const vbyte& message)
@@ -16,9 +19,10 @@ vbyte CryptoNeoOpenSSL::Hash256(const vbyte& message)
 	return vbyte(0);
 }
 
-bool CryptoNeoOpenSSL::VerifySignature(const vbyte& message, const byte& signature, const byte& pubkey)
+bool CryptoNeoOpenSSL::VerifySignature(const vbyte& message, const vbyte& signature, const vbyte& pubkey)
 {
 	return false;
+
 }
 
 // =========================
@@ -155,7 +159,7 @@ int16 CryptoNeoOpenSSL::lVerifySignature
 	return ret == 0x01 ? 0x01 : 0x00;
 }
 
-void CryptoNeoOpenSSL::lComputeHash160(byte* data, int32 length, byte* output)
+void CryptoNeoOpenSSL::lComputeHash160(const byte* data, int32 length, byte* output)
 {
 	if (length <= 0)
 	{
@@ -179,7 +183,7 @@ void CryptoNeoOpenSSL::lComputeHash160(byte* data, int32 length, byte* output)
 	OPENSSL_cleanse(&c, sizeof(c));
 }
 
-void CryptoNeoOpenSSL::lComputeHash256(byte* data, int32 length, byte* output)
+void CryptoNeoOpenSSL::lComputeHash256(const byte* data, int32 length, byte* output)
 {
 	if (length <= 0)
 	{
@@ -198,7 +202,7 @@ void CryptoNeoOpenSSL::lComputeHash256(byte* data, int32 length, byte* output)
 	lComputeSHA256(digest, SHA256_LENGTH, output);
 }
 
-void CryptoNeoOpenSSL::lComputeSHA256(byte* data, int32 length, byte* output)
+void CryptoNeoOpenSSL::lComputeSHA256(const byte* data, int32 length, byte* output)
 {
 	if (length <= 0)
 	{

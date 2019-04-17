@@ -17,7 +17,7 @@
 #include<IInventory.h>
 #include<Transaction.hpp>
 #include<crypto/ICrypto.h>
-#include<libneocrypto/CryptoNeoOpenSSL.h>
+#include<crypto/CryptoNeoOpenSSL.h>
 
 using namespace std;
 using namespace neopt;

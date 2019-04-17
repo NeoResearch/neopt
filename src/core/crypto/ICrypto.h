@@ -18,7 +18,7 @@ public:
 
    virtual vbyte Hash256(const vbyte& message) = 0;
 
-   virtual bool VerifySignature(const vbyte& message, const byte& signature, const byte& pubkey) = 0;
+   virtual bool VerifySignature(const vbyte& message, const vbyte& signature, const vbyte& pubkey) = 0;
 };
 
 }

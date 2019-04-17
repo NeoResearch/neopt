@@ -29,7 +29,7 @@ public:
 
    vbyte Hash256(const vbyte& message);
 
-   bool VerifySignature(const vbyte& message, const byte& signature, const byte& pubkey);
+   bool VerifySignature(const vbyte& message, const vbyte& signature, const vbyte& pubkey);
 
 
 public:
@@ -43,9 +43,9 @@ public:
 
 	// Methods
 	static void lComputeSHA1(byte* data, int32 length, byte* output);
-	static void lComputeSHA256(byte* data, int32 length, byte* output);
-	static void lComputeHash160(byte* data, int32 length, byte* output);
-	static void lComputeHash256(byte* data, int32 length, byte* output);
+	static void lComputeSHA256(const byte* data, int32 length, byte* output);
+	static void lComputeHash160(const byte* data, int32 length, byte* output);
+	static void lComputeHash256(const byte* data, int32 length, byte* output);
 
 	// -1=ERROR , 0= False , 1=True
 	static int16 lVerifySignature(byte* data, int32 dataLength, byte* signature, int32 signatureLength, byte* pubKey, int32 pubKeyLength);
