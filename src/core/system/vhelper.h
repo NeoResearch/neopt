@@ -48,6 +48,33 @@ public:
    }
 };
 
+ostream& operator<<(ostream &os, const vbyte &obj)
+{
+	os << "0x";
+	if (obj.size() > 0)
+		for (unsigned int i = 0; i < obj.size(); i++)
+			os << std::hex << (int)obj[i];
+	return os;
+}
+
+
+template<class T>
+ostream& operator<<(ostream &os, const vector<T> &obj)
+{
+	os << "vector(" << obj.size() << ") [";
+
+	if (obj.size() > 0)
+	{
+		for (unsigned int i = 0; i < obj.size() - 1; i++)
+			os << obj.at(i) << " , ";
+		os << obj.at(obj.size() - 1);
+	}
+
+	os << "]";
+
+	return os;
+}
+
 // TODO: define all operators here that are necessary
 
 }

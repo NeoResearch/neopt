@@ -11,18 +11,26 @@ vbyte CryptoNeoOpenSSL::Hash160(const vbyte& message)
 	vbyte voutput(HASH160_LENGTH);
 	lComputeHash160(message.data(), message.size(), voutput.data());
 	return voutput;
-	//return vbyte(output, output+HASH160_LENGTH);
 }
 
 vbyte CryptoNeoOpenSSL::Hash256(const vbyte& message)
 {
-	return vbyte(0);
+	vbyte voutput(HASH256_LENGTH);
+	lComputeHash256(message.data(), message.size(), voutput.data());
+	return voutput;
 }
 
 bool CryptoNeoOpenSSL::VerifySignature(const vbyte& message, const vbyte& signature, const vbyte& pubkey)
 {
 	return false;
 
+}
+
+vbyte CryptoNeoOpenSSL::SHA256(const vbyte& message)
+{
+	vbyte voutput(SHA256_LENGTH);
+	lComputeSHA256(message.data(), message.size(), voutput.data());
+	return voutput;
 }
 
 // =========================

@@ -35,6 +35,19 @@ int main()
    CryptoNeoOpenSSL lib;
    vbyte v;
    v = lib.Hash160(v);
+   cout << "v:" << v << endl;
+   // 0xb472a266d0bd89c13706a4132ccfb16f7c3b9fcb
+
+   v = lib.Hash160(vbyte(1, 0));
+   cout << "v:" << v << endl;
+   // 0x9f7fd096d37ed2c0e3f7f0cfc924beef4ffceb68
+
+   cout << lib.Hash256(vbyte()) << endl;
+   // 0x5df6e0e2761359d30a8275058e299fcc0381534545f55cf43e41983f5d4c9456
+
+   cout << lib.SHA256(vbyte()) << endl;
+   // 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
 
    cout << "Finished sucessfully" << endl;
 

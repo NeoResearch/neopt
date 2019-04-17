@@ -31,6 +31,12 @@ public:
 
    bool VerifySignature(const vbyte& message, const vbyte& signature, const vbyte& pubkey);
 
+   // SHA256
+   vbyte SHA256(const vbyte& message);
+
+   // RIPEMD160
+   vbyte RIPEMD160(const vbyte& message);
+
 
 public:
    // borrowed from the neo-HyperVM project
@@ -38,7 +44,8 @@ public:
 	// Constants
 	static const int32 SHA1_LENGTH = 20;
 	static const int32 SHA256_LENGTH = 32;
-	static const int32 HASH160_LENGTH = 20;
+   static const int32 RIPEMD160_LENGTH = 20;
+	static const int32 HASH160_LENGTH = RIPEMD160_LENGTH;
 	static const int32 HASH256_LENGTH = SHA256_LENGTH;
 
 	// Methods
