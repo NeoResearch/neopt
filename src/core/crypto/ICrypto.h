@@ -49,7 +49,7 @@ public:
    // proposed methods
    // -----------------
 
-   virtual vbyte GeneratePrivateKey()
+   virtual vbyte GeneratePrivateKey(vbyte& vpubkey)
    {
       return vbyte(0);
    }

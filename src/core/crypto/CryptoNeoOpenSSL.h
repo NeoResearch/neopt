@@ -4,7 +4,9 @@
 // implementation of ICrypto for openssl
 
 // system includes
-#include <string.h>
+#include <string>
+#include <cstring>
+#include <assert.h>
 
 // third-party includes
 #include <openssl/obj_mac.h> // for NID_secp192k1
@@ -63,7 +65,20 @@ public:
    // TODO: receive pubkey or already ECPoint(X,Y) ?
    vbyte SignData(const vbyte& digest, const vbyte& prikey, const vbyte& pubkey);
 
-   virtual vbyte GeneratePrivateKey();
+   virtual vbyte GeneratePrivateKey(vbyte& vpubkey);
+
+
+   // manually added
+   static vbyte FromHexString(std::string hex)
+   {
+      vbyte bytes(hex.length()/2);
+      for (unsigned int i = 0; i < hex.length(); i += 2) {
+        std::string byteString = hex.substr(i, 2);
+        byte b = (byte) strtol(byteString.c_str(), NULL, 16);
+        bytes[i] = b;
+      }
+      return bytes;
+   }
 
 
 public:

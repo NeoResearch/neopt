@@ -50,7 +50,8 @@ int main()
    cout << lib.SHA256(vbyte()) << endl;
    // 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 
-   vbyte priv = lib.GeneratePrivateKey();
+   vbyte mypubkey;
+   vbyte priv = lib.GeneratePrivateKey(mypubkey);
    cout << priv << endl;
 
 

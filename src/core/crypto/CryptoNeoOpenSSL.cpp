@@ -40,6 +40,10 @@ vbyte CryptoNeoOpenSSL::SHA256(const vbyte& message)
 vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& privkey, const vbyte& pubkey)
 {
 	// TODO: implement low level lSignData? (or keep C++ mixed?)
+	// TODO: apply SHA256 here to make sure?
+	const byte* hash   = digest.data();
+	int hashLen = 32;
+	assert(digest.size() == hashLen);
 	const byte* pubKey = pubkey.data();
 	int pubKeyLength   = pubkey.size();
 	const byte* mypriv = privkey.data();
@@ -116,7 +120,29 @@ vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& privkey, cons
 
 	// TODO: follow example: https://stackoverflow.com/questions/2228860/signing-a-message-using-ecdsa-in-openssl
 
-	return vbyte(0);
+	ECDSA_SIG *signature = ECDSA_do_sign(hash, hashLen, eckey);
+	if (NULL == signature)
+	{
+		 NEOPT_EXCEPTION("Failed to generate EC Signature\n");
+		 return vbyte(0);
+	}
+
+	//BIGNUM* r = BN_new();
+	//BIGNUM* s = BN_new();
+	//ECDSA_SIG_get0(signature, &r, &s); // TODO: DER ??
+
+	// DER
+	int der_len = ECDSA_size(eckey);
+	byte* der = (byte*)calloc(der_len, sizeof(byte));
+	i2d_ECDSA_SIG(signature, &der);
+	//int conv_error = BN_bn2bin(priv, vpriv.data());
+
+	vbyte vsig(der, der+der_len);
+
+	ECDSA_SIG_free(signature);
+
+
+	return std::move(vsig);
 }
 
 // =========================
@@ -257,8 +283,9 @@ int16 CryptoNeoOpenSSL::lVerifySignature
 	return ret == 0x01 ? 0x01 : 0x00;
 }
 
-vbyte CryptoNeoOpenSSL::GeneratePrivateKey()
+vbyte CryptoNeoOpenSSL::GeneratePrivateKey(vbyte& vpubkey)
 {
+	printf("generating priv/pub key\n");
 	EC_KEY *eckey=EC_KEY_new();
 	if (NULL == eckey)
 	{
@@ -293,9 +320,56 @@ vbyte CryptoNeoOpenSSL::GeneratePrivateKey()
 	const BIGNUM* priv = EC_KEY_get0_private_key(eckey);
 	vbyte vpriv(32);
 	int conv_error = BN_bn2bin(priv, vpriv.data());
-	//char * number_str = BN_bn2hex(priv);
-	//printf("%s\n", number_str);
 
+	char * number_str = BN_bn2hex(priv);
+	printf("priv %s\n", number_str);
+
+	BN_CTX *ctx;
+   ctx = BN_CTX_new(); // ctx is an optional buffer to save time from allocating and deallocating memory whenever required
+
+
+	// plan A
+	//const EC_POINT *pub_key = EC_KEY_get0_public_key(ec_key);
+	// plan B
+   EC_POINT* pub_key = EC_POINT_new(ecgroup);
+   if (!EC_POINT_mul(ecgroup, pub_key, priv, NULL, NULL, ctx))
+	{
+		NEOPT_EXCEPTION("Error at EC_POINT_mul. Getting pubkey failed.");
+		return vbyte(0);
+	}
+
+
+	printf("printing pubkey:\n");
+   // print plan A
+	BIGNUM *x = BN_new();
+	BIGNUM *y = BN_new();
+	if (EC_POINT_get_affine_coordinates_GFp(ecgroup, pub_key, x, y, NULL)) {
+		 BN_print_fp(stdout, x);
+		 putc('\n', stdout);
+		 BN_print_fp(stdout, y);
+		 putc('\n', stdout);
+	}
+
+	// print plan B
+	char *cc = EC_POINT_point2hex(ecgroup, pub_key, POINT_CONVERSION_UNCOMPRESSED, ctx);
+	printf("pubkey (uncompressed): %d %s\n", strlen(cc), cc);
+	std::string scc(cc);
+	printf("mystr: %s\n", scc.c_str());
+	vpubkey = CryptoNeoOpenSSL::FromHexString(scc);
+	//free(cc);
+
+	char *cc2 = EC_POINT_point2hex(ecgroup, pub_key, POINT_CONVERSION_COMPRESSED, ctx);
+	printf("pubkey (compressed): %s\n", cc2);
+	free(cc2);
+
+
+
+//     assert(EC_POINT_bn2point(group, &res, pub_key, ctx)); // Null here
+
+	////EC_KEY_set_public_key(eckey, pub_key);
+
+
+	BN_CTX_free(ctx);
 	EC_KEY_free(eckey);
 	EC_GROUP_free(ecgroup);
 

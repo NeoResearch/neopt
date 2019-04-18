@@ -52,6 +52,7 @@ public:
       NEOPT_EXCEPTION("Not implemented Skip");
       return vbyte();
    }
+
 };
 
 ostream& operator<<(ostream &os, const vbyte &obj)
