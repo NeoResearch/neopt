@@ -37,9 +37,85 @@ vbyte CryptoNeoOpenSSL::SHA256(const vbyte& message)
 
 // message is already received as a SHA256 digest
 // TODO: better to receive pubkey in general format or specific ECPoint(X,Y) ?
-vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& prikey, const vbyte& pubkey)
+vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& privkey, const vbyte& pubkey)
 {
-	// TODO: implement
+	// TODO: implement low level lSignData? (or keep C++ mixed?)
+	const byte* pubKey = pubkey.data();
+	int pubKeyLength   = pubkey.size();
+	const byte* mypriv = privkey.data();
+
+	// initialize environment and initialize private key
+	EC_KEY *eckey=EC_KEY_new();
+	if (NULL == eckey)
+	{
+	  NEOPT_EXCEPTION("Failed to create new EC Key");
+	  return vbyte(0);
+	}
+
+	EC_GROUP *ecgroup= EC_GROUP_new_by_curve_name(_curve);//NID_secp192k1);
+	if (NULL == ecgroup)
+	{
+		NEOPT_EXCEPTION("Failed to create new EC Group");
+		return vbyte(0);
+	}
+
+	int set_group_status = EC_KEY_set_group(eckey, ecgroup);
+	const int set_group_success = 1;
+	if (set_group_success != set_group_status)
+	{
+		NEOPT_EXCEPTION("Failed to set group for EC Key");
+		return vbyte(0);
+	}
+
+
+	byte* realPubKey = nullptr;
+	int realPublicKeyLength = 65;
+
+	if (pubKeyLength == 33 && (pubKey[0] == 0x02 || pubKey[0] == 0x03))
+	{
+		// remove const from array: must make sure realPubKey data is never changed
+		realPubKey = const_cast<byte*>(pubKey);
+		realPublicKeyLength = 33;
+	}
+	else if (pubKeyLength == 64)
+	{
+		// 0x04 first
+
+		// TODO: verify if no leak happens in this case
+		realPubKey = new byte[65];
+		realPubKey[0] = 0x04;
+
+		memcpy(&realPubKey[1], pubKey, 64);
+	}
+	else if (pubKeyLength == 65)
+	{
+		if (pubKey[0] != 0x04)
+		{
+			NEOPT_EXCEPTION("Error on signing");
+			return vbyte(0);
+		}
+
+		// remove const from array: must make sure realPubKey data is never changed
+		realPubKey = const_cast<byte*>(pubKey);
+	}
+	else if (pubKeyLength != 65)
+	{
+		NEOPT_EXCEPTION("Error on signing 2");
+		return vbyte(0);
+	}
+
+	BIGNUM* bn    = BN_bin2bn(realPubKey, realPublicKeyLength, nullptr);
+	EC_POINT* pub = EC_POINT_bn2point(ecgroup, bn, nullptr, nullptr);
+	BIGNUM*  priv = BN_bin2bn(&mypriv[0], 32, nullptr);
+
+	if (pub != nullptr)
+	{
+		int32 gen_status = EC_KEY_set_public_key(eckey, pub);
+		int32 gen_status2 = EC_KEY_set_private_key(eckey, priv);
+	}
+
+	// TODO: follow example: https://stackoverflow.com/questions/2228860/signing-a-message-using-ecdsa-in-openssl
+
 	return vbyte(0);
 }
 
@@ -71,6 +147,7 @@ const byte CryptoNeoOpenSSL::EMPTY_HASH256[] =
 	0x5d,0xf6,0xe0,0xe2,0x76,0x13,0x59,0xd3,0x0a,0x82,0x75,0x05,0x8e,0x29,0x9f,0xcc,
 	0x03,0x81,0x53,0x45,0x45,0xf5,0x5c,0xf4,0x3e,0x41,0x98,0x3f,0x5d,0x4c,0x94,0x56
 };
+
 
 int16 CryptoNeoOpenSSL::lVerifySignature
 (
@@ -218,6 +295,10 @@ vbyte CryptoNeoOpenSSL::GeneratePrivateKey()
 	int conv_error = BN_bn2bin(priv, vpriv.data());
 	//char * number_str = BN_bn2hex(priv);
 	//printf("%s\n", number_str);
+
+	EC_KEY_free(eckey);
+	EC_GROUP_free(ecgroup);
+
 	return std::move(vpriv);
 }
 
