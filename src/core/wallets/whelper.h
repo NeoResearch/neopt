@@ -14,6 +14,9 @@
 #include<IVerifiable.h>
 #include<crypto/ICrypto.h>
 #include<system/vhelper.h>
+#include<system/Buffer.hpp>
+#include<ProtocolSettings.hpp>
+#include<wallets/KeyPair.hpp>
 
 namespace neopt
 {
@@ -23,23 +26,18 @@ class whelper
 {
 public:
 
-   static vbyte Sign(ICrypto& crypto, const IVerifiable& verifiable, const KeyPair& key)
-   {
-      return crypto.Sign(verifiable.GetHashData(), key.PrivateKey, vhelper::Skip(key.PublicKey.EncodePoint(false), 1));
-   }
-
    static string ToAddress(const ProtocolSettings& settings, const UInt160& scriptHash)
    {
       vbyte data(21);
       data[0] = settings.AddressVersion;
-      Buffer.BlockCopy(scriptHash.ToArray(), 0, data, 1, 20);
+      Buffer::BlockCopy(scriptHash.ToArray(), 0, data, 1, 20);
       return chelper::Base58CheckEncode(data);
    }
 
    static UInt160 ToScriptHash(const ProtocolSettings& settings, string& address)
    {
       vbyte data = chelper::Base58CheckDecode(address);
-      if (data.Length != 21)
+      if (data.size() != 21)
           NEOPT_EXCEPTION("Format Exception ToScriptHash");
       if (data[0] != settings.AddressVersion)
           NEOPT_EXCEPTION("Format Exception ToScriptHash");

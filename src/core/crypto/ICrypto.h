@@ -33,6 +33,12 @@ public:
    // not available on Neo ICrypto, but important for usage
    // -----------------------------------------------------
 
+   virtual vbyte Sign(const vbyte& message, const vbyte& prikey, const vbyte& pubkey)
+   {
+      // TODO: implement
+      return vbyte(0);
+   }
+
    // SHA256
    virtual vbyte SHA256(const vbyte& message) = 0;
 

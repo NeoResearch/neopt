@@ -33,6 +33,12 @@ public:
       return "";
    }
 
+   static vbyte Base58CheckDecode(string address)
+   {
+      NEOPT_EXCEPTION("Not implemented: Base58CheckDecode");
+      return vbyte(0);
+   }
+
 };
 
 // TODO: define all operators here that are necessary

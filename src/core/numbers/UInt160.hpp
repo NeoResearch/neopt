@@ -17,7 +17,7 @@ namespace neopt
    /// <summary>
    /// This class stores a 160 bit unsigned int, represented as a 20-byte little-endian byte array
    /// </summary>
-   class UInt160 : UIntBase, IComparable<UInt160>, IEquatable<UInt160>
+   class UInt160 : public UIntBase, public IComparable<UInt160>, public IEquatable<UInt160>
    {
    public:
       static UInt160 Zero()

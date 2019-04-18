@@ -56,7 +56,7 @@ namespace neopt
       /// <summary>
       /// Deserialize function reads the expected size in bytes from the given BinaryReader and stores in data_bytes array.
       /// </summary>
-      void Deserialize(IBinaryReader& reader)
+      virtual void Deserialize(IBinaryReader& reader)
       {
          reader.Read(data_bytes, 0, data_bytes.size());
       }
@@ -66,7 +66,7 @@ namespace neopt
       /// Method Equals returns true if objects are equal, false otherwise
       /// If null is passed as parameter, this method returns false. If it's a self-reference, it returns true.
       /// </summary>
-      bool Equals(UIntBase* other)
+      virtual bool Equals(UIntBase* other)
       {
          if (other == nullptr)
             return false;
@@ -96,7 +96,7 @@ namespace neopt
       /// <summary>
       /// Method GetHashCode returns a 32-bit int representing a hash code, composed of the first 4 bytes.
       /// </summary>
-      int GetHashCode()
+      virtual int GetHashCode()
       {
          return IObject::ToInt32(data_bytes, 0);
       }
@@ -121,7 +121,7 @@ namespace neopt
       /// <summary>
       /// Method Serialize writes the data_bytes array into a BinaryWriter object
       /// </summary>
-      void Serialize(IBinaryWriter& writer)
+      virtual void Serialize(IBinaryWriter& writer)
       {
         writer.Write(data_bytes);
       }
@@ -129,16 +129,26 @@ namespace neopt
       /// <summary>
       /// Method ToArray() returns the byte array data_bytes, which stores the little-endian unsigned int
       /// </summary>
-      vbyte ToArray()
+      virtual vbyte& ToArray()
       {
-         return data_bytes; // TODO: ensure move semantics
+         // return copy or reference?
+         return data_bytes;
+      }
+
+      /// <summary>
+      /// Method ToArray() returns the byte array data_bytes, which stores the little-endian unsigned int
+      /// </summary>
+      virtual const vbyte& ToArray() const
+      {
+         // return copy or reference?
+         return data_bytes;
       }
 
       /// <summary>
       /// Method ToString returns a big-endian string starting by "0x" representing the little-endian unsigned int
       /// Example: if this is storing 20-bytes 01ff00ff00ff00ff00ff00ff00ff00ff00ff00a4, ToString() should return "0xa400ff00ff00ff00ff00ff00ff00ff00ff00ff01"
       /// </summary>
-      string ToString()
+      virtual string ToString()
       {
          stringstream ss;
          ss << "0x" << vhelper::ToHexString(vhelper::Reverse(data_bytes));

@@ -11,6 +11,8 @@
 
 #include<numbers/UInt160.hpp>
 #include<Witness.h>
+#include<wallets/KeyPair.hpp>
+#include<crypto/ICrypto.h>
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 
@@ -29,6 +31,31 @@ public:
    virtual void DeserializeUnsigned(IBinaryReader& reader) = 0;
 
    virtual void SerializeUnsigned(IBinaryWriter& writer) = 0;
+
+   // originally from Wallets/Helper.cs
+   virtual vbyte Sign(ICrypto& crypto, const KeyPair& key) const
+   {
+      return crypto.Sign(this->GetHashData(), key.PrivateKey, vhelper::Skip(key.PublicKey.EncodePoint(false), 1));
+   }
+
+   // originally from Network/P2P/Helper.cs
+   virtual vbyte GetHashData() const
+   {
+      // TODO: implement
+      return vbyte(0);
+   }
+   /*
+   public static byte[] GetHashData(this IVerifiable verifiable)
+   {
+       using (MemoryStream ms = new MemoryStream())
+       using (BinaryWriter writer = new BinaryWriter(ms))
+       {
+           verifiable.SerializeUnsigned(writer);
+           writer.Flush();
+           return ms.ToArray();
+       }
+   }
+   */
 
 };
 
