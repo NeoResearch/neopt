@@ -35,6 +35,14 @@ vbyte CryptoNeoOpenSSL::SHA256(const vbyte& message)
 	return voutput;
 }
 
+// message is already received as a SHA256 digest
+// TODO: better to receive pubkey in general format or specific ECPoint(X,Y) ?
+vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& prikey, const vbyte& pubkey)
+{
+	// TODO: implement
+	return vbyte(0);
+}
+
 // =========================
 // internal implementations
 // =========================
@@ -170,6 +178,47 @@ int16 CryptoNeoOpenSSL::lVerifySignature
 	}
 
 	return ret == 0x01 ? 0x01 : 0x00;
+}
+
+vbyte CryptoNeoOpenSSL::GeneratePrivateKey()
+{
+	EC_KEY *eckey=EC_KEY_new();
+	if (NULL == eckey)
+	{
+	  NEOPT_EXCEPTION("Failed to create new EC Key");
+	  return vbyte(0);
+	}
+
+	EC_GROUP *ecgroup= EC_GROUP_new_by_curve_name(_curve);//NID_secp192k1);
+	if (NULL == ecgroup)
+	{
+	   NEOPT_EXCEPTION("Failed to create new EC Group");
+	   return vbyte(0);
+	}
+
+	int set_group_status = EC_KEY_set_group(eckey, ecgroup);
+	const int set_group_success = 1;
+	if (set_group_success != set_group_status)
+	{
+		NEOPT_EXCEPTION("Failed to set group for EC Key");
+		return vbyte(0);
+	}
+
+	const int gen_success = 1;
+	int gen_status = EC_KEY_generate_key(eckey);
+	if (gen_success != gen_status)
+	{
+		NEOPT_EXCEPTION("Failed to generate EC Key");
+		return vbyte(0);
+	}
+
+	//EC_POINT* pub = EC_KEY_get0_public_key(eckey);
+	const BIGNUM* priv = EC_KEY_get0_private_key(eckey);
+	vbyte vpriv(32);
+	int conv_error = BN_bn2bin(priv, vpriv.data());
+	//char * number_str = BN_bn2hex(priv);
+	//printf("%s\n", number_str);
+	return std::move(vpriv);
 }
 
 void CryptoNeoOpenSSL::lComputeHash160(const byte* data, int32 length, byte* output)

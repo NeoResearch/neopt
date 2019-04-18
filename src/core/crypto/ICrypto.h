@@ -44,6 +44,21 @@ public:
 
    // RIPEMD160
    //virtual vbyte RIPEMD160(const vbyte& message) = 0;
+
+   // -----------------
+   // proposed methods
+   // -----------------
+
+   virtual vbyte GeneratePrivateKey()
+   {
+      return vbyte(0);
+   }
+
+   virtual vbyte GetPublicKeyFromPrivateKey(const vbyte& priv)
+   {
+      // TODO: if (!EC_POINT_mul(ecdsa->group, pub_key, priv_key, NULL, NULL, ctx))
+      return vbyte(0);
+   }
 };
 
 }

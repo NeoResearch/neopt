@@ -37,6 +37,34 @@ public:
    // RIPEMD160
    vbyte RIPEMD160(const vbyte& message);
 
+   vbyte Sign(const vbyte& message, const vbyte& privkey, const vbyte& pubkey)
+   {
+      return SignData(SHA256(message), privkey, pubkey);
+   }
+   /*
+   public byte[] Sign(byte[] message, byte[] prikey, byte[] pubkey)
+{
+    using (var ecdsa = ECDsa.Create(new ECParameters
+    {
+        Curve = ECCurve.NamedCurves.nistP256,
+        D = prikey,
+        Q = new ECPoint
+        {
+            X = pubkey.Take(32).ToArray(),
+            Y = pubkey.Skip(32).ToArray()
+        }
+    }))
+    {
+        return ecdsa.SignData(message, HashAlgorithmName.SHA256);
+    }
+}
+*/
+
+   // TODO: receive pubkey or already ECPoint(X,Y) ?
+   vbyte SignData(const vbyte& digest, const vbyte& prikey, const vbyte& pubkey);
+
+   virtual vbyte GeneratePrivateKey();
+
 
 public:
    // borrowed from the neo-HyperVM project
