@@ -27,6 +27,12 @@ public:
       return UInt160();
    }
 
+   static string Base58CheckEncode(const vbyte& data)
+   {
+      NEOPT_EXCEPTION("Not implemented: Base58CheckEncode");
+      return "";
+   }
+
 };
 
 // TODO: define all operators here that are necessary

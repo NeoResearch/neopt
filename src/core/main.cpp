@@ -19,6 +19,7 @@
 #include<crypto/ICrypto.h>
 #include<crypto/CryptoNeoOpenSSL.h>
 #include<numbers/Fixed8.hpp>
+#include<wallets/whelper.h>
 
 using namespace std;
 using namespace neopt;

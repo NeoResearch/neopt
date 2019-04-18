@@ -46,6 +46,12 @@ public:
       NEOPT_EXCEPTION("Not implemented GetVarSize");
       return 0;
    }
+
+   static vbyte Skip(const vbyte& v, int count)
+   {
+      NEOPT_EXCEPTION("Not implemented Skip");
+      return vbyte();
+   }
 };
 
 ostream& operator<<(ostream &os, const vbyte &obj)

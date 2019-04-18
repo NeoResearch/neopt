@@ -58,7 +58,8 @@ public:
 	static int16 lVerifySignature(const byte* data, int32 dataLength, const byte* signature, int32 signatureLength, const byte* pubKey, int32 pubKeyLength);
 
 private:
-	static const int32 _curve = NID_X9_62_prime256v1;
+	static const int32 _curve = NID_X9_62_prime256v1; // secp256r1
+   // see: https://www.ietf.org/rfc/rfc5480.txt
 
 	// Empty hashes
 
