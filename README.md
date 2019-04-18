@@ -27,6 +27,12 @@ The project proposal is divided into modules:
 * ledger: blockchain persistance
 * consensus: dBFT consensus
 
+### Tests
+
+Tests are very important! Just go to `tests` directory and type `make tests` (after installing lib `gtest`).
+* on linux, to install gtest, just use: `cd tests && ./linux_install_gtestlib.sh` (you may need to `chmod +x` the install script)
+* it is also important to install `lcov` (usually `apt install lcov`), so that you can also run `make coverage` and generate html coverage reports on `reports/` folder.
+
 ### Versioning
 
 Project will follow semantic versioning ([semver](semver.org)).

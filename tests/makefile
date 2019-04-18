@@ -1,6 +1,9 @@
 FILENAME :=  $(patsubst %.Test.cpp,%.core.test,$(wildcard core.tests/*.Test.cpp))
 
-all: $(FILENAME)
+all:
+	@echo "please type 'make tests'"
+
+tests: $(FILENAME)
 	@echo "Executing core test for: $(FILENAME)"
 	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:gtestlib/googlemock:gtestlib/googlemock/gtest && ./$(FILENAME)
 
