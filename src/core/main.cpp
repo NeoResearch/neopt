@@ -56,6 +56,8 @@ int main()
    cout << "priv:" << priv << endl;
    cout << "pub:" << mypubkey << endl;
 
+   vbyte sig = lib.SignData(lib.SHA256(vbyte()), priv, mypubkey);
+   cout << "sig:" << sig << endl;
 
    cout << "Finished sucessfully" << endl;
 

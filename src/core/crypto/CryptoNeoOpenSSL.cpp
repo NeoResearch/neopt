@@ -39,6 +39,7 @@ vbyte CryptoNeoOpenSSL::SHA256(const vbyte& message)
 // TODO: better to receive pubkey in general format or specific ECPoint(X,Y) ?
 vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& privkey, const vbyte& pubkey)
 {
+	printf("\n\nSignData\n");
 	// TODO: implement low level lSignData? (or keep C++ mixed?)
 	// TODO: apply SHA256 here to make sure?
 	const byte* hash   = digest.data();
@@ -127,20 +128,44 @@ vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& privkey, cons
 		 return vbyte(0);
 	}
 
-	//BIGNUM* r = BN_new();
-	//BIGNUM* s = BN_new();
-	//ECDSA_SIG_get0(signature, &r, &s); // TODO: DER ??
+	/*
+	// not DER format (double bignum format)
+	BIGNUM* r = BN_new();
+	BIGNUM* s = BN_new();
+	//const BIGNUM** pr = 0;
+	//const BIGNUM** ps = 0;
+	ECDSA_SIG_get0(signature, (const BIGNUM**)&r, (const BIGNUM**)&s);
+	//ECDSA_SIG_get0(signature, pr, ps);
+	//signature->r  gives forward declaration issue
+
+	vbyte vsig(64, 0);
+	BN_bn2bin(r, vsig.data()+0);
+	BN_bn2bin(s, vsig.data()+32);
+	//BN_bn2bin(*pr, vsig.data()+0);
+	//BN_bn2bin(*ps, vsig.data()+32);
+	//BN_free(r);
+	//BN_free(s);
+	*/
 
 	// DER
-	int der_len = ECDSA_size(eckey);
-	byte* der = (byte*)calloc(der_len, sizeof(byte));
-	i2d_ECDSA_SIG(signature, &der);
+	//int der_len = ECDSA_size(eckey);
+	// problem here TODO!
+	//byte* der = (byte*)calloc(der_len, sizeof(byte));
+	int der_len = i2d_ECDSA_SIG(signature, nullptr);
+	vbyte vsig(der_len, 0);
+	byte* sigdata = vsig.data();
+	i2d_ECDSA_SIG(signature, &sigdata);
+	//i2d_ECDSA_SIG(signature, &der);
 	//int conv_error = BN_bn2bin(priv, vpriv.data());
 
-	vbyte vsig(der, der+der_len);
+	//, BN_bn2hex(signature->s)
 
 	ECDSA_SIG_free(signature);
-
+	EC_KEY_free(eckey);
+	EC_POINT_free(pub);
+	BN_free(priv);
+	BN_free(bn);
+	EC_GROUP_free(ecgroup);
 
 	return std::move(vsig);
 }
