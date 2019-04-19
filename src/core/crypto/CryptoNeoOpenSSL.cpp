@@ -28,10 +28,17 @@ bool CryptoNeoOpenSSL::VerifySignature(const vbyte& message, const vbyte& signat
 	return ret == 1;
 }
 
-vbyte CryptoNeoOpenSSL::SHA256(const vbyte& message)
+vbyte CryptoNeoOpenSSL::Sha256(const vbyte& message)
 {
 	vbyte voutput(SHA256_LENGTH);
 	lComputeSHA256(message.data(), message.size(), voutput.data());
+	return voutput;
+}
+
+vbyte CryptoNeoOpenSSL::RIPEMD160(const vbyte& message)
+{
+	vbyte voutput(RIPEMD160_LENGTH);
+	lComputeRIPEMD160(message.data(), message.size(), voutput.data());
 	return voutput;
 }
 
@@ -39,12 +46,16 @@ vbyte CryptoNeoOpenSSL::SHA256(const vbyte& message)
 // TODO: better to receive pubkey in general format or specific ECPoint(X,Y) ?
 vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& privkey, const vbyte& pubkey)
 {
-	printf("\n\nSignData\n");
+	//printf("\n\nSignData\n");
 	// TODO: implement low level lSignData? (or keep C++ mixed?)
 	// TODO: apply SHA256 here to make sure?
 	const byte* hash   = digest.data();
 	int hashLen = 32;
-	assert(digest.size() == hashLen);
+	if(digest.size() != hashLen)
+	{
+		NEOPT_EXCEPTION("Failed to have digest of 32 bytes for SignData");
+		return vbyte(0);
+	}
 	const byte* pubKey = pubkey.data();
 	int pubKeyLength   = pubkey.size();
 	const byte* mypriv = privkey.data();
@@ -118,8 +129,6 @@ vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& privkey, cons
 		int32 gen_status = EC_KEY_set_public_key(eckey, pub);
 		int32 gen_status2 = EC_KEY_set_private_key(eckey, priv);
 	}
-
-	// TODO: follow example: https://stackoverflow.com/questions/2228860/signing-a-message-using-ecdsa-in-openssl
 
 	ECDSA_SIG *signature = ECDSA_do_sign(hash, hashLen, eckey);
 	if (NULL == signature)
@@ -206,6 +215,11 @@ const byte CryptoNeoOpenSSL::EMPTY_HASH256[] =
 	0x03,0x81,0x53,0x45,0x45,0xf5,0x5c,0xf4,0x3e,0x41,0x98,0x3f,0x5d,0x4c,0x94,0x56
 };
 
+const byte CryptoNeoOpenSSL::EMPTY_RIPEMD160[] =
+{
+	0x9c,0x11,0x85,0xa5,0xc5,0xe9,0xfc,0x54,0x61,0x28,
+	0x08,0x97,0x7e,0xe8,0xf5,0x48,0xb2,0x25,0x8d,0x31
+};
 
 int16 CryptoNeoOpenSSL::lVerifySignature
 (
@@ -318,7 +332,7 @@ int16 CryptoNeoOpenSSL::lVerifySignature
 // generates private key and updates parameter vpubkey (TODO: update function format)
 vbyte CryptoNeoOpenSSL::GeneratePrivateKey(vbyte& vpubkey)
 {
-	printf("generating priv/pub key\n");
+	//printf("generating priv/pub key\n");
 	EC_KEY *eckey=EC_KEY_new();
 	if (NULL == eckey)
 	{
@@ -354,9 +368,11 @@ vbyte CryptoNeoOpenSSL::GeneratePrivateKey(vbyte& vpubkey)
 	vbyte vpriv(32);
 	int conv_error = BN_bn2bin(priv, vpriv.data());
 
+	/*
 	char * number_str = BN_bn2hex(priv);
 	printf("private_key hexstr: %s\n", number_str);
 	free(number_str);
+	*/
 
 	BN_CTX *ctx;
    ctx = BN_CTX_new(); // ctx is an optional buffer to save time from allocating and deallocating memory whenever required
@@ -372,7 +388,7 @@ vbyte CryptoNeoOpenSSL::GeneratePrivateKey(vbyte& vpubkey)
 	//}
 
 
-	printf("printing pubkey:\n");
+	//printf("printing pubkey:\n");
 	/*
    // print plan A
 	BIGNUM *x = BN_new();
@@ -438,6 +454,22 @@ void CryptoNeoOpenSSL::lComputeHash160(const byte* data, int32 length, byte* out
 
 	RIPEMD160_Init(&c);
 	RIPEMD160_Update(&c, digest, SHA256_DIGEST_LENGTH);
+	RIPEMD160_Final(output, &c);
+	OPENSSL_cleanse(&c, sizeof(c));
+}
+
+
+void CryptoNeoOpenSSL::lComputeRIPEMD160(const byte* data, int32 length, byte* output)
+{
+	if (length <= 0)
+	{
+		memcpy(output, CryptoNeoOpenSSL::EMPTY_RIPEMD160, CryptoNeoOpenSSL::RIPEMD160_LENGTH);
+		return;
+	}
+
+	RIPEMD160_CTX c;
+	RIPEMD160_Init(&c);
+	RIPEMD160_Update(&c, data, length);
 	RIPEMD160_Final(output, &c);
 	OPENSSL_cleanse(&c, sizeof(c));
 }

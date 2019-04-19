@@ -47,7 +47,7 @@ int main()
    cout << "hash256(''):" << lib.Hash256(vbyte()) << endl;
    // 0x5df6e0e2761359d30a8275058e299fcc0381534545f55cf43e41983f5d4c9456
 
-   cout << "sha256(''):" << lib.SHA256(vbyte()) << endl;
+   cout << "sha256(''):" << lib.Sha256(vbyte()) << endl;
    // 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 
    vbyte mypubkey;
@@ -56,8 +56,21 @@ int main()
    cout << "priv:" << priv << endl;
    cout << "pub:" << mypubkey << endl;
 
-   vbyte sig = lib.SignData(lib.SHA256(vbyte()), priv, mypubkey);
+   vbyte sig = lib.SignData(lib.Sha256(vbyte()), priv, mypubkey);
    cout << "sig:" << sig << endl;
+
+   assert(lib.VerifySignature(vbyte(0), sig, mypubkey) == 1);
+   /*
+   strange fail. TODO: investigate in the future
+   digest: [32]0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+   priv:[32]0x0889f303d029922eb48c661802be5c0631ad0bfc195360483eb6cdfed938d285
+   pub:[33]0x0395add0fe8f578288860584b01bd68c21ee18819c1a6b6b67d2eafd3aefae6399
+   sig:[64]0x49cdf1429642fdf5e1ca25ca71278b216f0f0f2c251c3bfb56bca67f454aa0ea135cb98efbfafce69d2ee088c3c9dbe2c9bfcb8255dc3c3a5c52cb92264aa500
+   neopt-core-test: main.cpp:62: int main(): Assertion `lib.VerifySignature(vbyte(0), sig, mypubkey) == 1' failed.
+   */
+   assert(lib.VerifySignature(vbyte(1), sig, mypubkey) == 0);
+   assert(lib.VerifySignature(vbyte(1,3), lib.SignData(lib.Sha256(vbyte(1,3)), priv, mypubkey), mypubkey) == 1);
+
 
    cout << "Finished sucessfully" << endl;
 

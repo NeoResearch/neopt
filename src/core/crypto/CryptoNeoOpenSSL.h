@@ -34,14 +34,14 @@ public:
    bool VerifySignature(const vbyte& message, const vbyte& signature, const vbyte& pubkey);
 
    // SHA256
-   vbyte SHA256(const vbyte& message);
+   vbyte Sha256(const vbyte& message);
 
    // RIPEMD160
    vbyte RIPEMD160(const vbyte& message);
 
    vbyte Sign(const vbyte& message, const vbyte& privkey, const vbyte& pubkey)
    {
-      return SignData(SHA256(message), privkey, pubkey);
+      return SignData(Sha256(message), privkey, pubkey);
    }
    /*
    public byte[] Sign(byte[] message, byte[] prikey, byte[] pubkey)
@@ -96,6 +96,7 @@ public:
 	static void lComputeSHA256(const byte* data, int32 length, byte* output);
 	static void lComputeHash160(const byte* data, int32 length, byte* output);
 	static void lComputeHash256(const byte* data, int32 length, byte* output);
+   static void lComputeRIPEMD160(const byte* data, int32 length, byte* output);
 
 	// -1=ERROR , 0= False , 1=True
 	static int16 lVerifySignature(const byte* data, int32 dataLength, const byte* signature, int32 signatureLength, const byte* pubKey, int32 pubKeyLength);
@@ -106,6 +107,7 @@ private:
 
 	// Empty hashes
 
+   static const byte EMPTY_RIPEMD160[RIPEMD160_LENGTH];
 	static const byte EMPTY_HASH160[HASH160_LENGTH];
 	static const byte EMPTY_HASH256[HASH256_LENGTH];
 	static const byte EMPTY_SHA1[SHA1_LENGTH];
