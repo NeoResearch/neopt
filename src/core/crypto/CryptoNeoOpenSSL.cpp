@@ -283,6 +283,7 @@ int16 CryptoNeoOpenSSL::lVerifySignature
 	return ret == 0x01 ? 0x01 : 0x00;
 }
 
+// generates private key and updates parameter vpubkey (TODO: update function format)
 vbyte CryptoNeoOpenSSL::GeneratePrivateKey(vbyte& vpubkey)
 {
 	printf("generating priv/pub key\n");
@@ -293,7 +294,7 @@ vbyte CryptoNeoOpenSSL::GeneratePrivateKey(vbyte& vpubkey)
 	  return vbyte(0);
 	}
 
-	EC_GROUP *ecgroup= EC_GROUP_new_by_curve_name(_curve);//NID_secp192k1);
+	EC_GROUP *ecgroup= EC_GROUP_new_by_curve_name(_curve); //NID_secp192k1);
 	if (NULL == ecgroup)
 	{
 	   NEOPT_EXCEPTION("Failed to create new EC Group");
@@ -322,24 +323,25 @@ vbyte CryptoNeoOpenSSL::GeneratePrivateKey(vbyte& vpubkey)
 	int conv_error = BN_bn2bin(priv, vpriv.data());
 
 	char * number_str = BN_bn2hex(priv);
-	printf("priv %s\n", number_str);
+	printf("private_key hexstr: %s\n", number_str);
+	free(number_str);
 
 	BN_CTX *ctx;
    ctx = BN_CTX_new(); // ctx is an optional buffer to save time from allocating and deallocating memory whenever required
 
-
 	// plan A
-	//const EC_POINT *pub_key = EC_KEY_get0_public_key(ec_key);
+	const EC_POINT *pub_key = EC_KEY_get0_public_key(eckey);
 	// plan B
-   EC_POINT* pub_key = EC_POINT_new(ecgroup);
-   if (!EC_POINT_mul(ecgroup, pub_key, priv, NULL, NULL, ctx))
-	{
-		NEOPT_EXCEPTION("Error at EC_POINT_mul. Getting pubkey failed.");
-		return vbyte(0);
-	}
+   //EC_POINT* pub_key = EC_POINT_new(ecgroup);
+   //if (!EC_POINT_mul(ecgroup, pub_key, priv, NULL, NULL, ctx))
+	//{
+	//	NEOPT_EXCEPTION("Error at EC_POINT_mul. Getting pubkey failed.");
+	//	return vbyte(0);
+	//}
 
 
 	printf("printing pubkey:\n");
+	/*
    // print plan A
 	BIGNUM *x = BN_new();
 	BIGNUM *y = BN_new();
@@ -357,11 +359,18 @@ vbyte CryptoNeoOpenSSL::GeneratePrivateKey(vbyte& vpubkey)
 	printf("mystr: %s\n", scc.c_str());
 	vpubkey = CryptoNeoOpenSSL::FromHexString(scc);
 	//free(cc);
+	*/
 
+	/*
 	char *cc2 = EC_POINT_point2hex(ecgroup, pub_key, POINT_CONVERSION_COMPRESSED, ctx);
 	printf("pubkey (compressed): %s\n", cc2);
 	free(cc2);
+	*/
 
+   // point_conversion_form_t
+	vpubkey = vbyte(33);
+	//byte* pubkdata = vpubkey.data();
+	size_t converr = EC_POINT_point2oct(ecgroup, pub_key, POINT_CONVERSION_COMPRESSED, vpubkey.data(), vpubkey.size(), ctx);
 
 
 //     assert(EC_POINT_bn2point(group, &res, pub_key, ctx)); // Null here
@@ -371,6 +380,7 @@ vbyte CryptoNeoOpenSSL::GeneratePrivateKey(vbyte& vpubkey)
 
 	BN_CTX_free(ctx);
 	EC_KEY_free(eckey);
+	//EC_POINT_free(pub_key);
 	EC_GROUP_free(ecgroup);
 
 	return std::move(vpriv);

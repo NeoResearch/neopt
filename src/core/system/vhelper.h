@@ -7,6 +7,7 @@
 #include<vector>
 #include<algorithm>
 #include<sstream>
+#include<iomanip> // fill zero for hex
 
 // neo core
 #include<system/types.h>
@@ -60,7 +61,7 @@ ostream& operator<<(ostream &os, const vbyte &obj)
 	os << "0x";
 	if (obj.size() > 0)
 		for (unsigned int i = 0; i < obj.size(); i++)
-			os << std::hex << (int)obj[i];
+			os << std::setfill('0') << std::setw(2) << std::hex << (int)obj[i];
 	return os;
 }
 
