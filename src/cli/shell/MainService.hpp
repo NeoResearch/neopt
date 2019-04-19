@@ -89,7 +89,7 @@ protected:
       else if(cmd == "help")
          return OnHelpCommand(args);
       else if(cmd == "plugins")
-         return false; //OnPluginsCommand(args);
+         return OnPluginsCommand(args);
       else if(cmd == "import")
          return false; //OnImportCommand(args);
       else if(cmd == "list")
@@ -654,21 +654,25 @@ private:
        return true;
    }
 
-/*
-   private bool OnPluginsCommand(string[] args)
+private:
+   bool OnPluginsCommand(const vector<string>& args)
    {
-   if (Plugin.Plugins.Count > 0)
-   {
-       Console.WriteLine("Loaded plugins:");
-       Plugin.Plugins.ForEach(p => Console.WriteLine("\t" + p.Name));
-   }
-   else
-   {
-       Console.WriteLine("No loaded plugins");
-   }
-   return true;
+      if (pluginSystem.Plugins.size() > 0)
+      {
+
+         cout << "Loaded plugins:" << endl;
+         for(unsigned i=0; i<pluginSystem.Plugins.size(); i++)
+            cout << "\t" << pluginSystem.Plugins[i]->Name();
+         cout << endl;
+      }
+      else
+      {
+          cout << "No loaded plugins" << endl;
+      }
+      return true;
    }
 
+/*
    private bool OnImportCommand(string[] args)
    {
    switch (args[1].ToLower())

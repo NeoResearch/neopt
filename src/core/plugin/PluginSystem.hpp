@@ -13,10 +13,20 @@ namespace neopt
 class PluginSystem
 {
 public:
-   std::vector<IPlugin> plugins;
+   std::vector<IPlugin*> Plugins;
 
-   bool SendMessage(const std::vector<std::string>& args)
+   // TODO: check better ways to do this (perhaps dynamic library?)
+   // general plugin loading
+   void load(IPlugin& plugin)
    {
+      Plugins.push_back(&plugin);
+   }
+
+   bool SendMessage(const std::vector<std::string>& message)
+   {
+      for(unsigned i=0; i<Plugins.size(); i++)
+         if (Plugins[i]->OnMessage(message))
+            return true;
       return false;
    }
 };

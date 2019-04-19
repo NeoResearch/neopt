@@ -9,6 +9,9 @@
 // internal includes
 #include<shell/MainService.hpp>
 
+// plugins
+#include<plugins/ImportBlocks/ImportBlocks.h>
+
 using namespace std;
 using namespace neopt;
 
@@ -17,6 +20,10 @@ using namespace neopt;
 int main(int argc, char* argv[])
 {
    PluginSystem pluginSystem;
+
+   ImportBlocks pluginIB;
+   pluginSystem.load(pluginIB);
+
    MainService mainService(pluginSystem);
 
    vector<string> args(argc);
