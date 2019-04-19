@@ -20,6 +20,7 @@
 #include<crypto/CryptoNeoOpenSSL.h>
 #include<numbers/Fixed8.hpp>
 #include<wallets/whelper.h>
+#include<plugins/PluginSystem.hpp>
 
 using namespace std;
 using namespace neopt;
@@ -71,6 +72,7 @@ int main()
    assert(lib.VerifySignature(vbyte(1), sig, mypubkey) == 0);
    assert(lib.VerifySignature(vbyte(1,3), lib.SignData(lib.Sha256(vbyte(1,3)), priv, mypubkey), mypubkey) == 1);
 
+   PluginSystem plugins;
 
    cout << "Finished sucessfully" << endl;
 
