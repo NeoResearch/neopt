@@ -128,14 +128,17 @@ vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& privkey, cons
 		 return vbyte(0);
 	}
 
-	/*
-	// not DER format (double bignum format)
-	BIGNUM* r = BN_new();
-	BIGNUM* s = BN_new();
-	//const BIGNUM** pr = 0;
-	//const BIGNUM** ps = 0;
-	ECDSA_SIG_get0(signature, (const BIGNUM**)&r, (const BIGNUM**)&s);
+
+	// non-DER format (double bignum format)
+	//BIGNUM* r = BN_new();
+	//BIGNUM* s = BN_new();
+	//const BIGNUM** pr = (const BIGNUM**)malloc(sizeof(BIGNUM**));
+	//const BIGNUM** ps = (const BIGNUM**)malloc(sizeof(BIGNUM**));
+	const BIGNUM* r; // do not delete it
+	const BIGNUM* s; // do not delete it
+	//ECDSA_SIG_get0(signature, (const BIGNUM**)&r, (const BIGNUM**)&s);
 	//ECDSA_SIG_get0(signature, pr, ps);
+	ECDSA_SIG_get0(signature, &r, &s);
 	//signature->r  gives forward declaration issue
 
 	vbyte vsig(64, 0);
@@ -145,8 +148,11 @@ vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& privkey, cons
 	//BN_bn2bin(*ps, vsig.data()+32);
 	//BN_free(r);
 	//BN_free(s);
-	*/
+	//free(pr);
+	//free(ps);
 
+
+	/*
 	// DER
 	//int der_len = ECDSA_size(eckey);
 	// problem here TODO!
@@ -157,6 +163,7 @@ vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& privkey, cons
 	i2d_ECDSA_SIG(signature, &sigdata);
 	//i2d_ECDSA_SIG(signature, &der);
 	//int conv_error = BN_bn2bin(priv, vpriv.data());
+	*/
 
 	//, BN_bn2hex(signature->s)
 
