@@ -87,7 +87,7 @@ protected:
       else if(cmd == "export")
          return false; //OnExportCommand(args);
       else if(cmd == "help")
-         return false; //OnHelpCommand(args);
+         return OnHelpCommand(args);
       else if(cmd == "plugins")
          return false; //OnPluginsCommand(args);
       else if(cmd == "import")
@@ -604,9 +604,14 @@ protected:
        File.WriteAllLines(path, keys.Select(p => p.Export()));
    return true;
    }
+*/
 
-   private bool OnHelpCommand(string[] args)
+private:
+
+   bool OnHelpCommand(const vector<string>& args)
    {
+      std::cout << "neopt project under development.\n type 'exit' to exit" << std::endl;
+      /*
    Console.Write(
        "Normal Commands:\n" +
        "\tversion\n" +
@@ -644,10 +649,12 @@ protected:
        "\tuninstall <pluginName>\n" +
        "Advanced Commands:\n" +
        "\tstart consensus\n");
+       */
 
-   return true;
+       return true;
    }
 
+/*
    private bool OnPluginsCommand(string[] args)
    {
    if (Plugin.Plugins.Count > 0)
