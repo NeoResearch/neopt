@@ -7,7 +7,7 @@
 
 // core includes
 //#include<core/wallets/Wallet.h>
-#include<core/plugins/PluginSystem.hpp>
+#include<core/plugin/PluginSystem.hpp>
 
 namespace neopt
 {
@@ -610,7 +610,7 @@ private:
 
    bool OnHelpCommand(const vector<string>& args)
    {
-      std::cout << "neopt project under development.\n type 'exit' to exit" << std::endl;
+      std::cout << "neopt project under development.\nplease type 'exit' to exit" << std::endl;
       /*
    Console.Write(
        "Normal Commands:\n" +

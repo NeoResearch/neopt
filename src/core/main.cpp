@@ -20,7 +20,7 @@
 #include<crypto/CryptoNeoOpenSSL.h>
 #include<numbers/Fixed8.hpp>
 #include<wallets/whelper.h>
-#include<plugins/PluginSystem.hpp>
+#include<plugin/PluginSystem.hpp>
 
 using namespace std;
 using namespace neopt;

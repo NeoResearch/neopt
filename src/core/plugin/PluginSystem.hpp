@@ -5,7 +5,7 @@
 #include<vector>
 
 // core includes
-#include<plugins/IPlugin.h>
+#include<plugin/IPlugin.h>
 
 namespace neopt
 {

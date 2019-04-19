@@ -3,7 +3,7 @@
 #include<iostream>
 
 // core includes
-#include<core/plugins/PluginSystem.hpp>
+#include<core/plugin/PluginSystem.hpp>
 //#include<core/wallets/Wallet.h>
 
 // internal includes
