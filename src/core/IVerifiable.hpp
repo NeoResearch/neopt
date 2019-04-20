@@ -10,7 +10,7 @@
 #include<ISnapshot.h> // TODO: remove if possible
 
 #include<numbers/UInt160.hpp>
-#include<Witness.h>
+#include<Witness.hpp>
 #include<wallets/KeyPair.hpp>
 #include<crypto/ICrypto.h>
 

@@ -8,7 +8,7 @@
 #include<system/types.h>
 #include<numbers/UInt160.hpp>
 #include<json/JObject.hpp>
-#include<crypto/chelper.h>
+#include<crypto/chelper.hpp>
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 

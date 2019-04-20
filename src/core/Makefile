@@ -3,7 +3,7 @@ OPTIONS=-O0 -g # -Ofast
 OPENSSL_PATH=crypto/openssl
 
 all: #simple testing
-	g++   $(OPTIONS) --std=c++11 -I. -I$(OPENSSL_PATH)/include crypto/CryptoNeoOpenSSL.cpp -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl main.cpp -o neopt-core-test
+	g++   $(OPTIONS) --std=c++11 -I. -I$(OPENSSL_PATH)/include crypto/CryptoNeoOpenSSL.cpp -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl main.cpp system/printable.cpp -o neopt-core-test
 
 # no need to build external lib for now
 withlib: libneocrypto_openssl.a

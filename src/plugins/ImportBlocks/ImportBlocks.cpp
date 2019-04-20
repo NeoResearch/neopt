@@ -21,7 +21,7 @@ void ImportBlocks::OnPluginsLoaded()
 
     // TODO: use Actor system for message passing
     _blockImporter.Receive(BlockImporterAction::StartImport);
-    IBlockchain* blockchain = this->pluginSystem->neoSystem->blockchain;
+    IBlockchain& blockchain = this->pluginSystem->neoSystem->blockchain;
 
     cout << "ImportBlocks plugin loaded!" << endl;
 }

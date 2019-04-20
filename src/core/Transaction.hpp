@@ -7,7 +7,7 @@
 // neopt core part
 #include<system/ISerializable.h>
 #include<system/IEquatable.h>
-#include<IInventory.h>
+#include<IInventory.hpp>
 #include<system/IComparable.h>
 #include<numbers/UIntBase.hpp>
 #include<numbers/BigInteger.h>

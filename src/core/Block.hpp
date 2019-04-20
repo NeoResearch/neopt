@@ -8,7 +8,7 @@
 #include<system/ISerializable.h>
 #include<system/IEquatable.h>
 #include<system/IComparable.h>
-#include<IInventory.h>
+#include<IInventory.hpp>
 #include<numbers/UIntBase.hpp>
 #include<numbers/BigInteger.h>
 #include<system/shelper.h>

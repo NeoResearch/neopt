@@ -7,7 +7,8 @@
 
 // core includes
 //#include<core/wallets/Wallet.h>
-#include<core/plugin/PluginSystem.hpp>
+#include<core/plugin/PluginSystem.h>
+#include<core/plugin/IPlugin.h>
 
 namespace neopt
 {

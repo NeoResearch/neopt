@@ -1,7 +1,7 @@
 #ifndef IBLOCKCHAIN_H
 #define IBLOCKCHAIN_H
 
-
+// TODO: fix, this .h should never include .hpp
 
 // c++ standard part
 #include<vector>
@@ -12,10 +12,12 @@
 #include<ISnapshot.h> // TODO: remove if possible
 
 #include<numbers/UInt160.hpp>
-#include<Witness.h>
+#include<Witness.hpp>
 #include<wallets/KeyPair.hpp>
 #include<crypto/ICrypto.h>
 #include<Block.hpp>
+
+// TODO: fix, this .h should never include .hpp
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 

@@ -13,15 +13,15 @@
 #include<numbers/UIntBase.hpp>
 #include<numbers/UInt160.hpp>
 #include<IScriptContainer.h>
-#include<IVerifiable.h>
-#include<IInventory.h>
+#include<IVerifiable.hpp>
+#include<IInventory.hpp>
 #include<Block.hpp>
 #include<Transaction.hpp>
 #include<crypto/ICrypto.h>
 #include<crypto/CryptoNeoOpenSSL.h>
 #include<numbers/Fixed8.hpp>
-#include<wallets/whelper.h>
-#include<plugin/PluginSystem.hpp>
+#include<wallets/whelper.hpp>
+#include<plugin/PluginSystem.h>
 
 using namespace std;
 using namespace neopt;

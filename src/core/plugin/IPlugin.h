@@ -8,13 +8,10 @@
 
 // core includes
 #include<plugin/LogLevel.h>
-//#include<plugin/PluginSystem.hpp>
+#include<plugin/PluginSystem.h>
 
 namespace neopt
 {
-
-// forward declaration
-class PluginSystem;
 
 class IPlugin
 {

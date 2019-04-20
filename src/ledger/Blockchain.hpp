@@ -6,7 +6,7 @@
 
 // neopt core part
 #include<core/IBlockchain.h>
-#include<core/NeoSystem.hpp>
+#include<core/NeoSystem.h>
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 

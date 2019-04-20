@@ -1,5 +1,5 @@
-#ifndef WHELPER_H
-#define WHELPER_H
+#ifndef WHELPER_HPP
+#define WHELPER_HPP
 
 // Wallet Helper: whelper
 
@@ -11,9 +11,9 @@
 // neo core
 #include<system/types.h>
 #include<numbers/UInt160.hpp>
-#include<IVerifiable.h>
+#include<IVerifiable.hpp>
 #include<crypto/ICrypto.h>
-#include<system/vhelper.h>
+#include<system/vhelper.hpp>
 #include<system/Buffer.hpp>
 #include<ProtocolSettings.hpp>
 #include<wallets/KeyPair.hpp>
