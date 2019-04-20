@@ -1,6 +1,8 @@
 #ifndef NEO_SYSTEM_H
 #define NEO_SYSTEM_H
 
+// WARNING: do not include .hpp here, or things may break!
+
 // system includes
 #include<vector>
 

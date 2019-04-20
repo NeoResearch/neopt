@@ -1,6 +1,8 @@
 #ifndef PLUGIN_SYSTEM_H
 #define PLUGIN_SYSTEM_H
 
+// WARNING: do not include .hpp here, or things may break!
+
 // system includes
 #include<vector>
 #include<string>

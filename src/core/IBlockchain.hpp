@@ -1,7 +1,5 @@
-#ifndef IBLOCKCHAIN_H
-#define IBLOCKCHAIN_H
-
-// TODO: fix, this .h should never include .hpp
+#ifndef IBLOCKCHAIN_HPP
+#define IBLOCKCHAIN_HPP
 
 // c++ standard part
 #include<vector>

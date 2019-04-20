@@ -1,6 +1,8 @@
 #ifndef ICRYPTO_H
 #define ICRYPTO_H
 
+// WARNING: do not include .hpp here, or things may break!
+
 // system includes
 // none ..
 

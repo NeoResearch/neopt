@@ -6,7 +6,9 @@
 
 // core includes
 #include<core/plugin/IPlugin.h>
-#include<core/IBlockchain.h>
+
+// WARNING: this .hpp include is very risky an may break plugin
+#include<core/IBlockchain.hpp>
 
 // local includes
 #include<BlockImporter.hpp>

@@ -1,6 +1,8 @@
 #ifndef LIB_CRYPTO_OPENSSL_H
 #define LIB_CRYPTO_OPENSSL_H
 
+// WARNING: do not include .hpp here, or things may break!
+
 // implementation of ICrypto for openssl
 
 // system includes
