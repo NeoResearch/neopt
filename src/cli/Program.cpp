@@ -7,6 +7,9 @@
 #include<core/plugin/PluginSystem.hpp>
 //#include<core/wallets/Wallet.h>
 
+// ledger includes
+#include<ledger/Blockchain.hpp>
+
 // internal includes
 #include<shell/MainService.hpp>
 
@@ -29,8 +32,11 @@ int main(int argc, char* argv[])
    // finished loading plugins
    pluginSystem.NotifyPluginsLoadedAfterSystemConstructed();
 
+   // initialize Blockchain ledger
+   Blockchain blockchain;
+
    // build NeoSystem
-   NeoSystem neoSystem(pluginSystem);
+   NeoSystem neoSystem(pluginSystem, blockchain);
 
    // build MainService (cli)
    MainService mainService(pluginSystem);

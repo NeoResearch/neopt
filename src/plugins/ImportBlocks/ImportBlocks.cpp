@@ -18,5 +18,9 @@ void ImportBlocks::OnPluginsLoaded()
     //SuspendNodeStartup();
     //_blockImporter = System.ActorSystem.ActorOf(BlockImporter.Props());
     //_blockImporter.Tell(new BlockImporter.StartImport { BlockchainActorRef = System.Blockchain, OnComplete = OnImportComplete });
+
+    // TODO: use Actor system for message passing
+    _blockImporter.Receive(BlockImporterAction::StartImport);
+
     cout << "ImportBlocks plugin loaded!" << endl;
 }

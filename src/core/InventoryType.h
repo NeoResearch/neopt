@@ -12,9 +12,9 @@ namespace neopt
 
 enum InventoryType // int, not byte
 {
-   TX = 0x01,
-   Block = 0x02,
-   Consensus = 0xe0
+   IT_TX = 0x01,
+   IT_Block = 0x02, // name conflict with Block class... beware!
+   IT_Consensus = 0xe0
 };
 
 }

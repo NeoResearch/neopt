@@ -1,5 +1,5 @@
-#ifndef TRANSACTION_HPP
-#define TRANSACTION_HPP
+#ifndef BLOCK_HPP
+#define BLOCK_HPP
 
 // c++ standard part
 #include<vector>
@@ -7,21 +7,22 @@
 // neopt core part
 #include<system/ISerializable.h>
 #include<system/IEquatable.h>
-#include<IInventory.h>
 #include<system/IComparable.h>
+#include<IInventory.h>
 #include<numbers/UIntBase.hpp>
 #include<numbers/BigInteger.h>
 #include<system/shelper.h>
+//#include<Transaction.hpp>
 
 namespace neopt
 {
 
-   class Transaction : public IEquatable<Transaction>, public IInventory
+   class Block : public IEquatable<Block>//, public IInventory
    {
    public:
       // TODO: finally fill here with transaction info
 
-      bool Equals(const Transaction* other)
+      bool Equals(const Block* other)
       {
          if(other == nullptr)
             return false;

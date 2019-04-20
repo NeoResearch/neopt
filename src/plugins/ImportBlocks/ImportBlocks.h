@@ -7,11 +7,17 @@
 // core includes
 #include<core/plugin/IPlugin.h>
 
+// local includes
+#include<BlockImporter.hpp>
+
 namespace neopt
 {
 
 class ImportBlocks : public IPlugin
 {
+private:
+   BlockImporter _blockImporter;
+
 public:
    // what to put here?
 
@@ -22,6 +28,9 @@ protected:
    std::string Name() const;
 
    void OnPluginsLoaded();
+
+private:
+   void OnImportComplete(); // TODO: only use later as a callback after importer actor finishes 
 
 };
 

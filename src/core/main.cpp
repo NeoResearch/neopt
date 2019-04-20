@@ -15,6 +15,7 @@
 #include<IScriptContainer.h>
 #include<IVerifiable.h>
 #include<IInventory.h>
+#include<Block.hpp>
 #include<Transaction.hpp>
 #include<crypto/ICrypto.h>
 #include<crypto/CryptoNeoOpenSSL.h>
@@ -27,6 +28,7 @@ using namespace neopt;
 
 int main()
 {
+   Block block;
    IEquatable<int>* ieq = nullptr;
    UIntBase* uint = nullptr;
    UInt160 uint160;

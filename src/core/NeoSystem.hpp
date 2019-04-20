@@ -7,6 +7,7 @@
 // core includes
 #include<plugin/IPlugin.h>
 #include<plugin/PluginSystem.hpp>
+#include<IBlockchain.h>
 
 
 namespace neopt
@@ -15,11 +16,12 @@ namespace neopt
 class NeoSystem
 {
 public:
-   // creating PluginSystem here
    PluginSystem& pluginSystem;
 
-   NeoSystem(PluginSystem& _pluginSystem) :
-      pluginSystem(_pluginSystem)
+   IBlockchain& blockchain;
+
+   NeoSystem(PluginSystem& _pluginSystem, IBlockchain& _blockchain) :
+      pluginSystem(_pluginSystem), blockchain(_blockchain)
    {
    }
 
