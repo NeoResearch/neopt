@@ -662,7 +662,7 @@ private:
 
          cout << "Loaded plugins:" << endl;
          for(unsigned i=0; i<pluginSystem.Plugins.size(); i++)
-            cout << "\t" << pluginSystem.Plugins[i]->Name();
+            cout << pluginSystem.Plugins[i]->Name() << "\t";
          cout << endl;
       }
       else
