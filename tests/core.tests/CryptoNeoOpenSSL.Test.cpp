@@ -3,7 +3,7 @@
 // core includes
 #include<crypto/ICrypto.h>
 #include<crypto/CryptoNeoOpenSSL.h>
-#include<system/vhelper.h>
+#include<system/vhelper.hpp>
 
 using namespace neopt;
 
