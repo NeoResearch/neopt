@@ -21,6 +21,8 @@ protected:
 
    std::string Name() const;
 
+   void OnPluginsLoaded();
+
 };
 
 }
