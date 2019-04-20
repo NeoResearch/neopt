@@ -13,6 +13,12 @@
 namespace neopt
 {
 
+// forward declaration of PluginSystem
+class PluginSystem;
+
+// TODO: NeoSystem may need to be a templated class, to fix forward declarations (NeoSystem<PluginSystem, Blockchain ,...>)
+// TODO: another option may be to template all systems (PluginSystem<NeoSystem>...), less compromising but less powerful
+
 class NeoSystem
 {
 public:
@@ -23,6 +29,7 @@ public:
    NeoSystem(PluginSystem& _pluginSystem, IBlockchain& _blockchain) :
       pluginSystem(_pluginSystem), blockchain(_blockchain)
    {
+      pluginSystem.neoSystem = this;
    }
 
    // what to put here?

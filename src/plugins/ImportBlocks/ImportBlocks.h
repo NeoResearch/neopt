@@ -6,6 +6,7 @@
 
 // core includes
 #include<core/plugin/IPlugin.h>
+#include<core/IBlockchain.h>
 
 // local includes
 #include<BlockImporter.hpp>
@@ -30,7 +31,7 @@ protected:
    void OnPluginsLoaded();
 
 private:
-   void OnImportComplete(); // TODO: only use later as a callback after importer actor finishes 
+   void OnImportComplete(); // TODO: only use later as a callback after importer actor finishes
 
 };
 

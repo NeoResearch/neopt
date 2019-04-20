@@ -10,14 +10,20 @@
 #include<plugin/ILogPlugin.h>
 #include<plugin/LogLevel.h>
 
+#include<NeoSystem.hpp>
 
 namespace neopt
 {
 
+// forward declaration
+class NeoSystem;
 
 class PluginSystem
 {
 public:
+
+   NeoSystem* neoSystem;
+
    std::vector<IPlugin*> Plugins;
 
    // specific plugins
@@ -30,13 +36,17 @@ public:
    void load(IPlugin& plugin)
    {
       Plugins.push_back(&plugin);
+      plugin.pluginSystem = this;
    }
 
+   /*
    // TODO: must delete this from memory
    void load(IPlugin* plugin)
    {
       Plugins.push_back(plugin);
+
    }
+   */
 
    // load plugins (TODO: load as dynamic library)
    void LoadPlugins()

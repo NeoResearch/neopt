@@ -8,14 +8,19 @@
 
 // core includes
 #include<plugin/LogLevel.h>
+//#include<plugin/PluginSystem.hpp>
 
 namespace neopt
 {
+
+// forward declaration
+class PluginSystem;
 
 class IPlugin
 {
 public:
    // what to put here?
+   PluginSystem* pluginSystem;
 
 public: // TODO: make friend of PluginSystem? (protect?)
 
