@@ -22,6 +22,7 @@
 #include<numbers/Fixed8.hpp>
 #include<wallets/whelper.hpp>
 #include<plugin/PluginSystem.h>
+#include<system/BinaryReader.hpp>
 
 using namespace std;
 using namespace neopt;

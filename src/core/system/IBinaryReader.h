@@ -22,6 +22,19 @@ public:
 
    // returns array of read bytes
    virtual vbyte ReadVarBytes(int max) = 0;
+
+   // native function
+   virtual vbyte ReadBytes(int max) = 0;
+
+   // pack
+
+   virtual byte ReadByte() = 0;
+
+   virtual int16 ReadUInt16() = 0;
+
+   virtual uint32 ReadUInt32() = 0;
+
+   virtual ulong ReadUInt64() = 0;
 };
 
 }
