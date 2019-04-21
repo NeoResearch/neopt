@@ -23,20 +23,24 @@ using namespace neopt;
 
 int main(int argc, char* argv[])
 {
+   // initialize plugin system
    PluginSystem pluginSystem;
-
-   // manually loading "default" plugins (TODO: could use dynamic libraries)
-   ImportBlocks pluginIB;
-   pluginSystem.load(pluginIB);
-
-   // finished loading plugins
-   pluginSystem.NotifyPluginsLoadedAfterSystemConstructed();
 
    // initialize Blockchain ledger
    Blockchain blockchain;
 
    // build NeoSystem
    NeoSystem neoSystem(pluginSystem, blockchain);
+
+   // manually loading "default" plugins (TODO: could use dynamic libraries)
+   ImportBlocks pluginIB;
+   pluginSystem.load(pluginIB);
+
+   cout << "IB plugin: " << pluginIB.Name() << endl;
+
+   // finished loading plugins
+   pluginSystem.NotifyPluginsLoadedAfterSystemConstructed();
+
 
    // build MainService (cli)
    MainService mainService(pluginSystem);

@@ -9,6 +9,7 @@
 
 // WARNING: this .hpp include is very risky an may break plugin
 #include<core/IBlockchain.hpp>
+#include<core/PluginSettings.hpp>
 
 // local includes
 #include<BlockImporter.hpp>
@@ -19,16 +20,19 @@ namespace neopt
 class ImportBlocks : public IPlugin
 {
 private:
-   BlockImporter _blockImporter;
+   BlockImporter* _blockImporter;
+   PluginSettings settings;
 
 public:
-   // what to put here?
+   ImportBlocks();
+
+   virtual ~ImportBlocks();
+
+   std::string Name() const;
 
 protected:
 
    bool OnMessage(const std::vector<std::string>& message);
-
-   std::string Name() const;
 
    void OnPluginsLoaded();
 
