@@ -11,12 +11,14 @@
 #include<NeoSystem.h>
 #include<system/types.h>
 #include<plugin/LogLevel.h>
+//#include<system/IConfigurationSection.h> // TODO: perhaps not good .hpp here
 
 /*
 #include<plugin/IPlugin.h>
 #include<plugin/ILogPlugin.h>
 #include<plugin/LogLevel.h>
 */
+
 
 
 namespace neopt
@@ -37,6 +39,9 @@ public:
    // specific plugins
    std::vector<ILogPlugin*> Loggers;
 
+   std::string Path;
+
+   PluginSystem(std::string path = "");
 
    // TODO: check better ways to do this (perhaps dynamic library?)
    // general plugin loading

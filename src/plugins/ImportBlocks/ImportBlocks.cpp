@@ -3,6 +3,11 @@
 using namespace std;
 using namespace neopt;
 
+void ImportBlocks::Configure()
+{
+    ImportBlocksSettings::Load(this->GetConfiguration());
+}
+
 ImportBlocks::ImportBlocks()
 {
    _blockImporter = nullptr;
@@ -33,7 +38,7 @@ void ImportBlocks::OnPluginsLoaded()
 
     IBlockchain& blockchain = this->pluginSystem->neoSystem->blockchain;
 
-    _blockImporter = new BlockImporter(this->settings, blockchain);
+    _blockImporter = new BlockImporter(blockchain);
 
     // TODO: use Actor system for message passing
     _blockImporter->Receive(BlockImporterAction::StartImport);

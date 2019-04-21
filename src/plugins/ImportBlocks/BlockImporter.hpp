@@ -9,7 +9,9 @@
 // core includes
 #include<core/IBlockchain.hpp>
 #include<core/Block.hpp>
-#include<core/PluginSettings.hpp>
+
+// local includes
+#include<ImportBlocksSettings.h>
 
 namespace neopt
 {
@@ -29,14 +31,23 @@ private:
    vector<Block> blocksBeingImported;
    ////private Action _doneAction; // TODO: callback
 
-   PluginSettings& settings;
+   ///ImportBlocksSettings& settings;
 
 public:
-   BlockImporter(PluginSettings& _settings, IBlockchain& _blockchain) :
-      settings(_settings), blockchain(_blockchain)
+   BlockImporter(IBlockchain& _blockchain) :
+      blockchain(_blockchain)
    {
    }
 
+private:
+   static bool CheckMaxOnImportHeight(uint currentImportBlockHeight)
+   {
+       if (ImportBlocksSettings::Default().MaxOnImportHeight == 0 || ImportBlocksSettings::Default().MaxOnImportHeight >= currentImportBlockHeight)
+           return true;
+       return false;
+   }
+
+public:
    void Receive(BlockImporterAction action) // TODO: transform into OnReceive with Actor system
    {
       switch(action)

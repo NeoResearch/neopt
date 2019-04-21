@@ -9,10 +9,15 @@
 
 // WARNING: this .hpp include is very risky an may break plugin
 #include<core/IBlockchain.hpp>
-#include<core/PluginSettings.hpp>
+#include<core/plugin/PluginSettings.hpp>
+
 
 // local includes
 #include<BlockImporter.hpp>
+
+// forward reference
+class ImportBlockSettings;
+//#include<ImportBlocksSettings.hpp>
 
 namespace neopt
 {
@@ -21,9 +26,13 @@ class ImportBlocks : public IPlugin
 {
 private:
    BlockImporter* _blockImporter;
-   PluginSettings settings;
+
+   // just uses settings: ImportBlocksSettings::Default-> ...
 
 public:
+
+   void Configure();
+
    ImportBlocks();
 
    virtual ~ImportBlocks();

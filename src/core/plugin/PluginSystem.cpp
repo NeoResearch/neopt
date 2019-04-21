@@ -7,6 +7,11 @@
 using namespace std;
 using namespace neopt;
 
+PluginSystem::PluginSystem(std::string path)
+{
+   Path = path;
+}
+
 void PluginSystem::load(IPlugin& plugin)
 {
    Plugins.push_back(&plugin);
