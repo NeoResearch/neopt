@@ -53,16 +53,21 @@ public:
       switch(action)
       {
          case StartImport:
+         {
             std::cout << "starting to import blocks..." << std::endl;
 
+            bool b = CheckMaxOnImportHeight(10);
 
             this->Receive(BlockImporterAction::ImportCompleted); // TODO: use actor message for this
             break;
+         }
          case ImportCompleted:
+         {
 
             std::cout << "import blocks finished..." << std::endl;
 
             break;
+         }
       }
    }
 

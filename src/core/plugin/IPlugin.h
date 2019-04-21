@@ -23,6 +23,8 @@ public:
 
 public: // TODO: make friend of PluginSystem? (protect?)
 
+   virtual void Configure() = 0;
+
    // TODO: check if void* is better than string vector
    virtual bool OnMessage(const std::vector<std::string>& message) = 0;
 

@@ -22,10 +22,19 @@ private:
    static ImportBlocksSettings* _default;
 
 public:
-   //static ImportBlocksSettings& Default();
+
    static ImportBlocksSettings& Default()
    {
+      if(!_default)
+         _default = new ImportBlocksSettings(ConfigurationSection()); // empty configuration
       return *_default;
+   }
+
+   static void FreeSettings()
+   {
+      if(_default)
+         delete _default;
+      _default = nullptr;
    }
 
 private:
@@ -33,22 +42,19 @@ private:
    //static uint parse_uint(std::string s);
    static uint parse_uint(std::string s)
    {
-       return 0;
+      std::cout << "TODO: must parse_uint" << std::endl;
+      return 0;
    }
 
-
    ImportBlocksSettings(const ConfigurationSection& section);
-
-
 
 public:
 
    template<class T>
    T GetValueOrDefault(const ConfigurationSection& section, T defaultValue, std::function<T(string)> selector)
    {
-       if (section.Value() == "") return defaultValue;
-       //if (section.Value == nullptr) return defaultValue;
-       return selector(section.Value());
+      if (section.Value() == "") return defaultValue;
+      return selector(section.Value());
    }
 
    static void Load(const ConfigurationSection& section)

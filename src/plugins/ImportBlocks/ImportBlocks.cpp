@@ -5,7 +5,8 @@ using namespace neopt;
 
 void ImportBlocks::Configure()
 {
-    ImportBlocksSettings::Load(this->GetConfiguration());
+   cout << "Configuring ImportBlocks plugin" << endl;
+   ImportBlocksSettings::Load(this->GetConfiguration());
 }
 
 ImportBlocks::ImportBlocks()

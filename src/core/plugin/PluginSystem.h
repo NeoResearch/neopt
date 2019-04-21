@@ -60,6 +60,22 @@ public:
    // load plugins (TODO: load as dynamic library)
    void LoadPlugins();
 
+   // TODO: implement this feature only on non-portable versions
+   //static void FileSystemWatcherFolderChanged();
+   /*
+   void ReloadConfigurations()
+   {
+      for(unsigned i=0; i<Plugins.size(); i++)
+      {
+         Plugins[i]->Configure();
+         stringstream ss;
+         ss << "Reloaded config for " << Plugins[i]->Name();
+         plugin.Log(ss.str());
+         break; // TODO: why break?
+      }
+   }
+   */
+
    bool SendMessage(const std::vector<std::string>& message);
 
    void NotifyPluginsLoadedAfterSystemConstructed();

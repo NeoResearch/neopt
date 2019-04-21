@@ -5,7 +5,6 @@ using namespace neopt;
 
 ImportBlocksSettings* ImportBlocksSettings::_default = nullptr;
 
-
 ImportBlocksSettings::ImportBlocksSettings(const ConfigurationSection& section)
 {
    std::function<uint(string)> sel = parse_uint;

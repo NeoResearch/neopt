@@ -14,8 +14,10 @@ PluginSystem::PluginSystem(std::string path)
 
 void PluginSystem::load(IPlugin& plugin)
 {
+   cout << "LOADING PLUGIN " << plugin.Name() << endl;
    Plugins.push_back(&plugin);
    plugin.pluginSystem = this;
+   plugin.Configure();
 }
 
 void PluginSystem::LoadPlugins()

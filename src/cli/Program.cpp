@@ -53,6 +53,9 @@ int main(int argc, char* argv[])
    // run main service
    mainService.Run(args);
 
+   // free resources
+   ImportBlocksSettings::FreeSettings();
+
    // finished
    std::cout << "neopt-cli finished successfully" << std::endl;
    return 0;
