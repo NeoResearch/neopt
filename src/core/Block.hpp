@@ -79,7 +79,7 @@ namespace neopt
       }
 
       // IVerifiable
-      virtual void SerializeUnsigned(IBinaryWriter& writer)
+      virtual void SerializeUnsigned(IBinaryWriter& writer) const
       {
          NEOPT_EXCEPTION("Cannot serialize unsigned block yet");
       }

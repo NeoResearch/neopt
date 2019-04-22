@@ -3,6 +3,8 @@
 
 // c++ standard part
 #include<vector>
+#include<ostream>
+#include<sstream>
 
 // neopt core part
 #include<system/ISerializable.h>
@@ -13,6 +15,9 @@
 #include<Witness.hpp>
 #include<wallets/KeyPair.hpp>
 #include<crypto/ICrypto.h>
+
+#include<system/BinaryWriter.hpp>
+
 
 namespace neopt
 {
@@ -30,7 +35,7 @@ public:
 
    virtual void DeserializeUnsigned(IBinaryReader& reader) = 0;
 
-   virtual void SerializeUnsigned(IBinaryWriter& writer) = 0;
+   virtual void SerializeUnsigned(IBinaryWriter& writer) const = 0;
 
    // originally from Wallets/Helper.cs
    virtual vbyte Sign(ICrypto& crypto, const KeyPair& key) const
@@ -41,22 +46,12 @@ public:
    // originally from Network/P2P/Helper.cs
    virtual vbyte GetHashData() const
    {
-      // TODO: implement
-      NEOPT_EXCEPTION("GetHashData not implemented on IVerifiable");
-      return vbyte(0);
+      std::ostringstream oss;
+      BinaryWriter writer(oss);
+      this->SerializeUnsigned(writer);
+      writer.Flush();
+      return vhelper::ToArray(oss);
    }
-   /*
-   public static byte[] GetHashData(this IVerifiable verifiable)
-   {
-       using (MemoryStream ms = new MemoryStream())
-       using (BinaryWriter writer = new BinaryWriter(ms))
-       {
-           verifiable.SerializeUnsigned(writer);
-           writer.Flush();
-           return ms.ToArray();
-       }
-   }
-   */
 
 };
 

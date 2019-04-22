@@ -93,6 +93,14 @@ public:
       return in;
    }
 
+   static vbyte ToArray(const ostream& os)
+   {
+      // TODO: implement
+      NEOPT_EXCEPTION("Not implemented vhelper::ToArray() ostream");
+      return vbyte(0);
+   }
+
+
 };
 
 }

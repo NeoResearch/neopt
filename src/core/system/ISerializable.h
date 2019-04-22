@@ -23,11 +23,6 @@ public:
    // TODO: what's the best serialization format?
 
    virtual void Deserialize(IBinaryReader& reader) = 0;
-   /*
-   virtual void DeserializeUnsigned(IBinaryReader& reader) = 0;
-
-   virtual void SerializeUnsigned(IBinaryWriter& writer) = 0;
-   */
 
 };
 

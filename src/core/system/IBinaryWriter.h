@@ -19,6 +19,8 @@ public:
 
    // writes var bytes on vector
    virtual void WriteVarBytes(vbyte& v) = 0;
+
+   virtual void Flush() = 0; // don't know if actually needed
 };
 
 }
