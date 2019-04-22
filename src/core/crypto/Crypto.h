@@ -29,7 +29,25 @@ namespace neopt
 // cryptography for Neo
 class Crypto : public ICrypto
 {
+private:
+   static ICrypto* _crypto;
+   
 public:
+
+   static ICrypto& Default()
+   {
+      if(_crypto == nullptr)
+         _crypto = new Crypto();
+      return *_crypto;
+   }
+
+   static void Free()
+   {
+      if(_crypto != nullptr)
+         delete _crypto;
+      _crypto = nullptr;
+   }
+
    vbyte Hash160(const vbyte& message);
 
    vbyte Hash256(const vbyte& message);

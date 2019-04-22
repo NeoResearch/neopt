@@ -11,6 +11,9 @@
 
 using namespace neopt;
 
+// first thing, declare private static variable _crypto
+ICrypto* Crypto::_crypto = nullptr;
+
 // ==================
 // external functions
 // ==================

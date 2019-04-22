@@ -12,6 +12,7 @@
 #include<numbers/UIntBase.hpp>
 #include<numbers/BigInteger.h>
 #include<system/shelper.h>
+#include<crypto/Crypto.h>
 //#include<Transaction.hpp>
 
 namespace neopt
@@ -35,6 +36,7 @@ namespace neopt
    public:
       virtual UInt256 getHash()
       {
+         ICrypto& crypto = Crypto::Default();
          /*
          get
          {
