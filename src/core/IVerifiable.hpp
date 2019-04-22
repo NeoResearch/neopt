@@ -14,7 +14,7 @@
 #include<numbers/UInt160.hpp>
 #include<Witness.hpp>
 #include<wallets/KeyPair.hpp>
-#include<crypto/ICrypto.h>
+#include<crypto/Crypto.h>
 
 #include<system/BinaryWriter.hpp>
 
@@ -38,9 +38,9 @@ public:
    virtual void SerializeUnsigned(IBinaryWriter& writer) const = 0;
 
    // originally from Wallets/Helper.cs
-   virtual vbyte Sign(ICrypto& crypto, const KeyPair& key) const
+   virtual vbyte Sign(const KeyPair& key) const
    {
-      return crypto.Sign(this->GetHashData(), key.PrivateKey, vhelper::Skip(key.PublicKey.EncodePoint(false), 1));
+      return Crypto::Default().Sign(this->GetHashData(), key.PrivateKey, vhelper::Skip(key.PublicKey.EncodePoint(false), 1));
    }
 
    // originally from Network/P2P/Helper.cs
