@@ -26,6 +26,18 @@ class IBlockchain
 {
 public:
 
+// TODO: move singleton to Blockchain implementation, this is just an interface
+/*
+   static IBlockchain* _singleton;
+
+   static IBlockchain& Singleton()
+   {
+      return *_singleton;
+   }
+*/
+
+   int Height;
+
 
    // method to import blocks
    virtual void OnImport(std::vector<Block>& blocks) = 0;

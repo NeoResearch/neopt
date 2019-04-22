@@ -17,6 +17,18 @@ class Blockchain : public IBlockchain
 {
 public:
 
+   // TODO: avoid singleton for now
+   /*
+   // Singleton Class (TODO: use pattern on inheritance)
+   static IBlockchain* _singleton;
+
+   static IBlockchain& Singleton()
+   {
+      return *_singleton;
+   }
+   */
+
+
 
    // method to import blocks
    void OnImport(std::vector<Block>& blocks)

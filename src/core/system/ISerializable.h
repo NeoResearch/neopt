@@ -5,11 +5,17 @@ using namespace std; // TODO: do not use that in the future... prefer std::vecto
 
 // neopt core part
 #include<system/types.h>
-#include<system/IBinaryReader.h>
-#include<system/IBinaryWriter.h>
+//#include<system/IBinaryReader.h> // forward declaration
+//#include<system/IBinaryWriter.h> // forward declaration
 
 namespace neopt
 {
+
+// forward declaration
+class IBinaryReader;
+// forward declaration
+class IBinaryWriter;
+
 
 class ISerializable
 {

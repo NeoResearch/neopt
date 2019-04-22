@@ -17,15 +17,18 @@ typedef unsigned char byte;
 // signed short int
 typedef short  int16;
 
+// unsigned short int
+typedef unsigned short  uint16;
+
 // signed int
 typedef int int32;
 
 // unsigned int
 typedef unsigned int uint32;
 
-
 // unsigned long
 typedef unsigned long ulong;
+
 
 // byte array definition
 typedef std::vector<byte> vbyte;

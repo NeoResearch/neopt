@@ -5,11 +5,12 @@
 #include<vector>
 
 // neopt core part
-#include<system/ISerializable.h>
+//#include<system/ISerializable.h>
 #include<system/IEquatable.h>
 #include<system/IComparable.h>
 #include<numbers/UIntBase.hpp>
 #include<system/shelper.h>
+#include<system/vhelper.hpp>
 
 namespace neopt
 {

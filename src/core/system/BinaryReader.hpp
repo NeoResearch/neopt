@@ -3,6 +3,8 @@
 
 // system includes
 #include<vector>
+#include<iostream>
+#include<fstream>
 
 // neopt core part
 #include<system/types.h>
@@ -14,12 +16,90 @@ using namespace std; // TODO: do not use that in the future... prefer std::vecto
 namespace neopt
 {
 
+// this BinaryReader is not meant to be fully portable
+// if necessary, think on a better portability class and re-write over IBinaryReader interface
 class BinaryReader : public IBinaryReader
 {
+private:
+   istream* input;
+   bool mustDelete;
 public:
-   // read data directly on vector
-   virtual void Read(vector<byte>& data, int begin, int readsize)
+
+   // reading data from input stream
+   // may not be fully portable
+   // if necessary, in the future, create abstract Stream class with better cross-compatibility
+   BinaryReader(istream& _input) :
+      input(&_input), mustDelete(false)
    {
+   }
+
+   BinaryReader(istream* _input) :
+      input(_input), mustDelete(true)
+   {
+   }
+
+   virtual ~BinaryReader()
+   {
+      if(mustDelete)
+         delete input;
+   }
+
+   // Gets new independent reader from stream (must delete stream later)
+   virtual IBinaryReader* GetNewReader(std::istream* stream) const
+   {
+      return new BinaryReader(stream);
+   }
+
+
+   static bool FileExists(std::string name)
+   {
+      std::ifstream f(name.c_str());
+      return f.good();
+   }
+
+   // read data directly on vector
+   void Read(vector<byte>& data, int begin, int readsize)
+   {
+
+   }
+
+   // returns array of read bytes
+   virtual vbyte ReadVarBytes(int max)
+   {
+      return vbyte(0);
+   }
+
+   // native function
+   virtual vbyte ReadBytes(int max)
+   {
+      return vbyte(0);
+   }
+
+   // pack
+
+   virtual byte ReadByte()
+   {
+      return 0;
+   }
+
+   virtual int16 ReadInt16()
+   {
+      return 0;
+   }
+
+   virtual uint16 ReadUInt16()
+   {
+      return 0;
+   }
+
+   virtual int32 ReadInt32()
+   {
+      return 0;
+   }
+
+   virtual uint32 ReadUInt32()
+   {
+      return 0;
    }
 
    virtual long ReadInt64()
@@ -27,69 +107,15 @@ public:
       return 0;
    }
 
-   virtual vbyte ReadBytes(int max)
+   virtual ulong ReadUInt64()
    {
-      return vbyte(0);
-   }
-
-   // returns array of read bytes
-   vbyte ReadVarBytes(int max = 0x1000000)
-   {
-       return this->ReadBytes((int)this->ReadVarInt((ulong)max));
-   }
-
-   template<class T>
-   T ReadSerializable()
-   {
-      T obj; // empty constructor
-      ISerializable& sobj = (ISerializable)obj;
-      sobj.Deserialize(*this);
-      return std::move(obj);
-   }
-
-   template<class T>
-   vector<T> ReadSerializableArray(int max = 0x1000000)
-   {
-       vector<T> array(this->ReadVarInt((ulong)max));
-       // invoking empty constructor for all of this kind
-       for (int i = 0; i < array.size(); i++)
-       {
-          ISerializable& sobj = (ISerializable)array[i];
-          sobj.Deserialize(*this);
-       }
-       return array;
-   }
-
-   ulong ReadVarInt()
-   {
-      return this->ReadVarInt(nhelper::MaxValue<ulong>());
-   }
-
-   ulong ReadVarInt(ulong max)
-   {
-       byte fb = this->ReadByte();
-       ulong value;
-       if (fb == 0xFD)
-           value = this->ReadUInt16();
-       else if (fb == 0xFE)
-           value = this->ReadUInt32();
-       else if (fb == 0xFF)
-           value = this->ReadUInt64();
-       else
-           value = fb;
-       if (value > max)
-       {
-          NEOPT_EXCEPTION("FormatException");
-          return -1;
-       }
-       return value;
+      return 0;
    }
 
    string ReadVarString(int max = 0x1000000)
    {
        return ""; // TODO // Encoding.UTF8.GetString(this->ReadVarBytes(max));
    }
-
 };
 
 }
