@@ -8,8 +8,8 @@
 
 // neopt core part
 #include<system/types.h>
-#include<system/ISerializable.h> // TODO: move serialization to vhelper
-#include<numbers/nhelper.h>
+#include<system/ISerializable.h>
+//#include<numbers/nhelper.h>
 //#include<system/vhelper.hpp>
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
@@ -73,7 +73,7 @@ public:
 
    virtual ulong ReadVarInt()
    {
-      return this->ReadVarInt(nhelper::MaxValue<ulong>());
+      return this->ReadVarInt(types::MaxValue<ulong>());
    }
 
    virtual ulong ReadVarInt(ulong max)

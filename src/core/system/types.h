@@ -3,6 +3,7 @@
 
 // system includes
 #include<vector>
+#include<limits>
 
 // core includes
 // ... none
@@ -34,6 +35,22 @@ typedef unsigned long ulong;
 typedef std::vector<byte> vbyte;
 
 #define NEOPT_EXCEPTION(str) { printf("neopt error: %s\n", str); exit(1); }
+
+class types
+{
+public:
+   template<class T>
+   static T MaxValue()
+   {
+      return std::numeric_limits<T>::max();
+   }
+
+   template<class T>
+   static T MinValue()
+   {
+      return std::numeric_limits<T>::min();
+   }
+};
 
 }
 

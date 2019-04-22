@@ -6,11 +6,13 @@
 // system
 #include<vector>
 #include<sstream>
-#include<limits>
+//#include<limits>
 
 // neo core
 #include<system/types.h>
-#include<numbers/UInt160.hpp>
+//#include<numbers/UInt160.hpp>
+
+// TODO: is there any real usage for this class?
 
 namespace neopt
 {
@@ -20,17 +22,6 @@ class nhelper
 {
 public:
 
-   template<class T>
-   static T MaxValue()
-   {
-      return std::numeric_limits<T>::max();
-   }
-
-   template<class T>
-   static T MinValue()
-   {
-      return std::numeric_limits<T>::min();
-   }
 
 
 };

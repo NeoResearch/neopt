@@ -32,12 +32,12 @@ namespace neopt
    public:
       static const Fixed8 MaxValue()
       {
-         return Fixed8(nhelper::MaxValue<long>());
+         return Fixed8(types::MaxValue<long>());
       }
 
       static const Fixed8 MinValue()
       {
-         return Fixed8(nhelper::MinValue<long>());
+         return Fixed8(types::MinValue<long>());
       }
 
       static const Fixed8 One()

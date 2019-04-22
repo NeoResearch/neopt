@@ -10,6 +10,7 @@ wget -nc https://www.openssl.org/source/$OPENSSL_VER.tar.gz
 rm -rf openssl_src
 tar -zxf $OPENSSL_VER.tar.gz
 rm -rf openssl_src
+rm -rf crypto/openssl
 mv $OPENSSL_VER openssl_src
 # ================
 # building openssl
