@@ -31,10 +31,10 @@ class Crypto : public ICrypto
 {
 private:
    static ICrypto* _crypto;
-   
+
 public:
 
-   static ICrypto& Default()
+   static const ICrypto& Default()
    {
       if(_crypto == nullptr)
          _crypto = new Crypto();
@@ -48,19 +48,19 @@ public:
       _crypto = nullptr;
    }
 
-   vbyte Hash160(const vbyte& message);
+   vbyte Hash160(const vbyte& message) const;
 
-   vbyte Hash256(const vbyte& message);
+   vbyte Hash256(const vbyte& message) const;
 
-   bool VerifySignature(const vbyte& message, const vbyte& signature, const vbyte& pubkey);
+   bool VerifySignature(const vbyte& message, const vbyte& signature, const vbyte& pubkey) const;
 
    // SHA256
-   vbyte Sha256(const vbyte& message);
+   vbyte Sha256(const vbyte& message) const;
 
    // RIPEMD160
-   vbyte RIPEMD160(const vbyte& message);
+   vbyte RIPEMD160(const vbyte& message) const;
 
-   vbyte Sign(const vbyte& message, const vbyte& privkey, const vbyte& pubkey)
+   vbyte Sign(const vbyte& message, const vbyte& privkey, const vbyte& pubkey) const
    {
       return SignData(Sha256(message), privkey, pubkey);
    }
@@ -84,9 +84,9 @@ public:
 */
 
    // TODO: receive pubkey or already ECPoint(X,Y) ?
-   vbyte SignData(const vbyte& digest, const vbyte& prikey, const vbyte& pubkey);
+   vbyte SignData(const vbyte& digest, const vbyte& prikey, const vbyte& pubkey) const;
 
-   virtual vbyte GeneratePrivateKey(vbyte& vpubkey);
+   virtual vbyte GeneratePrivateKey(vbyte& vpubkey) const;
 
 
    // manually added

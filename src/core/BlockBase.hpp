@@ -36,7 +36,7 @@ namespace neopt
    public:
       virtual UInt256 getHash()
       {
-         ICrypto& crypto = Crypto::Default();
+         const ICrypto& crypto = Crypto::Default();
          /*
          get
          {

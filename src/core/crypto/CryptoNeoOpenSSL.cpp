@@ -82,21 +82,21 @@ const byte EMPTY_RIPEMD160[] =
 	0x08,0x97,0x7e,0xe8,0xf5,0x48,0xb2,0x25,0x8d,0x31
 };
 
-vbyte Crypto::Hash160(const vbyte& message)
+vbyte Crypto::Hash160(const vbyte& message) const
 {
 	vbyte voutput(HASH160_LENGTH);
 	::lComputeHash160(message.data(), message.size(), voutput.data());
 	return voutput;
 }
 
-vbyte Crypto::Hash256(const vbyte& message)
+vbyte Crypto::Hash256(const vbyte& message) const
 {
 	vbyte voutput(HASH256_LENGTH);
 	lComputeHash256(message.data(), message.size(), voutput.data());
 	return voutput;
 }
 
-bool Crypto::VerifySignature(const vbyte& message, const vbyte& signature, const vbyte& pubkey)
+bool Crypto::VerifySignature(const vbyte& message, const vbyte& signature, const vbyte& pubkey) const
 {
 	int16 ret = lVerifySignature(message.data(), message.size(), signature.data(), signature.size(), pubkey.data(), pubkey.size());
 	if (ret==-1)
@@ -104,14 +104,14 @@ bool Crypto::VerifySignature(const vbyte& message, const vbyte& signature, const
 	return ret == 1;
 }
 
-vbyte Crypto::Sha256(const vbyte& message)
+vbyte Crypto::Sha256(const vbyte& message) const
 {
 	vbyte voutput(SHA256_LENGTH);
 	lComputeSHA256(message.data(), message.size(), voutput.data());
 	return voutput;
 }
 
-vbyte Crypto::RIPEMD160(const vbyte& message)
+vbyte Crypto::RIPEMD160(const vbyte& message) const
 {
 	vbyte voutput(RIPEMD160_LENGTH);
 	lComputeRIPEMD160(message.data(), message.size(), voutput.data());
@@ -120,7 +120,7 @@ vbyte Crypto::RIPEMD160(const vbyte& message)
 
 // message is already received as a SHA256 digest
 // TODO: better to receive pubkey in general format or specific ECPoint(X,Y) ?
-vbyte Crypto::SignData(const vbyte& digest, const vbyte& privkey, const vbyte& pubkey)
+vbyte Crypto::SignData(const vbyte& digest, const vbyte& privkey, const vbyte& pubkey) const
 {
 	//printf("\n\nSignData\n");
 	// TODO: implement low level lSignData? (or keep C++ mixed?)
@@ -376,7 +376,7 @@ int16 lVerifySignature
 }
 
 // generates private key and updates parameter vpubkey (TODO: update function format)
-vbyte Crypto::GeneratePrivateKey(vbyte& vpubkey)
+vbyte Crypto::GeneratePrivateKey(vbyte& vpubkey) const
 {
 	//printf("generating priv/pub key\n");
 	EC_KEY *eckey=EC_KEY_new();
