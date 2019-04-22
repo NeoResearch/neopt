@@ -30,26 +30,8 @@ namespace neopt
       UInt160 NextConsensus;
       Witness witness;
 
-   private:
-      UInt256* _hash; // = nullptr
+public:
 
-   public:
-      virtual UInt256 getHash()
-      {
-         const ICrypto& crypto = Crypto::Default();
-         /*
-         get
-         {
-             if (_hash == null)
-             {
-                 _hash = new UInt256(Crypto.Default.Hash256(this.GetHashData()));
-             }
-             return _hash;
-         }
-         */
-         // TODO: implement
-         return UInt256();
-      }
 
 /*
       // IEquatable

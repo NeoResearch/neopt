@@ -42,6 +42,7 @@ public:
    virtual vbyte GetHashData() const
    {
       // TODO: implement
+      NEOPT_EXCEPTION("GetHashData not implemented on IVerifiable");
       return vbyte(0);
    }
    /*

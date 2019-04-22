@@ -21,7 +21,34 @@ namespace neopt
    class Block : public BlockBase, public IEquatable<Block>, public IInventory
    {
    public:
-      // TODO: finally fill here with transaction info
+
+
+   private:
+      UInt256* _hash; // = nullptr
+
+   public:
+
+      Block() :
+         _hash(nullptr)
+      {
+      }
+
+      virtual ~Block()
+      {
+         if(_hash != nullptr)
+            delete _hash;
+         _hash = nullptr;
+      }
+
+      // IInventory (Core project includes this on BlockBase ??? must be here on C++...)
+      virtual UInt256 getHash()
+      {
+         const ICrypto& crypto = Crypto::Default();
+
+         if(_hash == nullptr)
+            _hash = new UInt256(Crypto::Default().Hash256(IInventory::GetHashData()));
+         return *_hash; // can also be reference-based if desired
+      }
 
       // IEquatable
       bool Equals(const Block* other)
@@ -69,14 +96,6 @@ namespace neopt
       {
          // TODO: implement
          return vector<UInt160>(0);
-      }
-
-
-      // IInventory (BlockBase ???)
-      virtual UInt256 getHash()
-      {
-         // TODO: implement
-         return UInt256();
       }
 
 
