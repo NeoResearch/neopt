@@ -1,4 +1,13 @@
-#include <crypto/CryptoNeoOpenSSL.h>
+#include <crypto/Crypto.h>
+
+// third-party includes
+#include <openssl/obj_mac.h> // for NID_secp192k1
+
+#include <openssl/ec.h>      // for EC_GROUP_new_by_curve_name, EC_GROUP_free, EC_KEY_new, EC_KEY_set_group, EC_KEY_generate_key, EC_KEY_free
+#include <openssl/ecdsa.h>   // for ECDSA_do_sign, ECDSA_do_verify
+#include <openssl/sha.h>
+#include <openssl/ripemd.h>
+
 
 using namespace neopt;
 
@@ -6,21 +15,85 @@ using namespace neopt;
 // external functions
 // ==================
 
-vbyte CryptoNeoOpenSSL::Hash160(const vbyte& message)
+// borrowed from the neo-HyperVM project
+
+// public:
+// Constants
+static const int32 SHA1_LENGTH = 20;
+static const int32 SHA256_LENGTH = 32;
+static const int32 RIPEMD160_LENGTH = 20;
+static const int32 HASH160_LENGTH = RIPEMD160_LENGTH;
+static const int32 HASH256_LENGTH = SHA256_LENGTH;
+
+// Methods
+
+void lComputeSHA1(byte* data, int32 length, byte* output);
+void lComputeSHA256(const byte* data, int32 length, byte* output);
+void lComputeHash160(const byte* data, int32 length, byte* output);
+void lComputeHash256(const byte* data, int32 length, byte* output);
+void lComputeRIPEMD160(const byte* data, int32 length, byte* output);
+
+
+// -1=ERROR , 0= False , 1=True
+static int16 lVerifySignature(const byte* data, int32 dataLength, const byte* signature, int32 signatureLength, const byte* pubKey, int32 pubKeyLength);
+
+//private:
+static const int32 _curve = NID_X9_62_prime256v1; // secp256r1
+// see: https://www.ietf.org/rfc/rfc5480.txt
+
+// Empty hashes
+
+//static const byte EMPTY_RIPEMD160[RIPEMD160_LENGTH];
+//static const byte EMPTY_HASH160[HASH160_LENGTH];
+//static const byte EMPTY_HASH256[HASH256_LENGTH];
+//static const byte EMPTY_SHA1[SHA1_LENGTH];
+//static const byte EMPTY_SHA256[SHA256_LENGTH];
+
+const byte EMPTY_SHA1[] =
+{
+	0xda,0x39,0xa3,0xee,0x5e,0x6b,0x4b,0x0d,0x32,0x55,
+	0xbf,0xef,0x95,0x60,0x18,0x90,0xaf,0xd8,0x07,0x09
+};
+
+const byte EMPTY_HASH160[] =
+{
+	0xb4,0x72,0xa2,0x66,0xd0,0xbd,0x89,0xc1,0x37,0x06,
+	0xa4,0x13,0x2c,0xcf,0xb1,0x6f,0x7c,0x3b,0x9f,0xcb
+};
+
+const byte EMPTY_SHA256[] =
+{
+	0xe3,0xb0,0xc4,0x42,0x98,0xfc,0x1c,0x14,0x9a,0xfb,0xf4,0xc8,0x99,0x6f,0xb9,0x24,
+	0x27,0xae,0x41,0xe4,0x64,0x9b,0x93,0x4c,0xa4,0x95,0x99,0x1b,0x78,0x52,0xb8,0x55
+};
+
+const byte EMPTY_HASH256[] =
+{
+	0x5d,0xf6,0xe0,0xe2,0x76,0x13,0x59,0xd3,0x0a,0x82,0x75,0x05,0x8e,0x29,0x9f,0xcc,
+	0x03,0x81,0x53,0x45,0x45,0xf5,0x5c,0xf4,0x3e,0x41,0x98,0x3f,0x5d,0x4c,0x94,0x56
+};
+
+const byte EMPTY_RIPEMD160[] =
+{
+	0x9c,0x11,0x85,0xa5,0xc5,0xe9,0xfc,0x54,0x61,0x28,
+	0x08,0x97,0x7e,0xe8,0xf5,0x48,0xb2,0x25,0x8d,0x31
+};
+
+vbyte Crypto::Hash160(const vbyte& message)
 {
 	vbyte voutput(HASH160_LENGTH);
-	lComputeHash160(message.data(), message.size(), voutput.data());
+	::lComputeHash160(message.data(), message.size(), voutput.data());
 	return voutput;
 }
 
-vbyte CryptoNeoOpenSSL::Hash256(const vbyte& message)
+vbyte Crypto::Hash256(const vbyte& message)
 {
 	vbyte voutput(HASH256_LENGTH);
 	lComputeHash256(message.data(), message.size(), voutput.data());
 	return voutput;
 }
 
-bool CryptoNeoOpenSSL::VerifySignature(const vbyte& message, const vbyte& signature, const vbyte& pubkey)
+bool Crypto::VerifySignature(const vbyte& message, const vbyte& signature, const vbyte& pubkey)
 {
 	int16 ret = lVerifySignature(message.data(), message.size(), signature.data(), signature.size(), pubkey.data(), pubkey.size());
 	if (ret==-1)
@@ -28,14 +101,14 @@ bool CryptoNeoOpenSSL::VerifySignature(const vbyte& message, const vbyte& signat
 	return ret == 1;
 }
 
-vbyte CryptoNeoOpenSSL::Sha256(const vbyte& message)
+vbyte Crypto::Sha256(const vbyte& message)
 {
 	vbyte voutput(SHA256_LENGTH);
 	lComputeSHA256(message.data(), message.size(), voutput.data());
 	return voutput;
 }
 
-vbyte CryptoNeoOpenSSL::RIPEMD160(const vbyte& message)
+vbyte Crypto::RIPEMD160(const vbyte& message)
 {
 	vbyte voutput(RIPEMD160_LENGTH);
 	lComputeRIPEMD160(message.data(), message.size(), voutput.data());
@@ -44,7 +117,7 @@ vbyte CryptoNeoOpenSSL::RIPEMD160(const vbyte& message)
 
 // message is already received as a SHA256 digest
 // TODO: better to receive pubkey in general format or specific ECPoint(X,Y) ?
-vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& privkey, const vbyte& pubkey)
+vbyte Crypto::SignData(const vbyte& digest, const vbyte& privkey, const vbyte& pubkey)
 {
 	//printf("\n\nSignData\n");
 	// TODO: implement low level lSignData? (or keep C++ mixed?)
@@ -191,37 +264,7 @@ vbyte CryptoNeoOpenSSL::SignData(const vbyte& digest, const vbyte& privkey, cons
 // =========================
 
 
-const byte CryptoNeoOpenSSL::EMPTY_SHA1[] =
-{
-	0xda,0x39,0xa3,0xee,0x5e,0x6b,0x4b,0x0d,0x32,0x55,
-	0xbf,0xef,0x95,0x60,0x18,0x90,0xaf,0xd8,0x07,0x09
-};
-
-const byte CryptoNeoOpenSSL::EMPTY_HASH160[] =
-{
-	0xb4,0x72,0xa2,0x66,0xd0,0xbd,0x89,0xc1,0x37,0x06,
-	0xa4,0x13,0x2c,0xcf,0xb1,0x6f,0x7c,0x3b,0x9f,0xcb
-};
-
-const byte CryptoNeoOpenSSL::EMPTY_SHA256[] =
-{
-	0xe3,0xb0,0xc4,0x42,0x98,0xfc,0x1c,0x14,0x9a,0xfb,0xf4,0xc8,0x99,0x6f,0xb9,0x24,
-	0x27,0xae,0x41,0xe4,0x64,0x9b,0x93,0x4c,0xa4,0x95,0x99,0x1b,0x78,0x52,0xb8,0x55
-};
-
-const byte CryptoNeoOpenSSL::EMPTY_HASH256[] =
-{
-	0x5d,0xf6,0xe0,0xe2,0x76,0x13,0x59,0xd3,0x0a,0x82,0x75,0x05,0x8e,0x29,0x9f,0xcc,
-	0x03,0x81,0x53,0x45,0x45,0xf5,0x5c,0xf4,0x3e,0x41,0x98,0x3f,0x5d,0x4c,0x94,0x56
-};
-
-const byte CryptoNeoOpenSSL::EMPTY_RIPEMD160[] =
-{
-	0x9c,0x11,0x85,0xa5,0xc5,0xe9,0xfc,0x54,0x61,0x28,
-	0x08,0x97,0x7e,0xe8,0xf5,0x48,0xb2,0x25,0x8d,0x31
-};
-
-int16 CryptoNeoOpenSSL::lVerifySignature
+int16 lVerifySignature
 (
 	const byte* data, int32 dataLength,
 	const byte* signature, int32 signatureLength,
@@ -293,9 +336,9 @@ int16 CryptoNeoOpenSSL::lVerifySignature
 					{
 						if (gen_status == 0x01)
 						{
-							byte hash[CryptoNeoOpenSSL::SHA256_LENGTH];
+							byte hash[::SHA256_LENGTH];
 							lComputeSHA256(data, dataLength, hash);
-							ret = ECDSA_do_verify(hash, CryptoNeoOpenSSL::SHA256_LENGTH, sig, eckey);
+							ret = ECDSA_do_verify(hash, ::SHA256_LENGTH, sig, eckey);
 						}
 
 						// Free r,s and sig
@@ -330,7 +373,7 @@ int16 CryptoNeoOpenSSL::lVerifySignature
 }
 
 // generates private key and updates parameter vpubkey (TODO: update function format)
-vbyte CryptoNeoOpenSSL::GeneratePrivateKey(vbyte& vpubkey)
+vbyte Crypto::GeneratePrivateKey(vbyte& vpubkey)
 {
 	//printf("generating priv/pub key\n");
 	EC_KEY *eckey=EC_KEY_new();
@@ -405,7 +448,7 @@ vbyte CryptoNeoOpenSSL::GeneratePrivateKey(vbyte& vpubkey)
 	printf("pubkey (uncompressed): %d %s\n", strlen(cc), cc);
 	std::string scc(cc);
 	printf("mystr: %s\n", scc.c_str());
-	vpubkey = CryptoNeoOpenSSL::FromHexString(scc);
+	vpubkey = Crypto::FromHexString(scc);
 	//free(cc);
 	*/
 
@@ -434,11 +477,11 @@ vbyte CryptoNeoOpenSSL::GeneratePrivateKey(vbyte& vpubkey)
 	return std::move(vpriv);
 }
 
-void CryptoNeoOpenSSL::lComputeHash160(const byte* data, int32 length, byte* output)
+void lComputeHash160(const byte* data, int32 length, byte* output)
 {
 	if (length <= 0)
 	{
-		memcpy(output, CryptoNeoOpenSSL::EMPTY_HASH160, CryptoNeoOpenSSL::HASH160_LENGTH);
+		memcpy(output, ::EMPTY_HASH160, ::HASH160_LENGTH);
 		return;
 	}
 
@@ -459,11 +502,11 @@ void CryptoNeoOpenSSL::lComputeHash160(const byte* data, int32 length, byte* out
 }
 
 
-void CryptoNeoOpenSSL::lComputeRIPEMD160(const byte* data, int32 length, byte* output)
+void lComputeRIPEMD160(const byte* data, int32 length, byte* output)
 {
 	if (length <= 0)
 	{
-		memcpy(output, CryptoNeoOpenSSL::EMPTY_RIPEMD160, CryptoNeoOpenSSL::RIPEMD160_LENGTH);
+		memcpy(output, ::EMPTY_RIPEMD160, ::RIPEMD160_LENGTH);
 		return;
 	}
 
@@ -474,15 +517,15 @@ void CryptoNeoOpenSSL::lComputeRIPEMD160(const byte* data, int32 length, byte* o
 	OPENSSL_cleanse(&c, sizeof(c));
 }
 
-void CryptoNeoOpenSSL::lComputeHash256(const byte* data, int32 length, byte* output)
+void lComputeHash256(const byte* data, int32 length, byte* output)
 {
 	if (length <= 0)
 	{
-		memcpy(output, CryptoNeoOpenSSL::EMPTY_HASH256, CryptoNeoOpenSSL::HASH256_LENGTH);
+		memcpy(output, ::EMPTY_HASH256, ::HASH256_LENGTH);
 		return;
 	}
 
-	byte digest[SHA256_LENGTH];
+	byte digest[::SHA256_LENGTH];
 
 	// First SHA256
 
@@ -490,14 +533,14 @@ void CryptoNeoOpenSSL::lComputeHash256(const byte* data, int32 length, byte* out
 
 	// Then SHA256 Again
 
-	lComputeSHA256(digest, SHA256_LENGTH, output);
+	lComputeSHA256(digest, ::SHA256_LENGTH, output);
 }
 
-void CryptoNeoOpenSSL::lComputeSHA256(const byte* data, int32 length, byte* output)
+void lComputeSHA256(const byte* data, int32 length, byte* output)
 {
 	if (length <= 0)
 	{
-		memcpy(output, CryptoNeoOpenSSL::EMPTY_SHA256, CryptoNeoOpenSSL::SHA256_LENGTH);
+		memcpy(output, ::EMPTY_SHA256, ::SHA256_LENGTH);
 		return;
 	}
 
@@ -508,11 +551,11 @@ void CryptoNeoOpenSSL::lComputeSHA256(const byte* data, int32 length, byte* outp
 	OPENSSL_cleanse(&c, sizeof(c));
 }
 
-void CryptoNeoOpenSSL::lComputeSHA1(byte* data, int32 length, byte* output)
+void lComputeSHA1(byte* data, int32 length, byte* output)
 {
 	if (length <= 0)
 	{
-		memcpy(output, CryptoNeoOpenSSL::EMPTY_SHA1, CryptoNeoOpenSSL::SHA1_LENGTH);
+		memcpy(output, ::EMPTY_SHA1, ::SHA1_LENGTH);
 		return;
 	}
 

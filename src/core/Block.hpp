@@ -65,18 +65,20 @@ namespace neopt
       }
 
       // IVerifiable
-      virtual vector<UInt160> GetScriptHashesForVerifying(ISnapshot snapshot)
+      virtual vector<UInt160> GetScriptHashesForVerifying(ISnapshot& snapshot)
       {
          // TODO: implement
          return vector<UInt160>(0);
       }
 
-      // IInventory
+
+      // IInventory (BlockBase ???)
       virtual UInt256 getHash()
       {
          // TODO: implement
          return UInt256();
       }
+
 
       // IInventory
       virtual InventoryType getInventoryType()

@@ -18,7 +18,7 @@
 #include<Block.hpp>
 #include<Transaction.hpp>
 #include<crypto/ICrypto.h>
-#include<crypto/CryptoNeoOpenSSL.h>
+#include<crypto/Crypto.h>
 #include<numbers/Fixed8.hpp>
 #include<wallets/whelper.hpp>
 #include<plugin/PluginSystem.h>
@@ -38,7 +38,7 @@ int main()
    IInventory* iinventory = nullptr;
    Transaction* tx = nullptr;
 
-   CryptoNeoOpenSSL lib;
+   Crypto lib;
    vbyte v;
    v = lib.Hash160(v);
    cout << "hash160(''):" << v << endl;

@@ -11,8 +11,6 @@
 #include<numbers/UInt256.hpp>
 #include<InventoryType.h>
 
-using namespace std; // TODO: do not use that in the future... prefer std::vector instead
-
 namespace neopt
 {
 

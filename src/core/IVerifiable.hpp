@@ -14,8 +14,6 @@
 #include<wallets/KeyPair.hpp>
 #include<crypto/ICrypto.h>
 
-using namespace std; // TODO: do not use that in the future... prefer std::vector instead
-
 namespace neopt
 {
 
@@ -25,10 +23,10 @@ class IVerifiable : public IScriptContainer, virtual public ISerializable
 {
 public:
 
-   virtual vector<Witness> getWitnesses() = 0;
+   virtual std::vector<Witness> getWitnesses() = 0;
 
    // TODO: if possible, remove ISnapshot from here
-   virtual vector<UInt160> GetScriptHashesForVerifying(ISnapshot snapshot) = 0;
+   virtual std::vector<UInt160> GetScriptHashesForVerifying(ISnapshot& snapshot) = 0;
 
    virtual void DeserializeUnsigned(IBinaryReader& reader) = 0;
 
