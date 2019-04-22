@@ -19,7 +19,9 @@ using namespace std; // TODO: do not use that in the future... prefer std::vecto
 namespace neopt
 {
 
-class IVerifiable : public IScriptContainer, public ISerializable
+// WARNING: escaping from the "Diamond of Death"
+// making ISerializable a virtual inheritance
+class IVerifiable : public IScriptContainer, virtual public ISerializable
 {
 public:
 

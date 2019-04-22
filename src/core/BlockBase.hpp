@@ -1,28 +1,35 @@
-#ifndef BLOCK_HPP
-#define BLOCK_HPP
+#ifndef BLOCK_BASE_HPP
+#define BLOCK_BASE_HPP
 
 // c++ standard part
 #include<vector>
 
 // neopt core part
-#include<system/ISerializable.h>
-#include<system/IEquatable.h>
-#include<system/IComparable.h>
+#include<IVerifiable.hpp>
+//#include<system/IEquatable.h>
+//#include<system/IComparable.h>
 #include<IInventory.hpp>
 #include<numbers/UIntBase.hpp>
 #include<numbers/BigInteger.h>
 #include<system/shelper.h>
-#include<BlockBase.hpp>
 //#include<Transaction.hpp>
 
 namespace neopt
 {
 
-   class Block : public BlockBase, public IEquatable<Block>, public IInventory
+   class BlockBase : public IVerifiable
    {
    public:
-      // TODO: finally fill here with transaction info
+      uint Version;
+      UInt256 PrevHash;
+      UInt256 MerkleRoot;
+      uint Timestamp;
+      uint Index;
+      ulong ConsensusData;
+      UInt160 NextConsensus;
+      Witness witness;
 
+/*
       // IEquatable
       bool Equals(const Block* other)
       {
@@ -92,7 +99,7 @@ namespace neopt
       }
 
 
-
+*/
    };
 }
 

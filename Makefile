@@ -16,3 +16,6 @@ test:
 
 openssl:
 	cd src/core && ./linux_get_build_openssl.sh
+
+run:
+	./build/neopt-cli

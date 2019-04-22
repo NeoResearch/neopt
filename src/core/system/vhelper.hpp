@@ -69,7 +69,7 @@ public:
    template<class T>
    static T AsSerializable(const vbyte& value, int start = 0)
    {
-      std::cout << "AsSerializable!" << std::endl;
+      //std::cout << "vhelper::AsSerializable!" << std::endl;
       //using (MemoryStream ms = new MemoryStream(value, start, value.Length - start, false))
       //using (BinaryReader reader = new BinaryReader(ms, Encoding.UTF8))
       std::istream* in = vhelper::ToIStream(value, start);
