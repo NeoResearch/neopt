@@ -33,6 +33,27 @@ namespace neopt
 public:
 
 
+   virtual void Deserialize(IBinaryReader& reader)
+   {
+      std::cout << "BlockBase::Deserialize" << std::endl;
+      BlockBase::DeserializeUnsigned(reader);
+      if (reader.ReadByte() != 1)
+         NEOPT_EXCEPTION("Format Exception BlockBase::Deserialize");
+      witness = reader.ReadSerializable<Witness>();
+   }
+
+   virtual void DeserializeUnsigned(IBinaryReader& reader)
+   {
+       std::cout << "BlockBase::DeserializeUnsigned" << std::endl;
+       Version = reader.ReadUInt32();
+       PrevHash = reader.ReadSerializable<UInt256>();
+       MerkleRoot = reader.ReadSerializable<UInt256>();
+       Timestamp = reader.ReadUInt32();
+       Index = reader.ReadUInt32();
+       ConsensusData = reader.ReadUInt64();
+       NextConsensus = reader.ReadSerializable<UInt160>();
+   }
+
 /*
       // IEquatable
       bool Equals(const Block* other)

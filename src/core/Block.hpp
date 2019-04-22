@@ -69,14 +69,21 @@ namespace neopt
       // ISerializable
       virtual void Deserialize(IBinaryReader& reader)
       {
+         std::cout << "Block::Deserialize" << std::endl;
+         BlockBase::Deserialize(reader);
          NEOPT_EXCEPTION("Cannot deserialize block yet");
       }
 
-      // IVerifiable
+      //using BlockBase::DeserializeUnsigned; // TODO: why not get this automatically?
+      //     pehaps, a side-effect of IVerifiable virtual inheritance
+      // IVerifiable (only on BlockBase)
       virtual void DeserializeUnsigned(IBinaryReader& reader)
       {
-         NEOPT_EXCEPTION("Cannot deserialize unsigned block yet");
+         std::cout << "Block::DeserializeUnsigned" << std::endl;
+         BlockBase::DeserializeUnsigned(reader);
       }
+
+
 
       // IVerifiable
       virtual void SerializeUnsigned(IBinaryWriter& writer) const
