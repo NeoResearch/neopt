@@ -27,6 +27,18 @@ The project proposal is divided into modules:
 * ledger: blockchain persistance
 * consensus: dBFT consensus
 
+### How to build
+
+#### On Linux
+First, install `openssl` dependency. But don't be afraid, just type `make openssl` and be happy :)
+
+After that, type `make` (`make cli`) to build `neopt-cli` and put the binary on `build` folder (tests will run automatically).
+
+To run tests only, type `make test` to invoke all tests from `tests` folder.
+
+#### On Windows (and others)
+TODO
+
 ### Tests
 
 Tests are very important! Just go to `tests` directory and type `make tests` (after installing lib `gtest`).
