@@ -90,6 +90,7 @@ private:
 
       if (BinaryReader::FileExists(pathAcc))
       {
+         std::cout << "File 'chain.acc' found! Will import it!" << std::endl;
          std::ifstream fs(pathAcc, std::ios::binary);
          return GetBlocks(fs);
       }

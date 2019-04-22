@@ -24,7 +24,7 @@ public:
 
    virtual InventoryType getInventoryType() = 0;
 
-   virtual bool Verify(ISnapshot snapshot) = 0;
+   virtual bool Verify(ISnapshot& snapshot) = 0;
 };
 
 }
