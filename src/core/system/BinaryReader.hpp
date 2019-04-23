@@ -33,7 +33,8 @@ public:
    BinaryReader(istream& _input, int _byteCount = -1) :
       input(&_input), mustDelete(false), byteCount(_byteCount)
    {
-      std::cout << "BinaryReader::byteCountA = " << byteCount << std::endl;
+      // ifstream reference would fit here (reading files)
+      //std::cout << "BinaryReader::byteCountA = " << byteCount << std::endl;
       // -1 means no limit is known
       assert(byteCount >= -1);
    }
@@ -86,19 +87,31 @@ public:
    // read data directly on vector
    void Read(vector<byte>& data, int begin, int readsize)
    {
-
+      NEOPT_EXCEPTION("BinaryReader::not implemented! read data");
    }
 
    // returns array of read bytes
    virtual vbyte ReadVarBytes(int max)
    {
+      NEOPT_EXCEPTION("BinaryReader::not implemented! varbytes");
       return vbyte(0);
    }
 
    // native function
    virtual vbyte ReadBytes(int max)
    {
-      return vbyte(0);
+      vbyte bytes(max, 0);
+      for(int i=0; i<max; i++)
+      {
+         bytes[i] = ReadByte();
+         //(*input) >> bytes[i];
+         //if(byteCount > 0)
+         //   byteCount--;
+         //std::cout << "byte " << i << "/" << max << ": " << (int)bytes[i] << std::endl;
+      }
+      return bytes;
+      //NEOPT_EXCEPTION("BinaryReader::not implemented! readbytes");
+      //return vbyte(0);
    }
 
    // pack
@@ -106,45 +119,16 @@ public:
    virtual byte ReadByte()
    {
       assert(byteCount != 0);
-      byte b;
-      (*input) >> b;
+      assert((*input).good());
+      byte b = input->get();
       if(byteCount > 0)
          byteCount--;
       return b;
    }
 
-   virtual int16 ReadInt16()
-   {
-      return 0;
-   }
-
-   virtual uint16 ReadUInt16()
-   {
-      return 0;
-   }
-
-   virtual int32 ReadInt32()
-   {
-      return 0;
-   }
-
-   virtual uint32 ReadUInt32()
-   {
-      return 0;
-   }
-
-   virtual long ReadInt64()
-   {
-      return 0;
-   }
-
-   virtual ulong ReadUInt64()
-   {
-      return 0;
-   }
-
    string ReadVarString(int max = 0x1000000)
    {
+      NEOPT_EXCEPTION("BinaryReader::not implemented! varstring");
        return ""; // TODO // Encoding.UTF8.GetString(this->ReadVarBytes(max));
    }
 };

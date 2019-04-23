@@ -61,13 +61,17 @@ private:
       BinaryReader r(stream);
       uint start = read_start ? r.ReadUInt32() : 0;
       uint count = r.ReadUInt32();
+      std::cout << "BlockImporter::Import from height " << start << " to height " << count << std::endl;
       uint end = start + count - 1;
       if (end <= blockchain.Height)
       //if (end <= Blockchain::Singleton().Height)
          return std::move(blocks);
       for (uint height = start; height <= end; height++)
       {
-         vbyte array = r.ReadBytes(r.ReadInt32());
+         std::cout << "Will read bytes for height = " << height << std::endl;
+         int size = r.ReadInt32();
+         std::cout << "block size = " << size << std::endl;
+         vbyte array = r.ReadBytes(size);
          if (!CheckMaxOnImportHeight(height))
             break;
          if (height > blockchain.Height)
