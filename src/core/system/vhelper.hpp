@@ -96,7 +96,7 @@ public:
       //std::cout << "created buffer: size=" << sizeof(buffer) << std::endl;
       //for(unsigned i=0; i<(sizeof(buffer)/4); i++)
       //    std::cout << i << " :{" << ((int)(buffer[i])) << "}" << std::endl;
-      membuf* sbuf = new membuf(buffer, buffer + sizeof(buffer));
+      membuf* sbuf = new membuf(buffer+start, buffer + sizeof(buffer));
       //std::cout << "created membuf" << std::endl;
       std::istream* in = new std::istream(sbuf);
       //std::cout << "built istream: " << in << std::endl;

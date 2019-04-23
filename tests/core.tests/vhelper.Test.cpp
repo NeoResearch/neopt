@@ -35,3 +35,18 @@ TEST(BinaryReaderTest, Test_TOIStream_raw_0x0102030405)
 	EXPECT_EQ(b, 0x05);
    delete in;
 }
+
+TEST(BinaryReaderTest, Test_TOIStream_raw_0x0102030405_start_2)
+{
+	vbyte param = {0x01, 0x02, 0x03, 0x04, 0x05};
+	istream* in = vhelper::ToIStream(param, 2);
+   EXPECT_EQ((*in).good(), true);
+   byte b;
+   (*in) >> b;
+	EXPECT_EQ(b, 0x03);
+   (*in) >> b;
+	EXPECT_EQ(b, 0x04);
+   (*in) >> b;
+	EXPECT_EQ(b, 0x05);
+   delete in;
+}
