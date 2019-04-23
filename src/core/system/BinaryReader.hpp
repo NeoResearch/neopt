@@ -24,7 +24,7 @@ class BinaryReader : public IBinaryReader
 private:
    istream* input;
    bool mustDelete;
-   int byteCount; // byte count must be precise here
+   int byteCount; // byte count must be precise here (or -1, meaning no limits)
 public:
 
    // reading data from input stream
@@ -33,6 +33,7 @@ public:
    BinaryReader(istream& _input, int _byteCount = -1) :
       input(&_input), mustDelete(false), byteCount(_byteCount)
    {
+      std::cout << "BinaryReader::byteCountA = " << byteCount << std::endl;
       // -1 means no limit is known
       assert(byteCount >= -1);
    }
@@ -40,6 +41,7 @@ public:
    BinaryReader(istream* _input, int _byteCount = -1) :
       input(_input), mustDelete(true), byteCount(_byteCount)
    {
+      std::cout << "BinaryReader::byteCountB = " << byteCount << std::endl;
       // -1 means no limit is known
       assert(byteCount >= -1);
    }
@@ -52,9 +54,10 @@ public:
       }
    };
 
-   BinaryReader(vbyte& bytes) :
+   explicit BinaryReader(vbyte& bytes) :
       mustDelete(true), byteCount(bytes.size())
    {
+      std::cout << "BinaryReader::byteCountC = " << byteCount << std::endl;
       char* buffer = (char*)bytes.data();
       membufx* sbuf = new membufx(buffer, buffer + sizeof(buffer)); // perhaps need to store this one too, to delete later
       input = new std::istream(sbuf);
