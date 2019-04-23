@@ -23,8 +23,20 @@ public:
    // read data directly on vector
    virtual void Read(vector<byte>& data, int begin, int readsize) = 0;
 
-   // native function
-   virtual vbyte ReadBytes(int max) = 0;
+   // return count of bytes available for reading (-1 is used if value is unknown)
+   virtual int AvailableBytes()
+   {
+      return -1; // -1 means 'unknown'
+   }
+
+   // default implementation function
+   virtual vbyte ReadBytes(int max)
+   {
+      vbyte bytes(std::max(max, AvailableBytes()), 0);
+      for(int i=0; i<max; i++)
+         bytes[i] = ReadByte();
+      return bytes;
+   }
 
    // pack
 

@@ -70,6 +70,11 @@ public:
          delete input;
    }
 
+   virtual int AvailableBytes()
+   {
+      return byteCount;
+   }
+
 /*
    // Gets new independent reader from stream (must delete stream later)
    virtual IBinaryReader* GetNewReader(std::istream* stream) const
@@ -98,6 +103,7 @@ public:
    }
 
    // native function
+   /*
    virtual vbyte ReadBytes(int max)
    {
       vbyte bytes(max, 0);
@@ -113,6 +119,7 @@ public:
       //NEOPT_EXCEPTION("BinaryReader::not implemented! readbytes");
       //return vbyte(0);
    }
+   */
 
    // pack
 
@@ -121,6 +128,7 @@ public:
       assert(byteCount != 0);
       assert((*input).good());
       byte b = input->get();
+      ////input->read(&b, 1);
       if(byteCount > 0)
          byteCount--;
       return b;

@@ -25,3 +25,17 @@ TEST(BinaryReaderTest, Test_ReadByte_0x0102030405)
 	EXPECT_EQ(reader.ReadByte(), 0x04);
 	EXPECT_EQ(reader.ReadByte(), 0x05);
 }
+
+TEST(BinaryReaderTest, Test_AvailableBytes_0x02)
+{
+	vbyte param(1, 2); // 0x02
+	BinaryReader reader(param);
+	EXPECT_EQ(reader.AvailableBytes(), 1);
+}
+
+TEST(BinaryReaderTest, Test_AvailableBytes_0x0102030405)
+{
+	vbyte param = {0x01, 0x02, 0x03, 0x04, 0x05};
+	BinaryReader reader(param);
+	EXPECT_EQ(reader.AvailableBytes(), 5);
+}
