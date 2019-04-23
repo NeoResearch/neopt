@@ -73,7 +73,7 @@ public:
       //using (MemoryStream ms = new MemoryStream(value, start, value.Length - start, false))
       //using (BinaryReader reader = new BinaryReader(ms, Encoding.UTF8))
       std::istream* in = vhelper::ToIStream(value, start);
-      IBinaryReader* reader = new BinaryReader(in);//this->GetNewReader(in);
+      IBinaryReader* reader = new BinaryReader(in, ((int)value.size())-start);//this->GetNewReader(in);
 
       T obj = reader->ReadSerializable<T>();
       delete reader;
@@ -87,9 +87,22 @@ public:
 
    static std::istream* ToIStream(const vbyte& param, int start = 0)//const vbyte& param)
    {
-      char* buffer = (char*)param.data();
-      membuf sbuf(buffer, buffer + sizeof(buffer));
-      std::istream* in = new std::istream(&sbuf);
+      //std::cout << "creating buffer: param size=" << param.size() << std::endl;
+      const byte* buffer1 = param.data();
+      //byte* buffer2 = (byte*)malloc(param.size()*sizeof(unsigned char));
+      //std::cout << "buffer2 byte: size=" << sizeof(buffer2) << std::endl;
+      //std::cout << "buffer byte: size=" << sizeof(buffer1) << " sizeint:" << sizeof(int) << " sizebyte:" << sizeof(byte) << std::endl;
+      char* buffer = (char*)buffer1;
+      //std::cout << "created buffer: size=" << sizeof(buffer) << std::endl;
+      //for(unsigned i=0; i<(sizeof(buffer)/4); i++)
+      //    std::cout << i << " :{" << ((int)(buffer[i])) << "}" << std::endl;
+      membuf* sbuf = new membuf(buffer, buffer + sizeof(buffer));
+      //std::cout << "created membuf" << std::endl;
+      std::istream* in = new std::istream(sbuf);
+      //std::cout << "built istream: " << in << std::endl;
+      //byte b;
+      //(*in) >> b;
+      //std::cout << "read one byte: " << int(b) << std::endl;
       return in;
    }
 

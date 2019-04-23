@@ -39,6 +39,7 @@ public:
       BlockBase::DeserializeUnsigned(reader);
       if (reader.ReadByte() != 1)
          NEOPT_EXCEPTION("Format Exception BlockBase::Deserialize");
+      std::cout << "Will read witness" << std::endl;
       witness = reader.ReadSerializable<Witness>();
    }
 

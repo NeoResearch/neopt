@@ -5,6 +5,7 @@
 #include<vector>
 #include<iostream>
 #include<fstream>
+#include<assert.h>
 
 // neopt core part
 #include<system/types.h>
@@ -23,19 +24,40 @@ class BinaryReader : public IBinaryReader
 private:
    istream* input;
    bool mustDelete;
+   int byteCount; // byte count must be precise here
 public:
 
    // reading data from input stream
    // may not be fully portable
    // if necessary, in the future, create abstract Stream class with better cross-compatibility
-   BinaryReader(istream& _input) :
-      input(&_input), mustDelete(false)
+   BinaryReader(istream& _input, int _byteCount = -1) :
+      input(&_input), mustDelete(false), byteCount(_byteCount)
    {
+      // -1 means no limit is known
+      assert(byteCount >= -1);
    }
 
-   BinaryReader(istream* _input) :
-      input(_input), mustDelete(true)
+   BinaryReader(istream* _input, int _byteCount = -1) :
+      input(_input), mustDelete(true), byteCount(_byteCount)
    {
+      // -1 means no limit is known
+      assert(byteCount >= -1);
+   }
+
+   struct membufx : std::streambuf
+   {
+      membufx(char* begin, char* end)
+      {
+        this->setg(begin, begin, end);
+      }
+   };
+
+   BinaryReader(vbyte& bytes) :
+      mustDelete(true), byteCount(bytes.size())
+   {
+      char* buffer = (char*)bytes.data();
+      membufx* sbuf = new membufx(buffer, buffer + sizeof(buffer)); // perhaps need to store this one too, to delete later
+      input = new std::istream(sbuf);
    }
 
    virtual ~BinaryReader()
@@ -44,12 +66,13 @@ public:
          delete input;
    }
 
+/*
    // Gets new independent reader from stream (must delete stream later)
    virtual IBinaryReader* GetNewReader(std::istream* stream) const
    {
       return new BinaryReader(stream);
    }
-
+*/
 
    static bool FileExists(std::string name)
    {
@@ -79,7 +102,12 @@ public:
 
    virtual byte ReadByte()
    {
-      return 0;
+      assert(byteCount != 0);
+      byte b;
+      (*input) >> b;
+      if(byteCount > 0)
+         byteCount--;
+      return b;
    }
 
    virtual int16 ReadInt16()
