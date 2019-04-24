@@ -14,7 +14,6 @@
 #include<system/shelper.h>
 #include<payloads/BlockBase.hpp>
 #include<payloads/Transaction.hpp>
-//#include<Transaction.hpp>
 
 namespace neopt
 {
@@ -24,7 +23,7 @@ namespace neopt
    public:
       const int MaxTransactionsPerBlock = types::MaxValue<ushort>();
 
-      //std::vector<Transaction> Transactions;
+      std::vector<Transaction> Transactions;
 
    private:
       UInt256* _hash; // = nullptr

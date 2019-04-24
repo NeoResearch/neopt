@@ -134,6 +134,39 @@ namespace neopt
       }
 
 
+      // IVerifiable
+      virtual std::vector<Witness> getWitnesses()
+      {
+         return Witnesses;
+      }
+
+      // IVerifiable
+      virtual vbyte GetMessage()
+      {
+          return this->GetHashData();
+      }
+
+      // IVerifiable
+      virtual std::vector<UInt160> GetScriptHashesForVerifying(ISnapshot& snapshot)
+      {
+         /*
+         if (References == null) throw new InvalidOperationException();
+         HashSet<UInt160> hashes = new HashSet<UInt160>(Inputs.Select(p => References[p].ScriptHash));
+         hashes.UnionWith(Attributes.Where(p => p.Usage == TransactionAttributeUsage.Script).Select(p => new UInt160(p.Data)));
+         foreach (var group in Outputs.GroupBy(p => p.AssetId))
+         {
+             AssetState asset = snapshot.Assets.TryGet(group.Key);
+             if (asset == null) throw new InvalidOperationException();
+             if (asset.AssetType.HasFlag(AssetType.DutyFlag))
+             {
+                  hashes.UnionWith(group.Select(p => p.ScriptHash));
+             }
+         }
+         return hashes.OrderBy(p => p).ToArray();
+         */
+         return std::vector<UInt160>(0);
+      }
+
    protected:
       Transaction(TransactionType _type) :
          Type(_type),_feePerByte(-Fixed8::Satoshi()), _hash(nullptr), _network_fee(-Fixed8::Satoshi())
@@ -191,6 +224,123 @@ protected:
       virtual void OnDeserialized()
       {
       }
+
+
+public:
+       virtual bool Verify(ISnapshot& snapshot)
+       {
+          std::vector<Transaction> mempool(0);
+          return Verify(snapshot, mempool);
+       }
+
+       virtual bool Verify(ISnapshot& snapshot, std::vector<Transaction>& mempool)
+       {
+          /*
+            if (Size > MaxTransactionSize) return false;
+            for (int i = 1; i < Inputs.Length; i++)
+                for (int j = 0; j < i; j++)
+                    if (Inputs[i].PrevHash == Inputs[j].PrevHash && Inputs[i].PrevIndex == Inputs[j].PrevIndex)
+                        return false;
+            if (mempool.Where(p => p != this).SelectMany(p => p.Inputs).Intersect(Inputs).Count() > 0)
+                return false;
+            if (snapshot.IsDoubleSpend(this))
+                return false;
+            foreach (var group in Outputs.GroupBy(p => p.AssetId))
+            {
+                AssetState asset = snapshot.Assets.TryGet(group.Key);
+                if (asset == null) return false;
+                if (asset.Expiration <= snapshot.Height + 1 && asset.AssetType != AssetType.GoverningToken && asset.AssetType != AssetType.UtilityToken)
+                    return false;
+                foreach (TransactionOutput output in group)
+                    if (output.Value.GetData() % (long)Math.Pow(10, 8 - asset.Precision) != 0)
+                        return false;
+            }
+            TransactionResult[] results = GetTransactionResults()?.ToArray();
+            if (results == null) return false;
+            TransactionResult[] results_destroy = results.Where(p => p.Amount > Fixed8.Zero).ToArray();
+            if (results_destroy.Length > 1) return false;
+            if (results_destroy.Length == 1 && results_destroy[0].AssetId != Blockchain.UtilityToken.Hash)
+                return false;
+            if (SystemFee > Fixed8.Zero && (results_destroy.Length == 0 || results_destroy[0].Amount < SystemFee))
+                return false;
+            TransactionResult[] results_issue = results.Where(p => p.Amount < Fixed8.Zero).ToArray();
+            switch (Type)
+            {
+                case TransactionType.MinerTransaction:
+                case TransactionType.ClaimTransaction:
+                    if (results_issue.Any(p => p.AssetId != Blockchain.UtilityToken.Hash))
+                        return false;
+                    break;
+                case TransactionType.IssueTransaction:
+                    if (results_issue.Any(p => p.AssetId == Blockchain.UtilityToken.Hash))
+                        return false;
+                    break;
+                default:
+                    if (results_issue.Length > 0)
+                        return false;
+                    break;
+            }
+            if (Attributes.Count(p => p.Usage == TransactionAttributeUsage.ECDH02 || p.Usage == TransactionAttributeUsage.ECDH03) > 1)
+                return false;
+            if (!VerifyReceivingScripts()) return false;
+            return this.VerifyWitnesses(snapshot);
+            */
+       }
+
+    private:
+       bool VerifyReceivingScripts()
+       {
+            //TODO: run ApplicationEngine
+            //foreach (UInt160 hash in Outputs.Select(p => p.ScriptHash).Distinct())
+            //{
+            //    ContractState contract = Blockchain.Default.GetContract(hash);
+            //    if (contract == null) continue;
+            //    if (!contract.Payable) return false;
+            //    using (StateReader service = new StateReader())
+            //    {
+            //        ApplicationEngine engine = new ApplicationEngine(TriggerType.VerificationR, this, Blockchain.Default, service, Fixed8.Zero);
+            //        engine.LoadScript(contract.Script, false);
+            //        using (ScriptBuilder sb = new ScriptBuilder())
+            //        {
+            //            sb.EmitPush(0);
+            //            sb.Emit(OpCode.PACK);
+            //            sb.EmitPush("receiving");
+            //            engine.LoadScript(sb.ToArray(), false);
+            //        }
+            //        if (!engine.Execute()) return false;
+            //        if (engine.EvaluationStack.Count != 1 || !engine.EvaluationStack.Pop().GetBoolean()) return false;
+            //    }
+            //}
+            return true;
+       }
+
+
+
+      // serialization
+
+public:
+      void Serialize(IBinaryWriter& writer)
+      {
+         this->SerializeUnsigned(writer);
+         writer.Write(Witnesses);
+      }
+
+protected:
+      virtual void SerializeExclusiveData(IBinaryWriter& writer) const
+      {
+      }
+
+public:
+      void SerializeUnsigned(IBinaryWriter& writer) const
+      {
+         writer.Write((byte)Type);
+         writer.Write(Version);
+         SerializeExclusiveData(writer);
+         writer.Write(Attributes);
+         writer.Write(Inputs);
+         writer.Write(Outputs);
+      }
+
 
    };
 }

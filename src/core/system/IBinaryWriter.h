@@ -5,6 +5,7 @@ using namespace std; // TODO: do not use that in the future... prefer std::vecto
 
 // neopt core part
 #include<system/types.h>
+#include<system/ISerializable.h>
 
 namespace neopt
 {
@@ -19,6 +20,22 @@ public:
 
    // writes var bytes on vector
    virtual void WriteVarBytes(vbyte& v) = 0;
+
+   virtual void Write(ISerializable& value)
+   {
+      value.Serialize(*this);
+   }
+
+/*
+public static void Write<T>(this BinaryWriter writer, T[] value) where T : ISerializable
+{
+    writer.WriteVarInt(value.Length);
+    for (int i = 0; i < value.Length; i++)
+    {
+        value[i].Serialize(writer);
+    }
+}
+*/
 
    virtual void Flush() = 0; // don't know if actually needed
 };
