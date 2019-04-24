@@ -71,6 +71,8 @@ namespace neopt
       {
          std::cout << "Block::Deserialize" << std::endl;
          BlockBase::Deserialize(reader);
+         std::cout << "Block base finished::Deserialize" << std::endl;
+
          NEOPT_EXCEPTION("Cannot deserialize block yet");
       }
 

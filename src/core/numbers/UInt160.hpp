@@ -27,10 +27,10 @@ namespace neopt
       }
 
       /// <summary>
-      /// The empty constructor stores an empty byte array
+      /// The empty constructor stores an empty byte array (TODO: not empty...)
       /// </summary>
       UInt160()
-           : UIntBase()
+           : UIntBase(20)
       {
       }
 

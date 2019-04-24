@@ -39,7 +39,7 @@ namespace neopt
    protected:
 
       // data it's automatically initialized with given size.
-      UIntBase(int bytes = 0)
+      UIntBase(int bytes) // TODO: = 0 (default)
          : data_bytes(vbyte(bytes))
       {
       }
@@ -60,6 +60,7 @@ namespace neopt
       /// </summary>
       virtual void Deserialize(IBinaryReader& reader)
       {
+         std::cout << "UIntBase::Deserialize (" << data_bytes.size() << ")" << std::endl;
          reader.Read(data_bytes, 0, data_bytes.size());
       }
 

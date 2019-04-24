@@ -50,7 +50,7 @@ public:
       if((AvailableBytes() != -1) && (AvailableBytes() < max))
          NEOPT_EXCEPTION("IBinaryReader::Cannot read enough bytes!"); // or, return vbyte(0); TODO
       vbyte bytes(std::max(max, AvailableBytes()), 0);
-      for(int i=0; i<max; i++)
+      for(int i=0; i<bytes.size(); i++)
          bytes[i] = ReadByte();
       return bytes;
    }

@@ -47,12 +47,21 @@ public:
    {
        std::cout << "BlockBase::DeserializeUnsigned" << std::endl;
        Version = reader.ReadUInt32();
+       std::cout << "BlockBase::Will read uint256" << std::endl;
        PrevHash = reader.ReadSerializable<UInt256>();
+       std::cout << "PrevHash = " << PrevHash.ToString() << std::endl;
+       std::cout << "BlockBase::Will read uint256" << std::endl;
        MerkleRoot = reader.ReadSerializable<UInt256>();
+       std::cout << "BlockBase::Will read timestamp" << std::endl;
        Timestamp = reader.ReadUInt32();
+       std::cout << "timestamp = " << Timestamp << std::endl;
+       std::cout << "BlockBase::Will read index" << std::endl;
        Index = reader.ReadUInt32();
+       std::cout << "BlockBase::Will read consensus data" << std::endl;
        ConsensusData = reader.ReadUInt64();
+       std::cout << "BlockBase::Will read next consensus uint160" << std::endl;
        NextConsensus = reader.ReadSerializable<UInt160>();
+       std::cout << "BlockBase::finished reading" << std::endl;
    }
 
 /*

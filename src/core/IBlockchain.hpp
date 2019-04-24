@@ -7,7 +7,7 @@
 // neopt core part
 #include<system/ISerializable.h>
 #include<IScriptContainer.h>
-#include<ISnapshot.h> // TODO: remove if possible
+#include<ISnapshot.h>
 
 #include<numbers/UInt160.hpp>
 #include<Witness.hpp>
@@ -24,6 +24,9 @@ namespace neopt
 
 class IBlockchain
 {
+private:
+   ISnapshot* currentSnapshot;
+
 public:
 
 // TODO: move singleton to Blockchain implementation, this is just an interface
@@ -36,7 +39,17 @@ public:
    }
 */
 
-   int Height;
+   IBlockchain() :
+      currentSnapshot(nullptr)
+   {
+   }
+
+   virtual int Height()
+   {
+      if(!currentSnapshot)
+         return 30000; // TODO: fix this
+      return currentSnapshot->Height;
+   }
 
 
    // method to import blocks
