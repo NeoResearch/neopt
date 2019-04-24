@@ -44,10 +44,10 @@ public:
    {
    }
 
-   virtual int Height()
+   virtual uint Height()
    {
       if(!currentSnapshot)
-         return 30000; // TODO: fix this
+         return 0; // TODO: fix this
       return currentSnapshot->Height;
    }
 

@@ -72,17 +72,20 @@ private:
          int size = r.ReadInt32();
          std::cout << "block size = " << size << "(reading these and storing on array)" << std::endl;
          vbyte array = r.ReadBytes(size);
-         std::cout << "array size = " << array.size() << std::endl;
+         std::cout << "array size = " << array.size() << array << std::endl;
          if (!CheckMaxOnImportHeight(height))
             break;
-         std::cout << "will import" << std::endl;
+         std::cout << "may import" << std::endl;
          if (height > blockchain.Height())
          //if (height > Blockchain::Singleton().Height)
          {
+            std::cout << "needs to load block!" << std::endl;
             //Block block = array.AsSerializable<Block>();
             Block block = vhelper::AsSerializable<Block>(array);
             blocks.push_back(std::move(block));
          }
+         else
+            std::cout << "skipping block.." << std::endl;
       }
       return std::move(blocks);
    }

@@ -35,11 +35,19 @@ public:
       return "";
    }
 
-   static vbyte HexToBytes(const string& v)
+   static vbyte HexToBytes(const string& hex)
    {
       // TODO: implement
-      NEOPT_EXCEPTION("Not implemented yet: HexToBytes");
-      return vbyte(0);
+      //NEOPT_EXCEPTION("Not implemented yet: HexToBytes");
+      vbyte bytes(hex.length()/2);
+
+      for (uint i = 0; i < hex.length(); i += 2)
+      {
+         std::string byteString = hex.substr(i, 2);
+         byte b = (byte) strtol(byteString.c_str(), NULL, 16);
+         bytes[i/2] = b;
+      }
+      return bytes;
    }
 
 

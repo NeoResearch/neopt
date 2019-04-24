@@ -13,7 +13,7 @@ class ISnapshot
 public:
    // TODO: what's needed here?
 
-   int Height;
+   uint Height;
 
 };
 

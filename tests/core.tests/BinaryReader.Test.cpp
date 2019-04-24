@@ -51,12 +51,31 @@ TEST(BinaryReaderTest, Test_ReadByteAndAvailable_0x0102030405)
 	EXPECT_EQ(reader.AvailableBytes(), 2);
 }
 
+TEST(BinaryReaderTest, Test_Read_Middle_Full_0x0102030405)
+{
+	vbyte source = {0x01, 0x02, 0x03, 0x04, 0x05};
+	vbyte param = {0x07, 0x08, 0x09};
+	BinaryReader reader(param);
+	EXPECT_EQ(reader.AvailableBytes(), 3);
+	reader.Read(source, 0, 3);
+	EXPECT_EQ(reader.AvailableBytes(), 0);
+	// source should be: 0x01 0x07 0x08 0x04 0x05
+	EXPECT_EQ(source.size(), 5);
+	EXPECT_EQ(source[0], 0x07);
+	EXPECT_EQ(source[1], 0x08);
+	EXPECT_EQ(source[2], 0x09);
+	EXPECT_EQ(source[3], 0x04);
+	EXPECT_EQ(source[4], 0x05);
+}
+
 TEST(BinaryReaderTest, Test_Read_Middle_0x0102030405)
 {
 	vbyte source = {0x01, 0x02, 0x03, 0x04, 0x05};
 	vbyte param = {0x07, 0x08, 0x09};
 	BinaryReader reader(param);
-	reader.Read(source, 1, 2);
+	EXPECT_EQ(reader.AvailableBytes(), 3);
+	reader.Read(source, 1, 2); // reader has 3 bytes {0x07, 0x08, 0x09}
+	EXPECT_EQ(reader.AvailableBytes(), 1);
 	// source should be: 0x01 0x07 0x08 0x04 0x05
 	EXPECT_EQ(source.size(), 5);
 	EXPECT_EQ(reader.AvailableBytes(), 1);
