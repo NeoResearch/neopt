@@ -20,27 +20,40 @@ namespace neopt
 class IBinaryReader
 {
 public:
-   // read data directly on vector
-   virtual void Read(vector<byte>& data, int begin, int readsize) = 0;
+
+   // the most fundamental method to be implemented! how to get a single byte...
+   virtual byte ReadByte() = 0;
 
    // return count of bytes available for reading (-1 is used if value is unknown)
-   virtual int AvailableBytes()
+   virtual int AvailableBytes() const
    {
       return -1; // -1 means 'unknown'
+   }
+
+   // read data directly on vector, of size 'readsize', at position 'begin' (used on UIntBase)
+   virtual void Read(vector<byte>& data, int begin, int readsize)
+   {
+      // vector must have enough size
+      if(begin+readsize > data.size())
+      {
+         NEOPT_EXCEPTION("IBinaryReader::Read error. Not enough space on array");
+         return;
+      }
+      vbyte bytes = ReadBytes(readsize);
+      for(int i=0; i<readsize; i++)
+         data[begin+i] = bytes[i];
    }
 
    // default implementation function
    virtual vbyte ReadBytes(int max)
    {
+      if((AvailableBytes() != -1) && (AvailableBytes() < max))
+         NEOPT_EXCEPTION("IBinaryReader::Cannot read enough bytes!"); // or, return vbyte(0); TODO
       vbyte bytes(std::max(max, AvailableBytes()), 0);
       for(int i=0; i<max; i++)
          bytes[i] = ReadByte();
       return bytes;
    }
-
-   // pack
-
-   virtual byte ReadByte() = 0;
 
    // read int16 in little-endian format
    virtual int16 ReadInt16()

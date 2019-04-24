@@ -42,7 +42,7 @@ public:
    BinaryReader(istream* _input, int _byteCount = -1) :
       input(_input), mustDelete(true), byteCount(_byteCount)
    {
-      std::cout << "BinaryReader::byteCountB = " << byteCount << std::endl;
+      //std::cout << "BinaryReader::byteCountB = " << byteCount << std::endl;
       // -1 means no limit is known
       assert(byteCount >= -1);
    }
@@ -58,7 +58,7 @@ public:
    explicit BinaryReader(vbyte& bytes) :
       mustDelete(true), byteCount(bytes.size())
    {
-      std::cout << "BinaryReader::byteCountC = " << byteCount << std::endl;
+      //std::cout << "BinaryReader::byteCountC = " << byteCount << std::endl;
       char* buffer = (char*)bytes.data();
       membufx* sbuf = new membufx(buffer, buffer + sizeof(buffer)); // perhaps need to store this one too, to delete later
       input = new std::istream(sbuf);
@@ -70,7 +70,7 @@ public:
          delete input;
    }
 
-   virtual int AvailableBytes()
+   virtual int AvailableBytes() const
    {
       return byteCount;
    }
@@ -89,18 +89,6 @@ public:
       return f.good();
    }
 
-   // read data directly on vector
-   void Read(vector<byte>& data, int begin, int readsize)
-   {
-      NEOPT_EXCEPTION("BinaryReader::not implemented! read data");
-   }
-
-   // returns array of read bytes
-   virtual vbyte ReadVarBytes(int max)
-   {
-      NEOPT_EXCEPTION("BinaryReader::not implemented! varbytes");
-      return vbyte(0);
-   }
 
    // native function
    /*
