@@ -54,13 +54,14 @@ namespace neopt
          this->data_bytes = value; // receiving value (use move semantics?)
       }
 
-   private:
+   protected:
       /// <summary>
       /// Deserialize function reads the expected size in bytes from the given BinaryReader and stores in data_bytes array.
       /// </summary>
       virtual void Deserialize(IBinaryReader& reader)
       {
          std::cout << "UIntBase::Deserialize (" << data_bytes.size() << ")" << std::endl;
+         std::cout << "Reader size =" << reader.AvailableBytes() << std::endl;
          reader.Read(data_bytes, 0, data_bytes.size());
       }
 

@@ -11,7 +11,7 @@
 
 // neo core
 #include<system/types.h>
-#include<system/printable.h>
+//#include<system/printable.h>
 #include<system/ISerializable.h>
 #include<system/IBinaryReader.h>
 #include<system/BinaryReader.hpp>
@@ -35,6 +35,7 @@ public:
    }
 
    // TODO: replace by operator<< ?
+   /*
    template<class T>
    static string ToHexString(const vector<T>& v)
    {
@@ -42,6 +43,18 @@ public:
       // TODO: check if format is this
       for(unsigned i=0; i<v.size(); i++) // TODO: use foreach
          ss << v[i];
+      return ss.str();
+   }
+   */
+   static string ToHexString(const vbyte& v)
+   {
+      //std::cout << "ToHexString!!!!" << std::endl;
+      stringstream ss;
+      // TODO: check if format is this
+      for(unsigned i=0; i<v.size(); i++) // TODO: use foreach
+         ss << std::setfill('0') << std::setw(2) << std::hex << (int)v[i];
+      //std::cout << "ToHexString!!!! RESULT = " << ss.str() << std::endl;
+
       return ss.str();
    }
 

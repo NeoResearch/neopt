@@ -22,9 +22,19 @@ namespace neopt
 class BinaryReader : public IBinaryReader
 {
 private:
+   struct wrap_vector_as_istream : std::streambuf
+   {
+       wrap_vector_as_istream(std::vector<char>& v)
+       {
+           this->setg(&v[0], &v[0], &v[0]+v.size());
+       }
+   };
+
+private:
    istream* input;
    bool mustDelete;
    int byteCount; // byte count must be precise here (or -1, meaning no limits)
+   wrap_vector_as_istream* databuf;
 public:
 
    // reading data from input stream
@@ -37,6 +47,7 @@ public:
       //std::cout << "BinaryReader::byteCountA = " << byteCount << std::endl;
       // -1 means no limit is known
       assert(byteCount >= -1);
+      databuf = nullptr;
    }
 
    BinaryReader(istream* _input, int _byteCount = -1) :
@@ -45,35 +56,73 @@ public:
       //std::cout << "BinaryReader::byteCountB = " << byteCount << std::endl;
       // -1 means no limit is known
       assert(byteCount >= -1);
+      databuf = nullptr;
    }
-
+/*
    struct membufx : std::streambuf
    {
+      //membufx(char* begin, char* end)
       membufx(char* begin, char* end)
       {
-        this->setg(begin, begin, end);
+         std::cout << "begin= " << (void*)begin << " end=" << (void*)end << std::endl;
+         this->setg(begin, begin, end);
       }
    };
+*/
+/*
+   template<typename CharT, typename TraitsT = std::char_traits<CharT> >
+   class vectorwrapbuf : public std::basic_streambuf<CharT, TraitsT> {
+   public:
+       vectorwrapbuf(std::vector<CharT> &vec) {
+           this->setg(vec.data(), vec.data(), vec.data() + vec.size());
+       }
+   };
+*/
 
    explicit BinaryReader(vbyte& bytes) :
       mustDelete(true), byteCount(bytes.size())
    {
       //std::cout << "BinaryReader::byteCountC = " << byteCount << std::endl;
-      char* buffer = (char*)bytes.data();
-      membufx* sbuf = new membufx(buffer, buffer + sizeof(buffer)); // perhaps need to store this one too, to delete later
-      input = new std::istream(sbuf);
+      //char* buffer = (char*)bytes.data();
+      /*
+      byte* buffer = bytes.data();
+      if(sizeof(buffer) != bytes.size())
+      {
+         std::cout << "building BinaryReader with " << bytes.size() << " bytes!" << std::endl;
+         std::cout << "buffer has size of " << sizeof(buffer) << " bytes!" << std::endl;
+         for(unsigned i=0; i<bytes.size(); i++)
+         {
+            std::cout << "{i=" << i << " " << (uint)buffer[i] << "} ";
+         }
+         std::cout << std::endl;
+      }
+      */
+      //membufx* sbuf = new membufx(bytes.begin(), bytes.end());//(char*)buffer, ((char*)buffer) + bytes.size()); /*sizeof(buffer)*/ // perhaps need to store this one too, to delete later
+      //vectorwrapbuf<byte>* databuf = new vectorwrapbuf<byte>(bytes);
+      vector<char>& sdata = (vector<char>&)(bytes);
+      databuf = new wrap_vector_as_istream(sdata);
+      input = new std::istream(databuf);
+      //input = new std::istream(sbuf);
    }
 
    virtual ~BinaryReader()
    {
       if(mustDelete)
          delete input;
+      if(databuf)
+         delete databuf;
    }
 
    virtual int AvailableBytes() const
    {
       return byteCount;
    }
+
+   virtual bool Good() const
+   {
+      return input->good();
+   }
+
 
 /*
    // Gets new independent reader from stream (must delete stream later)
@@ -91,6 +140,33 @@ public:
 
 
    // native function
+
+   /*
+   virtual vbyte ReadBytes(int max)
+   {
+      assert(byteCount != 0);
+      assert((*input).good());
+
+      //byte b = input->get();
+      char b1;
+      input->read(&b1, 1);
+      byte b = (byte)b1;
+
+      std::cout << "GCOUNT: " << input->gcount() << std::endl;
+      if(!input->good())
+      {
+         std::cout << "WAS GOOD, NOT GOOD NOW!" << std::endl;
+         std::cout << "eof: " << input->eof() << std::endl;
+         std::cout << "bad: " << input->bad() << std::endl;
+         std::cout << "fail: " << input->fail() << std::endl;
+      }
+      ////input->read(&b, 1);
+      if(byteCount > 0)
+         byteCount--;
+      return b;
+   }
+   */
+
    /*
    virtual vbyte ReadBytes(int max)
    {
@@ -115,7 +191,22 @@ public:
    {
       assert(byteCount != 0);
       assert((*input).good());
-      byte b = input->get();
+
+      //byte b = input->get();
+      char b1;
+      input->read(&b1, 1);
+      byte b = (byte)b1;
+
+      //std::cout << "GCOUNT: " << input->gcount() << std::endl;
+      /*
+      if(!input->good())
+      {
+         std::cout << "WAS GOOD, NOT GOOD NOW! b=" << (int) b << std::endl;
+         std::cout << "eof: " << input->eof() << std::endl;
+         std::cout << "bad: " << input->bad() << std::endl;
+         std::cout << "fail: " << input->fail() << std::endl;
+      }
+      */
       ////input->read(&b, 1);
       if(byteCount > 0)
          byteCount--;

@@ -12,6 +12,7 @@
 
 // neo core
 #include<system/types.h>
+#include<system/vhelper.hpp>
 
 namespace neopt
 {

@@ -30,6 +30,11 @@ public:
       return -1; // -1 means 'unknown'
    }
 
+   virtual bool Good() const
+   {
+      return true;
+   }
+
    // read data directly on vector, of size 'readsize', at position 'begin' (used on UIntBase)
    virtual void Read(vector<byte>& data, int begin, int readsize)
    {
@@ -47,11 +52,15 @@ public:
    // default implementation function
    virtual vbyte ReadBytes(int max)
    {
+      //std::cout << "ReadBytes: " << max << std::endl;
       if((AvailableBytes() != -1) && (AvailableBytes() < max))
          NEOPT_EXCEPTION("IBinaryReader::Cannot read enough bytes!"); // or, return vbyte(0); TODO
       vbyte bytes(max, 0);
       for(int i=0; i<bytes.size(); i++)
+      {
          bytes[i] = ReadByte();
+         //std::cout << "byte " << i << " : " << (int)bytes[i] << " good:" << Good() << std::endl;
+      }
       return bytes;
    }
 
