@@ -23,6 +23,7 @@
 #include<wallets/whelper.hpp>
 #include<plugin/PluginSystem.h>
 #include<system/BinaryReader.hpp>
+#include<system/printable.h>
 
 using namespace std;
 using namespace neopt;

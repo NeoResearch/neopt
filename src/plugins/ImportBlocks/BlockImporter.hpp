@@ -166,8 +166,23 @@ public:
          }
          case ImportCompleted:
          {
-
             std::cout << "import blocks finished..." << std::endl;
+
+            std::vector<Block> blocksToImport = blocksBeingImported;
+            blocksBeingImported.clear();
+
+            if(blocksToImport.size() > 0)
+            {
+               blockchain.OnImport(blocksToImport);
+               //Blockchain::Singleton().OnImport(blocksToImport);
+                //_blockchainActorRef.Tell(new Blockchain.Import { Blocks = blocksToImport });
+            }
+            else
+            {
+                blocksBeingImported.clear();//Dispose();
+                //_doneAction(); // should call ImportBlocks::OnImportCompleted
+                std::cout << "Should call ImportBlocks::OnImportCompleted. TODO" << std::endl;
+            }
 
             break;
          }
