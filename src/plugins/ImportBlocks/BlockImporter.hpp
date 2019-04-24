@@ -12,6 +12,7 @@
 #include<core/system/BinaryReader.hpp>
 #include<ledger/Blockchain.hpp>
 #include<core/system/vhelper.hpp>
+#include<core/system/printable.h>
 
 // local includes
 #include<ImportBlocksSettings.h>

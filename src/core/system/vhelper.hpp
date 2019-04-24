@@ -100,6 +100,9 @@ public:
 
    static std::istream* ToIStream(const vbyte& param, int start = 0)//const vbyte& param)
    {
+      std::cout << "DEPRECATING ToIStream ????? " << std::endl;
+      std::cout << "Please try not to use ToIStream ????? " << std::endl;
+
       //std::cout << "creating buffer: param size=" << param.size() << std::endl;
       const byte* buffer1 = param.data();
       //byte* buffer2 = (byte*)malloc(param.size()*sizeof(unsigned char));

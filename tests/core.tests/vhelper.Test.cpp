@@ -54,6 +54,8 @@ TEST(BinaryReaderTest, Test_TOIStream_HexToBytes_Block2_TN)
 	EXPECT_EQ(param[3], 0x00);
 	EXPECT_EQ(param[4], 0xef);
 	EXPECT_EQ(param[5], 0x1f);
+	EXPECT_EQ(param[685], 0x00);
+
 	istream* in = vhelper::ToIStream(param);
    EXPECT_EQ((*in).good(), true);
    byte b = in->get();
@@ -63,5 +65,5 @@ TEST(BinaryReaderTest, Test_TOIStream_HexToBytes_Block2_TN)
 	EXPECT_EQ(in->get(), 0x00);
 	EXPECT_EQ(in->get(), 0xef);
 	EXPECT_EQ(in->get(), 0x1f);
-   delete in;
+   delete in;	
 }
