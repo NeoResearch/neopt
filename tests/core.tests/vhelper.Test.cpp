@@ -7,6 +7,8 @@
 using namespace std;
 using namespace neopt;
 
+// method ToIOStream does not exist anymore
+/*
 TEST(BinaryReaderTest, Test_TOIStream_raw_0x02)
 {
 	vbyte param(1, 2); // 0x02
@@ -65,5 +67,6 @@ TEST(BinaryReaderTest, Test_TOIStream_HexToBytes_Block2_TN)
 	EXPECT_EQ(in->get(), 0x00);
 	EXPECT_EQ(in->get(), 0xef);
 	EXPECT_EQ(in->get(), 0x1f);
-   delete in;	
+   delete in;
 }
+*/

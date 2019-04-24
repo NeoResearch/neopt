@@ -85,11 +85,12 @@ public:
       //std::cout << "vhelper::AsSerializable!" << std::endl;
       //using (MemoryStream ms = new MemoryStream(value, start, value.Length - start, false))
       //using (BinaryReader reader = new BinaryReader(ms, Encoding.UTF8))
-      std::istream* in = vhelper::ToIStream(value, start);
-      IBinaryReader* reader = new BinaryReader(in, ((int)value.size())-start);//this->GetNewReader(in);
+      //std::istream* in = vhelper::ToIStream(value, start);
+      vbyte part(value.begin()+start, value.end());
+      BinaryReader reader(part); //new BinaryReader(in, ((int)value.size())-start);//this->GetNewReader(in);
 
-      T obj = reader->ReadSerializable<T>();
-      delete reader;
+      T obj = reader.ReadSerializable<T>();
+      //delete reader;
       return std::move(obj);
    }
 
@@ -97,7 +98,7 @@ public:
    //virtual IBinaryReader* GetNewReader(std::istream* stream) const = 0;
 
 
-
+/*
    static std::istream* ToIStream(const vbyte& param, int start = 0)//const vbyte& param)
    {
       std::cout << "DEPRECATING ToIStream ????? " << std::endl;
@@ -121,6 +122,7 @@ public:
       //std::cout << "read one byte: " << int(b) << std::endl;
       return in;
    }
+*/
 
    static vbyte ToArray(const ostream& os)
    {
