@@ -12,7 +12,8 @@
 #include<numbers/UIntBase.hpp>
 #include<numbers/BigInteger.h>
 #include<system/shelper.h>
-#include<BlockBase.hpp>
+#include<payloads/BlockBase.hpp>
+#include<payloads/Transaction.hpp>
 //#include<Transaction.hpp>
 
 namespace neopt
@@ -21,7 +22,9 @@ namespace neopt
    class Block : public BlockBase, public IEquatable<Block>, public IInventory
    {
    public:
+      const int MaxTransactionsPerBlock = types::MaxValue<ushort>();
 
+      //std::vector<Transaction> Transactions;
 
    private:
       UInt256* _hash; // = nullptr
@@ -73,17 +76,42 @@ namespace neopt
          BlockBase::Deserialize(reader);
          std::cout << "Block base finished::Deserialize" << std::endl;
 
+/*
+         Transactions = new Transaction[reader.ReadVarInt(MaxTransactionsPerBlock)];
+            if (Transactions.Length == 0) throw new FormatException();
+            HashSet<UInt256> hashes = new HashSet<UInt256>();
+            for (int i = 0; i < Transactions.Length; i++)
+            {
+                Transactions[i] = Transaction.DeserializeFrom(reader);
+                if (i == 0)
+                {
+                    if (Transactions[0].Type != TransactionType.MinerTransaction)
+                        throw new FormatException();
+                }
+                else
+                {
+                    if (Transactions[i].Type == TransactionType.MinerTransaction)
+                        throw new FormatException();
+                }
+                if (!hashes.Add(Transactions[i].Hash))
+                    throw new FormatException();
+            }
+            if (MerkleTree.ComputeRoot(Transactions.Select(p => p.Hash).ToArray()) != MerkleRoot)
+            throw new FormatException();
+*/
          NEOPT_EXCEPTION("Cannot deserialize block yet");
       }
 
       //using BlockBase::DeserializeUnsigned; // TODO: why not get this automatically?
-      //     pehaps, a side-effect of IVerifiable virtual inheritance
+      //     perhaps, a side-effect of IVerifiable virtual inheritance
       // IVerifiable (only on BlockBase)
+
       virtual void DeserializeUnsigned(IBinaryReader& reader)
       {
-         std::cout << "Block::DeserializeUnsigned" << std::endl;
+         NEOPT_EXCEPTION("SHOULD NEVER CALL Block::DeserializeUnsigned. Strange!");
          BlockBase::DeserializeUnsigned(reader);
       }
+
 
 
 

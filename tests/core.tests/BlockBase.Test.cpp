@@ -1,7 +1,7 @@
 #include<gtest/gtest.h>
 
 // core includes
-#include<BlockBase.hpp>
+#include<payloads/BlockBase.hpp>
 #include<system/vhelper.hpp>
 #include<system/BinaryReader.hpp>
 

@@ -11,9 +11,9 @@ using namespace std; // TODO: do not use that in the future... prefer std::vecto
 namespace neopt
 {
 
-// forward declaration
+// forward declaration (see end of this file)
 class IBinaryReader;
-// forward declaration
+// forward declaration (see end of this file)
 class IBinaryWriter;
 
 
@@ -27,5 +27,9 @@ public:
 };
 
 }
+
+// forward declarations
+#include<system/IBinaryReader.h>
+#include<system/IBinaryWriter.h>
 
 #endif

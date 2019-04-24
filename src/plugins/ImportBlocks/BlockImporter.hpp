@@ -8,7 +8,7 @@
 
 // core includes
 #include<core/IBlockchain.hpp>
-#include<core/Block.hpp>
+#include<core/payloads/Block.hpp>
 #include<core/system/BinaryReader.hpp>
 #include<ledger/Blockchain.hpp>
 #include<core/system/vhelper.hpp>

@@ -13,7 +13,7 @@
 #include<Witness.hpp>
 #include<wallets/KeyPair.hpp>
 #include<crypto/ICrypto.h>
-#include<Block.hpp>
+#include<payloads/Block.hpp>
 
 // TODO: fix, this .h should never include .hpp
 

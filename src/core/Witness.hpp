@@ -39,14 +39,17 @@ namespace neopt
          return vhelper::GetVarSize(InvocationScript) + vhelper::GetVarSize(InvocationScript);
       }
 
-   private:
-      void Deserialize(IBinaryReader& reader)
+   //private: // WHY PRIVATE?
+   public:
+      // ISerializable class
+      virtual void Deserialize(IBinaryReader& reader)
       {
          InvocationScript = reader.ReadVarBytes(65536);
          VerificationScript = reader.ReadVarBytes(65536);
       }
 
-      void Serialize(IBinaryWriter& writer)
+      // ISerializable class
+      virtual void Serialize(IBinaryWriter& writer)
       {
          writer.WriteVarBytes(InvocationScript);
          writer.WriteVarBytes(VerificationScript);

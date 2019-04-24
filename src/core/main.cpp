@@ -15,8 +15,8 @@
 #include<IScriptContainer.h>
 #include<IVerifiable.hpp>
 #include<IInventory.hpp>
-#include<Block.hpp>
-#include<Transaction.hpp>
+#include<payloads/Block.hpp>
+#include<payloads/Transaction.hpp>
 #include<crypto/ICrypto.h>
 #include<crypto/Crypto.h>
 #include<numbers/Fixed8.hpp>

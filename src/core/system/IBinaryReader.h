@@ -135,11 +135,11 @@ public:
    template<class T>
    vector<T> ReadSerializableArray(int max = 0x1000000)
    {
-       vector<T> array(this->ReadVarInt((ulong)max));
+       vector<T> array(this->ReadVarInt((ulong)max)); // TODO: why ulong?
        // invoking empty constructor for all of this kind
        for (int i = 0; i < array.size(); i++)
        {
-          ISerializable& sobj = (ISerializable)array[i];
+          ISerializable& sobj = (ISerializable&)array[i];
           sobj.Deserialize(*this);
        }
        return array;

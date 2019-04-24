@@ -208,6 +208,25 @@ namespace neopt
       }
 */
 
+      // ========================== OPERATORS
+
+      // overloaded minus (-) operator
+      Fixed8 operator- () const
+      {
+         return std::move(Fixed8(this->value));
+      }
+
+      Fixed8 operator /(long y) const
+      {
+         Fixed8 result(this->value / y);
+         return std::move(result);
+      }
+
+      bool operator== (const Fixed8& that) const
+      {
+         return this->value == that.value;
+      }
+
 /*
         public static explicit operator decimal(Fixed8 value)
         {
