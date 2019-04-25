@@ -99,6 +99,11 @@ namespace neopt
          return std::move(UInt256);
       }
 
+      bool operator==(const UInt256& other) const
+      {
+         return (this->data_bytes == other.data_bytes);
+      }
+
       /*
       /// <summary>
       /// Method TryParse tries to parse a big-endian hex string and store it as a UInt256 little-endian 20-bytes array

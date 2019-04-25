@@ -3,6 +3,7 @@
 
 // c++ standard part
 #include<vector>
+#include<unordered_set>
 
 // neopt core part
 #include<system/ISerializable.h>
@@ -69,6 +70,15 @@ namespace neopt
          return vbyte(0);
       }
 
+      // TODO: create faster and better hashes
+      struct uintbase_hash
+      {
+         std::size_t operator()(const UIntBase& _node) const
+         {
+            return std::hash<std::string>()(_node.ToString());
+         }
+      };
+
       // ISerializable
       virtual void Deserialize(IBinaryReader& reader)
       {
@@ -76,29 +86,37 @@ namespace neopt
          BlockBase::Deserialize(reader);
          std::cout << "Block base finished::Deserialize" << std::endl;
 
-/*
-         Transactions = new Transaction[reader.ReadVarInt(MaxTransactionsPerBlock)];
-            if (Transactions.Length == 0) throw new FormatException();
-            HashSet<UInt256> hashes = new HashSet<UInt256>();
-            for (int i = 0; i < Transactions.Length; i++)
-            {
-                Transactions[i] = Transaction.DeserializeFrom(reader);
-                if (i == 0)
-                {
-                    if (Transactions[0].Type != TransactionType.MinerTransaction)
-                        throw new FormatException();
-                }
-                else
-                {
-                    if (Transactions[i].Type == TransactionType.MinerTransaction)
-                        throw new FormatException();
-                }
-                if (!hashes.Add(Transactions[i].Hash))
-                    throw new FormatException();
-            }
-            if (MerkleTree.ComputeRoot(Transactions.Select(p => p.Hash).ToArray()) != MerkleRoot)
-            throw new FormatException();
-*/
+
+         Transactions = std::vector<Transaction*>(reader.ReadVarInt(MaxTransactionsPerBlock), nullptr);
+         if (Transactions.size() == 0)
+            NEOPT_EXCEPTION("Block Deserialize FormatException");
+
+         std::unordered_set<UInt256, uintbase_hash> hashes;
+         //HashSet<UInt256> hashes = new HashSet<UInt256>();
+         for (int i = 0; i < Transactions.size(); i++)
+         {
+             Transactions[i] = Transaction::DeserializeFrom(reader);//new Transaction(Transaction.DeserializeFrom(reader);
+             if (i == 0)
+             {
+                 if (Transactions[0]->Type != TransactionType::TT_MinerTransaction)
+                     NEOPT_EXCEPTION("Block First Miner Tx Format Exception");
+                     //throw new FormatException();
+             }
+             else
+             {
+                 if (Transactions[i]->Type == TransactionType::TT_MinerTransaction)
+                     NEOPT_EXCEPTION("Block Miner Tx Format Exception");
+                     //throw new FormatException();
+             }
+             hashes.emplace(Transactions[i]->getHash());
+             //if (!hashes->emplace(Transactions[i]->getHash()).second)
+             //if (!hashes.Add(Transactions[i].Hash))
+            //   NEOPT_EXCEPTION("Block unordered_set emplace Format Exception");
+                 //throw new FormatException();
+         }
+         //if (MerkleTree.ComputeRoot(Transactions.Select(p => p.Hash).ToArray()) != MerkleRoot)
+         //throw new FormatException();
+
          NEOPT_EXCEPTION("Cannot deserialize block yet");
       }
 

@@ -350,6 +350,37 @@ public:
          //writer.Write(Outputs);
       }
 
+      // strange static methods (could be elsewhere?)
+public:
+
+// vhelper is better
+/*
+   static Transaction DeserializeFrom(vbyte& value, int offset = 0)
+   {
+      if(offset != 0)
+         NEOPT_EXCEPTION("Transaction::OFFSET MUST BE ZERO!");
+
+      BinaryReader reader()
+       using (MemoryStream ms = new MemoryStream(value, offset, value.Length - offset, false))
+       using (BinaryReader reader = new BinaryReader(ms, Encoding.UTF8))
+       {
+           return DeserializeFrom(reader);
+       }
+   }
+   */
+
+      static Transaction* DeserializeFrom(IBinaryReader& reader)
+      {
+          // Looking for type in reflection cache
+          Transaction* transaction = new Transaction((TransactionType)reader.ReadByte());//ReflectionCache.CreateInstance<Transaction>(reader.ReadByte());
+          //if (transaction == null) throw new FormatException();
+
+          transaction->DeserializeUnsignedWithoutType(reader);
+          transaction->Witnesses = reader.ReadSerializableArray<Witness>();
+          transaction->OnDeserialized();
+          return transaction;
+      }
+
 
    };
 }

@@ -152,7 +152,7 @@ namespace neopt
       /// Method ToString returns a big-endian string starting by "0x" representing the little-endian unsigned int
       /// Example: if this is storing 20-bytes 01ff00ff00ff00ff00ff00ff00ff00ff00ff00a4, ToString() should return "0xa400ff00ff00ff00ff00ff00ff00ff00ff00ff01"
       /// </summary>
-      virtual string ToString()
+      virtual string ToString() const
       {
          stringstream ss;
          ss << "0x" << vhelper::ToHexString(vhelper::Reverse(data_bytes));
