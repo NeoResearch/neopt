@@ -71,13 +71,44 @@ TEST(BinaryReaderTest, Test_TOIStream_HexToBytes_Block2_TN)
 }
 */
 
-TEST(vhelperTests, Test_Select_Even_0x0102030405)
+TEST(vhelperTests, Test_Where_Even_0x0102030405)
 {
 	vbyte param = {0x01, 0x02, 0x03, 0x04, 0x05};
    std::function<bool(const byte&)> sel = [](const byte& b){return b % 2 == 0;};
 
-   vbyte v2 = vhelper::Select(param, sel);
+   vbyte v2 = vhelper::Where(param, sel);
 	EXPECT_EQ(v2.size(), 2);
    EXPECT_EQ(v2[0], 0x02);
    EXPECT_EQ(v2[1], 0x04);
+}
+
+TEST(vhelperTests, Test_ToHexString_0x0102030405)
+{
+	vbyte param = {0x01, 0x02, 0x03, 0x04, 0x05};
+   string s = vhelper::ToHexString(param);
+
+   EXPECT_EQ(s, "0102030405");
+}
+
+TEST(vhelperTests, Test_ToHexString_0x01)
+{
+   byte b = 0x01;
+   string s = vhelper::ToHexString(b);
+
+   EXPECT_EQ(s, "01");
+}
+
+
+TEST(vhelperTests, Test_Select_Byte_HexString_0x0102030405)
+{
+	vbyte param = {0x01, 0x02, 0x03, 0x04, 0x05};
+   std::function<string(const byte&)> sel = [](const byte& b) -> string {return vhelper::ToHexString(b);};
+
+   vector<string> v2 = vhelper::Select(param, sel);
+	EXPECT_EQ(v2.size(), param.size());
+   EXPECT_EQ(v2[0], "01");
+   EXPECT_EQ(v2[1], "02");
+   EXPECT_EQ(v2[2], "03");
+   EXPECT_EQ(v2[3], "04");
+   EXPECT_EQ(v2[4], "05");
 }

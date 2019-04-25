@@ -66,17 +66,28 @@ public:
    }
    */
 
-   // 'select' using erase-remove-idiom
+   // 'where' using erase-remove-idiom
    template<class T>
-   static vector<T> Select(const vector<T>& v1, std::function<bool(const T&)> sel)
+   static vector<T> Where(const vector<T>& v1, std::function<bool(const T&)> sel)
    {
       vector<T> v(v1);
-      size_t idx = 0;
       v.erase(std::remove_if(v.begin(),
                                 v.end(),
                                 [&sel](const T& val){return !sel(val);}
                              ), v.end());
       return std::move(v);
+   }
+
+   // 'select' using transform pattern
+   template<class T1, class T2>
+   static vector<T2> Select(const vector<T1>& v1, std::function<T2(const T1&)> sel)
+   {
+      vector<T2> ret(v1.size());
+      std::transform(v1.begin(),
+                   v1.end(),
+                   ret.begin(),
+                   [&sel](const T1& a) -> T2 { return sel(a); });
+      return std::move(ret);
    }
 
 
@@ -90,6 +101,11 @@ public:
       //std::cout << "ToHexString!!!! RESULT = " << ss.str() << std::endl;
 
       return ss.str();
+   }
+
+   static string ToHexString(const byte& b)
+   {
+      return ToHexString(vbyte(1,b));
    }
 
    static int GetVarSize(const vbyte& v)

@@ -118,6 +118,9 @@ namespace neopt
                 NEOPT_EXCEPTION("Block HashSet.Add Format Exception");
                  //throw new FormatException();
          }
+
+         //std::function<bool(const byte&)> sel = [](const byte& b){return b % 2 == 0;};
+
          //if (MerkleTree.ComputeRoot(Transactions.Select(p => p.Hash).ToArray()) != MerkleRoot)
          //throw new FormatException();
 
