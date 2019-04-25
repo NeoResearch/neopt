@@ -8,6 +8,7 @@
 #include<algorithm>
 #include<sstream>
 #include<iomanip> // fill zero for hex
+#include<functional>
 
 // neo core
 #include<system/types.h>
@@ -36,7 +37,7 @@ public:
 
    // Concat copy
    template<class T>
-   static vector<T> Concat(const vector<T>& v1, const vector<T>& v2) // will empty v2 and put after v1
+   static vector<T> Concat(const vector<T>& v1, const vector<T>& v2) // will return copy
    {
       vector<T> v(v1);
       v.insert(v.end(), v2.begin(), v2.end());
@@ -64,6 +65,21 @@ public:
       return ss.str();
    }
    */
+
+   // 'select' using erase-remove-idiom
+   template<class T>
+   static vector<T> Select(const vector<T>& v1, std::function<bool(const T&)> sel)
+   {
+      vector<T> v(v1);
+      size_t idx = 0;
+      v.erase(std::remove_if(v.begin(),
+                                v.end(),
+                                [&sel](const T& val){return !sel(val);}
+                             ), v.end());
+      return std::move(v);
+   }
+
+
    static string ToHexString(const vbyte& v)
    {
       //std::cout << "ToHexString!!!!" << std::endl;

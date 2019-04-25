@@ -70,3 +70,14 @@ TEST(BinaryReaderTest, Test_TOIStream_HexToBytes_Block2_TN)
    delete in;
 }
 */
+
+TEST(vhelperTests, Test_Select_Even_0x0102030405)
+{
+	vbyte param = {0x01, 0x02, 0x03, 0x04, 0x05};
+   std::function<bool(const byte&)> sel = [](const byte& b){return b % 2 == 0;};
+
+   vbyte v2 = vhelper::Select(param, sel);
+	EXPECT_EQ(v2.size(), 2);
+   EXPECT_EQ(v2[0], 0x02);
+   EXPECT_EQ(v2[1], 0x04);
+}
