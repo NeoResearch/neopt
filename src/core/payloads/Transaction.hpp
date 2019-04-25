@@ -177,6 +177,24 @@ namespace neopt
       Transaction(TransactionType _type) :
          Type(_type),_feePerByte(-Fixed8::Satoshi()), _hash(nullptr), _network_fee(-Fixed8::Satoshi())
       {
+         switch(Type)
+         {
+            case TransactionType::TT_MinerTransaction:
+            case TransactionType::TT_IssueTransaction:
+            case TransactionType::TT_ClaimTransaction:
+            case TransactionType::TT_EnrollmentTransaction:
+            case TransactionType::TT_RegisterTransaction:
+            case TransactionType::TT_ContractTransaction:
+            case TransactionType::TT_StateTransaction:
+            case TransactionType::TT_PublishTransaction:
+            case TransactionType::TT_InvocationTransaction:
+               break;
+            default:
+            {
+               std::cout << "Tx type is: " << Type << std::endl;
+               NEOPT_EXCEPTION("UNKNOWN TX TYPE!");
+            }
+         }
       }
 
    public:
@@ -205,13 +223,17 @@ namespace neopt
       void Deserialize(IBinaryReader& reader)
       {
          this->DeserializeUnsigned(reader);
+
+         std::cout << std::endl << "GOING TO TX WITNESS PART!!" << std::endl;
          Witnesses = reader.ReadSerializableArray<Witness>();
          OnDeserialized();
       }
 
       void DeserializeUnsigned(IBinaryReader& reader)
       {
-         if ((TransactionType)reader.ReadByte() != Type)
+         TransactionType txType = (TransactionType)reader.ReadByte();
+         std::cout << "READ TX TYPE: " << txType << std::endl;
+         if (txType != Type)
             NEOPT_EXCEPTION("Transaction::DeserializeUnsigned FormatException");
          DeserializeUnsignedWithoutType(reader);
       }
@@ -361,11 +383,15 @@ public:
       static Transaction* DeserializeFrom(IBinaryReader& reader)
       {
          std::cout << "Transaction::DeserializeFrom" << std::endl;
+         std::cout << "AVAILABLE BYTES: " << reader.AvailableBytes() << std::endl;
+
+         TransactionType txType = (TransactionType)reader.ReadByte();
+         std::cout << "TX TYPE IS " << txType << std::endl;
           // Looking for type in reflection cache
-          Transaction* transaction = new Transaction((TransactionType)reader.ReadByte());//ReflectionCache.CreateInstance<Transaction>(reader.ReadByte());
+          Transaction* transaction = new Transaction(txType);//ReflectionCache.CreateInstance<Transaction>(reader.ReadByte());
           //if (transaction == null) throw new FormatException();
 
-          std::cout << "Transaction:: will deserialize unsigned" << std::endl;
+          std::cout << "Transaction:: will deserialize unsigned Without TYPE" << std::endl;
           transaction->DeserializeUnsignedWithoutType(reader);
           std::cout << "Transaction:: will read witness" << std::endl;
           transaction->Witnesses = reader.ReadSerializableArray<Witness>();

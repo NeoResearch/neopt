@@ -93,6 +93,7 @@ namespace neopt
          Transactions = std::vector<Transaction*>(reader.ReadVarInt(MaxTransactionsPerBlock), nullptr);
          if (Transactions.size() == 0)
             NEOPT_EXCEPTION("Block Deserialize FormatException");
+         std::cout << "TRANSACTION SIZE = " << Transactions.size() << std::endl;
 
          //std::unordered_set<UInt256, uintbase_hash> hashes;
          HashSet<UInt256> hashes;
@@ -122,7 +123,7 @@ namespace neopt
 
          // note that const will be removed because we trust that getHash() only updates useful stuff
          std::function<UInt256(const Transaction*)> sel = [](const Transaction* t) -> UInt256{return (const_cast<Transaction*>(t))->getHash();};
-
+//         std::function<UInt256(const Transaction*&)> sel = [](const Transaction*& t) -> UInt256{return (const_cast<Transaction*&>(t))->getHash();};
          if (MerkleTree::ComputeRoot(vhelper::SelectP(Transactions, sel)) != MerkleRoot)
             NEOPT_EXCEPTION("Block ComputeRoot FormatException");
          //throw new FormatException();

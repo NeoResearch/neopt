@@ -54,7 +54,10 @@ public:
    {
       //std::cout << "ReadBytes: " << max << std::endl;
       if((AvailableBytes() != -1) && (AvailableBytes() < max))
+      {
+         std::cout << "ERROR! wanted " << max << " bytes, only have " << AvailableBytes() << std::endl;
          NEOPT_EXCEPTION("IBinaryReader::Cannot read enough bytes!"); // or, return vbyte(0); TODO
+      }
       vbyte bytes(max, 0);
       for(int i=0; i<bytes.size(); i++)
       {
@@ -164,7 +167,8 @@ public:
            value = fb;
        if (value > max)
        {
-          NEOPT_EXCEPTION("FormatException");
+          std::cout << "TOO HUGE VALUE: " << value << " max=" << max << std::endl;
+          NEOPT_EXCEPTION("IBinaryReader::ReadVarInt error: Too huge value! FormatException");
           return -1;
        }
        return value;
