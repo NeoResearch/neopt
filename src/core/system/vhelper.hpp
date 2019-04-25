@@ -124,11 +124,29 @@ public:
    }
 */
 
+/*
    static vbyte ToArray(const ostream& os)
    {
       // TODO: implement
       NEOPT_EXCEPTION("Not implemented vhelper::ToArray() ostream");
       return vbyte(0);
+   }
+*/
+
+
+   template<class T>
+   static T DeserializeFrom(const vbyte& value, int offset = 0)
+   {
+      if(offset >= value.size())
+         NEOPT_EXCEPTION("vhelper::DeserializeFrom: OFFSET BIGGER THAN AVAILABLE BYTES!");
+
+      vbyte data(value.begin()+offset, value.begin()+value.size()-offset);
+      BinaryReader reader(data);
+      // using (MemoryStream ms = new MemoryStream(value, offset, value.Length - offset, false))
+      // using (BinaryReader reader = new BinaryReader(ms, Encoding.UTF8))
+      T obj;
+      obj.DeserializeFrom(reader);
+      return std::move(obj);
    }
 
 

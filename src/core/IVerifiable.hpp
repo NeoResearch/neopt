@@ -46,11 +46,13 @@ public:
    // originally from Network/P2P/Helper.cs
    virtual vbyte GetHashData() const
    {
-      std::ostringstream oss;
-      BinaryWriter writer(oss);
+      //std::ostringstream oss;
+      vbyte data;
+      BinaryWriter writer(data);
       this->SerializeUnsigned(writer);
       writer.Flush();
-      return vhelper::ToArray(oss);
+      return std::move(data);
+      //return vhelper::ToArray(oss);
    }
 
 };

@@ -23,25 +23,33 @@ class BinaryWriter : public IBinaryWriter
 private:
    ostream* output;
    bool mustDelete;
+   vbyte* data_bytes; // if available, write here
 public:
 
    // writing data on output stream
    // may not be fully portable
    // if necessary, in the future, create abstract Stream class with better cross-compatibility
    BinaryWriter(ostream& _output) :
-      output(&_output), mustDelete(false)
+      output(&_output), mustDelete(false), data_bytes(nullptr)
    {
    }
 
    BinaryWriter(ostream* _output) :
-      output(_output), mustDelete(true)
+      output(_output), mustDelete(true), data_bytes(nullptr)
+   {
+   }
+
+   BinaryWriter(vbyte& data) :
+      output(nullptr), mustDelete(false), data_bytes(&data)
    {
    }
 
    virtual ~BinaryWriter()
    {
-      if(mustDelete)
+      if(mustDelete && output)
          delete output;
+      output = nullptr;
+      data_bytes = nullptr;
    }
 
    using IBinaryWriter::Write;
