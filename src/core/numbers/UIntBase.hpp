@@ -130,6 +130,15 @@ namespace neopt
         writer.Write(data_bytes);
       }
 
+
+      // return copy (TODO: think about it).
+      // MerkleTree already uses this as copy... if change this behavior, must update there too, to include a copy there
+      // Copy is safer for now. Peformance comes after.
+      virtual vbyte ToArray()
+      {
+         return data_bytes;
+      }
+/*
       /// <summary>
       /// Method ToArray() returns the byte array data_bytes, which stores the little-endian unsigned int
       /// </summary>
@@ -138,7 +147,9 @@ namespace neopt
          // return copy or reference?
          return data_bytes;
       }
+*/
 
+/*
       /// <summary>
       /// Method ToArray() returns the byte array data_bytes, which stores the little-endian unsigned int
       /// </summary>
@@ -147,6 +158,7 @@ namespace neopt
          // return copy or reference?
          return data_bytes;
       }
+*/
 
       /// <summary>
       /// Method ToString returns a big-endian string starting by "0x" representing the little-endian unsigned int

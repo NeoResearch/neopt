@@ -34,6 +34,24 @@ public:
       return std::move(rev);
    }
 
+   // Concat copy
+   template<class T>
+   static vector<T> Concat(const vector<T>& v1, const vector<T>& v2) // will empty v2 and put after v1
+   {
+      vector<T> v(v1);
+      v.insert(v.end(), v2.begin(), v2.end());
+      return std::move(v);
+   }
+
+/*
+   template<class T>
+   static void Concat(vector<T>& v1, vector<T>& v2) // will empty v2 and put after v1
+   {
+      v1.insert(v1.begin(), v2.begin(), v2.end());
+      v2.clear();
+   }
+*/
+
    // TODO: replace by operator<< ?
    /*
    template<class T>

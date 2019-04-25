@@ -15,6 +15,9 @@
 #include<system/shelper.h>
 #include<payloads/BlockBase.hpp>
 #include<payloads/Transaction.hpp>
+#include<system/HashSet.hpp>
+#include<adt/MerkleTree.hpp>
+
 
 namespace neopt
 {
@@ -91,7 +94,8 @@ namespace neopt
          if (Transactions.size() == 0)
             NEOPT_EXCEPTION("Block Deserialize FormatException");
 
-         std::unordered_set<UInt256, uintbase_hash> hashes;
+         //std::unordered_set<UInt256, uintbase_hash> hashes;
+         HashSet<UInt256> hashes;
          //HashSet<UInt256> hashes = new HashSet<UInt256>();
          for (int i = 0; i < Transactions.size(); i++)
          {
@@ -108,10 +112,10 @@ namespace neopt
                      NEOPT_EXCEPTION("Block Miner Tx Format Exception");
                      //throw new FormatException();
              }
-             hashes.emplace(Transactions[i]->getHash());
+             //hashes.emplace(Transactions[i]->getHash());
              //if (!hashes->emplace(Transactions[i]->getHash()).second)
-             //if (!hashes.Add(Transactions[i].Hash))
-            //   NEOPT_EXCEPTION("Block unordered_set emplace Format Exception");
+             if (!hashes.Add(Transactions[i]->getHash()))
+                NEOPT_EXCEPTION("Block HashSet.Add Format Exception");
                  //throw new FormatException();
          }
          //if (MerkleTree.ComputeRoot(Transactions.Select(p => p.Hash).ToArray()) != MerkleRoot)
