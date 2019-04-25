@@ -16,7 +16,7 @@
 #include<wallets/KeyPair.hpp>
 #include<crypto/Crypto.h>
 
-#include<system/BinaryWriter.hpp>
+#include<system/IBinaryWriter.h>
 
 
 namespace neopt
@@ -27,6 +27,10 @@ namespace neopt
 class CoinReference //: public ISerializable
 {
 public:
+
+   virtual void Serialize(IBinaryWriter& writer) const
+   {
+   }
 
 };
 

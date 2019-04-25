@@ -23,7 +23,8 @@ namespace neopt
    public:
       const int MaxTransactionsPerBlock = types::MaxValue<ushort>();
 
-      std::vector<Transaction> Transactions;
+      // Transaction is abstract perhaps?
+      std::vector<Transaction*> Transactions;
 
    private:
       UInt256* _hash; // = nullptr

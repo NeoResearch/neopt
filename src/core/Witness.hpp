@@ -49,7 +49,7 @@ namespace neopt
       }
 
       // ISerializable class
-      virtual void Serialize(IBinaryWriter& writer)
+      virtual void Serialize(IBinaryWriter& writer) const
       {
          writer.WriteVarBytes(InvocationScript);
          writer.WriteVarBytes(VerificationScript);

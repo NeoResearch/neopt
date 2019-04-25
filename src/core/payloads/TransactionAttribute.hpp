@@ -28,6 +28,11 @@ class TransactionAttribute //: public ISerializable
 {
 public:
 
+
+   virtual void Serialize(IBinaryWriter& writer) const
+   {
+   }
+
 };
 
 }

@@ -28,6 +28,10 @@ class TransactionOutput //: public ISerializable
 {
 public:
 
+   virtual void Serialize(IBinaryWriter& writer) const
+   {
+   }
+
 };
 
 }

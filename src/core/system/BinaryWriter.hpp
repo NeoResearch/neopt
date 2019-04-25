@@ -44,20 +44,12 @@ public:
          delete output;
    }
 
+   using IBinaryWriter::Write;
 
-   // writes data directly from vector
-   virtual void Write(const vector<byte>& data)
+   virtual void Write(byte v)
    {
    }
 
-   virtual void Write(long v)
-   {
-   }
-
-   // writes var bytes on vector
-   virtual void WriteVarBytes(vbyte& v)
-   {
-   }
 
    virtual void Flush()
    {

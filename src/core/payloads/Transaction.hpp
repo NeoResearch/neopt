@@ -167,6 +167,12 @@ namespace neopt
          return std::vector<UInt160>(0);
       }
 
+   public:
+      Transaction() : // TODO: remove
+         Type(TransactionType::TT_MinerTransaction) // TODO: remove
+      {
+      }
+
    protected:
       Transaction(TransactionType _type) :
          Type(_type),_feePerByte(-Fixed8::Satoshi()), _hash(nullptr), _network_fee(-Fixed8::Satoshi())
@@ -322,7 +328,7 @@ public:
       void Serialize(IBinaryWriter& writer)
       {
          this->SerializeUnsigned(writer);
-         writer.Write(Witnesses);
+         IBinaryWriter::WriteArray<Witness>(writer, Witnesses);
       }
 
 protected:
@@ -336,9 +342,12 @@ public:
          writer.Write((byte)Type);
          writer.Write(Version);
          SerializeExclusiveData(writer);
-         writer.Write(Attributes);
-         writer.Write(Inputs);
-         writer.Write(Outputs);
+         IBinaryWriter::WriteArray<TransactionAttribute>(writer, Attributes);
+         //writer.Write(Attributes);
+         IBinaryWriter::WriteArray<CoinReference>(writer, Inputs);
+         //writer.Write(Inputs);
+         IBinaryWriter::WriteArray<TransactionOutput>(writer, Outputs);
+         //writer.Write(Outputs);
       }
 
 
