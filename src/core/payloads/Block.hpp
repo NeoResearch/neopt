@@ -100,6 +100,7 @@ namespace neopt
          for (int i = 0; i < Transactions.size(); i++)
          {
              Transactions[i] = Transaction::DeserializeFrom(reader);//new Transaction(Transaction.DeserializeFrom(reader);
+             std::cout << "Block:: TX Deserialized" << std::endl;
              if (i == 0)
              {
                  if (Transactions[0]->Type != TransactionType::TT_MinerTransaction)
@@ -119,9 +120,11 @@ namespace neopt
                  //throw new FormatException();
          }
 
-         //std::function<bool(const byte&)> sel = [](const byte& b){return b % 2 == 0;};
+         // note that const will be removed because we trust that getHash() only updates useful stuff
+         std::function<UInt256(const Transaction*)> sel = [](const Transaction* t) -> UInt256{return (const_cast<Transaction*>(t))->getHash();};
 
-         //if (MerkleTree.ComputeRoot(Transactions.Select(p => p.Hash).ToArray()) != MerkleRoot)
+         if (MerkleTree::ComputeRoot(vhelper::SelectP(Transactions, sel)) != MerkleRoot)
+            NEOPT_EXCEPTION("Block ComputeRoot FormatException");
          //throw new FormatException();
 
          NEOPT_EXCEPTION("Cannot deserialize block yet");

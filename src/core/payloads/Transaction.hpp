@@ -220,9 +220,14 @@ private:
       void DeserializeUnsignedWithoutType(IBinaryReader& reader)
       {
          Version = reader.ReadByte();
+         std::cout << "Transaction:: will read exclusive data" << std::endl;
          DeserializeExclusiveData(reader);
+         std::cout << "Transaction:: will read arrays" << std::endl;
+         std::cout << "Transaction:: will read array 1" << std::endl;
          Attributes = reader.ReadSerializableArray<TransactionAttribute>(MaxTransactionAttributes);
+         std::cout << "Transaction:: will read array 2" << std::endl;
          Inputs = reader.ReadSerializableArray<CoinReference>();
+         std::cout << "Transaction:: will read array 3" << std::endl;
          Outputs = reader.ReadSerializableArray<TransactionOutput>(types::MaxValue<ushort>() + 1);
       }
 
@@ -355,12 +360,16 @@ public:
 
       static Transaction* DeserializeFrom(IBinaryReader& reader)
       {
+         std::cout << "Transaction::DeserializeFrom" << std::endl;
           // Looking for type in reflection cache
           Transaction* transaction = new Transaction((TransactionType)reader.ReadByte());//ReflectionCache.CreateInstance<Transaction>(reader.ReadByte());
           //if (transaction == null) throw new FormatException();
 
+          std::cout << "Transaction:: will deserialize unsigned" << std::endl;
           transaction->DeserializeUnsignedWithoutType(reader);
+          std::cout << "Transaction:: will read witness" << std::endl;
           transaction->Witnesses = reader.ReadSerializableArray<Witness>();
+          std::cout << "Transaction:: on deserialized" << std::endl;
           transaction->OnDeserialized();
           return transaction;
       }

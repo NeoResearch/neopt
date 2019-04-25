@@ -34,7 +34,7 @@ typedef unsigned long ulong;
 // byte array definition
 typedef std::vector<byte> vbyte;
 
-#define NEOPT_EXCEPTION(str) { printf("neopt error: %s\n", str); exit(1); }
+#define NEOPT_EXCEPTION(str) { printf("neopt error(%s): %s\n", __func__,  str); exit(1); }
 
 class types
 {

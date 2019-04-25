@@ -23,7 +23,7 @@ namespace neopt
       {
       }
 
-      MerkleTreeNode(UInt256& _hash) :
+      MerkleTreeNode(const UInt256& _hash) :
          Hash(_hash)
       {
       }
@@ -51,19 +51,22 @@ namespace neopt
          return _depth;
       }
 
-      MerkleTree(std::vector<UInt256>& hashes)
+      MerkleTree(const std::vector<UInt256>& hashes)
       {
            if (hashes.size() == 0)
                NEOPT_EXCEPTION("MerkleTree ArgumentException");
            // TODO: create Select pattern
+
+           std::function<MerkleTreeNode*(const UInt256&)> sel = [](const UInt256& p) -> MerkleTreeNode*{return new MerkleTreeNode(p);};
            //this->root = Build(hashes.Select(p => new MerkleTreeNode { Hash = p }).ToArray());
+           this->root = Build(vhelper::Select(hashes, sel));
            int depth = 1;
            for (MerkleTreeNode* i = root; i->LeftChild != nullptr; i = i->LeftChild)
                depth++;
            this->_depth = depth;
       }
 
-      static MerkleTreeNode* Build(std::vector<UInt256>& hashes)
+      static MerkleTreeNode* Build(const std::vector<UInt256>& hashes)
       {
          std::vector<MerkleTreeNode*> leaves(hashes.size(), nullptr);
          for(unsigned i=0; i<hashes.size(); i++)
@@ -71,7 +74,7 @@ namespace neopt
          return Build(leaves);
       }
 
-      static MerkleTreeNode* Build(std::vector<MerkleTreeNode*>& leaves)
+      static MerkleTreeNode* Build(const std::vector<MerkleTreeNode*>& leaves)
       {
            if (leaves.size() == 0)
                NEOPT_EXCEPTION("MerkleTree Build ArgumentException");
@@ -100,8 +103,9 @@ namespace neopt
            return Build(parents); //TailCall
       }
 
-      static UInt256 ComputeRoot(std::vector<UInt256>& hashes)
+      static UInt256 ComputeRoot(const std::vector<UInt256>& hashes)
       {
+         std::cout << "will compute merkle root" << std::endl;
          if (hashes.size() == 0)
             NEOPT_EXCEPTION("MerkleTree ComputeRoot ArgumentException");
          if (hashes.size() == 1)

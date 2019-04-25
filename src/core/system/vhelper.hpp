@@ -79,6 +79,8 @@ public:
    }
 
    // 'select' using transform pattern
+   // note that parameter is const, since it's not supposed to update them...
+   // it's useful for on-time compute functions, such as getHash(), which are not harmful to the base class, but const_cast can be used when sure of that
    template<class T1, class T2>
    static vector<T2> Select(const vector<T1>& v1, std::function<T2(const T1&)> sel)
    {
@@ -87,6 +89,18 @@ public:
                    v1.end(),
                    ret.begin(),
                    [&sel](const T1& a) -> T2 { return sel(a); });
+      return std::move(ret);
+   }
+
+   // pointer version
+   template<class T1, class T2>
+   static vector<T2> SelectP(const vector<T1*>& v1, std::function<T2(const T1*)> sel)
+   {
+      vector<T2> ret(v1.size());
+      std::transform(v1.begin(),
+                   v1.end(),
+                   ret.begin(),
+                   [&sel](const T1* a) -> T2 { return sel(a); });
       return std::move(ret);
    }
 
