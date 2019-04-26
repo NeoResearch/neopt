@@ -16,6 +16,7 @@
 #include<IVerifiable.hpp>
 #include<IInventory.hpp>
 #include<payloads/Block.hpp>
+#include<payloads/MinerTransaction.hpp>
 #include<payloads/Transaction.hpp>
 #include<crypto/ICrypto.h>
 #include<crypto/Crypto.h>
@@ -77,6 +78,10 @@ int main()
    assert(lib.VerifySignature(vbyte(1,3), lib.SignData(lib.Sha256(vbyte(1,3)), priv, mypubkey), mypubkey) == 1);
 
    PluginSystem plugins;
+
+   // testing transaction
+
+   Transaction* t = Transaction::CreateInstance(TT_MinerTransaction);
 
    cout << "Finished sucessfully" << endl;
 

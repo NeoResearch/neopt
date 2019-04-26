@@ -10,6 +10,8 @@ using namespace neopt;
 
 TEST(TransactionTests, Test_Transaction_Deserialize_SingleFromBlock_Manually)
 {
+	//////// 010000d11f7a2800000000
+	
 	string block2tn = "010000d11f7a2800000000";
 
 	vbyte param = shelper::HexToBytes(block2tn);
@@ -37,33 +39,52 @@ TEST(TransactionTests, Test_Transaction_Deserialize_SingleFromBlock_Manually)
 
 	// DeserializeExclusiveData(reader);
 	// doing this manually too
-	// nothing to read
-	EXPECT_EQ(reader.AvailableBytes(), 8);
-	// d11f7a2800000000
+	// this method will come from MinerTransaction
+	// d11f7a28 (rest is 00000000)
 
-	// reading attributes
-	//vector<TransactionAttributes> Attributes = reader.ReadSerializableArray<TransactionAttribute>(16); // TODO: fix limit
-	// manually (FOR NOW)
-
-	int count = reader.ReadVarInt(16);
-	EXPECT_EQ(count, 0);
-	EXPECT_EQ(reader.AvailableBytes(), 9);
-
-	//vector<T> array(this->ReadVarInt((ulong)max)); // TODO: why ulong?
+	uint Nonce = reader.ReadUInt32();
+	EXPECT_EQ(Nonce, 679092177);
+	EXPECT_EQ(reader.AvailableBytes(), 4);
 
 
+	// read attributes array 
+	// 00 
+    vector<TransactionAttribute> Attributes = reader.ReadSerializableArray<TransactionAttribute>(16);
+	EXPECT_EQ(Attributes.size(), 0);
+	EXPECT_EQ(reader.AvailableBytes(), 3);
 
+	// read inputs array
+	// 00
+    vector<CoinReference> Inputs = reader.ReadSerializableArray<CoinReference>();
+	EXPECT_EQ(Inputs.size(), 0);
+	EXPECT_EQ(reader.AvailableBytes(), 2);
+
+	// read outputs array
+	// 00
+    vector<TransactionOutput> Outputs = reader.ReadSerializableArray<TransactionOutput>();
+	EXPECT_EQ(Outputs.size(), 0);
+	EXPECT_EQ(reader.AvailableBytes(), 1);
+
+	// finishes the Read Unsigned No type... back to DeserializeFrom 
+
+	// read witness array
+	// 00 (last)
+	vector<Witness> Witnesses = reader.ReadSerializableArray<Witness>();
+	EXPECT_EQ(Witnesses.size(), 0);
 	EXPECT_EQ(reader.AvailableBytes(), 0);
+
+	// finishes Tx deserialization
 }
 
 TEST(TransactionTests, Test_Transaction_Deserialize_SingleFromBlock_Automatically)
 {
-	string block2tn = "010000d11f7a2800000000";
+	// Miner Transaction
+	string block2tn = "0000d11f7a2800000000";
 
 	vbyte param = shelper::HexToBytes(block2tn);
 
 	BinaryReader reader(param);
-	EXPECT_EQ(reader.AvailableBytes(), 11);
+	EXPECT_EQ(reader.AvailableBytes(), 10);
 
 	Transaction* tx = Transaction::DeserializeFrom(reader);
 

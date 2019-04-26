@@ -167,33 +167,25 @@ namespace neopt
          return std::vector<UInt160>(0);
       }
 
-   public:
+    /*
+   protected:
       Transaction() : // TODO: remove
          Type(TransactionType::TT_MinerTransaction) // TODO: remove
       {
       }
+      */
+
+   public:
+        static bool ValidTransactionType(TransactionType type);
 
    protected:
       Transaction(TransactionType _type) :
          Type(_type),_feePerByte(-Fixed8::Satoshi()), _hash(nullptr), _network_fee(-Fixed8::Satoshi())
       {
-         switch(Type)
+         if(!Transaction::ValidTransactionType(Type))
          {
-            case TransactionType::TT_MinerTransaction:
-            case TransactionType::TT_IssueTransaction:
-            case TransactionType::TT_ClaimTransaction:
-            case TransactionType::TT_EnrollmentTransaction:
-            case TransactionType::TT_RegisterTransaction:
-            case TransactionType::TT_ContractTransaction:
-            case TransactionType::TT_StateTransaction:
-            case TransactionType::TT_PublishTransaction:
-            case TransactionType::TT_InvocationTransaction:
-               break;
-            default:
-            {
-               std::cout << "Tx type is: " << Type << std::endl;
-               NEOPT_EXCEPTION("UNKNOWN TX TYPE!");
-            }
+            std::cout << "Tx type is: " << Type << std::endl;
+            NEOPT_EXCEPTION("UNKNOWN TX TYPE!");
          }
       }
 
@@ -262,11 +254,11 @@ protected:
 public:
        virtual bool Verify(ISnapshot& snapshot)
        {
-          std::vector<Transaction> mempool(0);
+          std::vector<Transaction*> mempool(0);
           return Verify(snapshot, mempool);
        }
 
-       virtual bool Verify(ISnapshot& snapshot, std::vector<Transaction>& mempool)
+       virtual bool Verify(ISnapshot& snapshot, std::vector<Transaction*>& mempool)
        {
           /*
             if (Size > MaxTransactionSize) return false;
@@ -378,30 +370,96 @@ public:
       }
 
       // strange static methods (could be elsewhere?)
-public:
+    public:
 
-      static Transaction* DeserializeFrom(IBinaryReader& reader)
-      {
-         std::cout << "Transaction::DeserializeFrom" << std::endl;
-         std::cout << "AVAILABLE BYTES: " << reader.AvailableBytes() << std::endl;
+        // Factory Method (defined in the end of this file after loading all subclasses)
+        static Transaction* CreateInstance(TransactionType type);
 
-         TransactionType txType = (TransactionType)reader.ReadByte();
-         std::cout << "TX TYPE IS " << txType << std::endl;
-          // Looking for type in reflection cache
-          Transaction* transaction = new Transaction(txType);//ReflectionCache.CreateInstance<Transaction>(reader.ReadByte());
-          //if (transaction == null) throw new FormatException();
+        static Transaction* DeserializeFrom(IBinaryReader& reader)
+        {
+            std::cout << "Transaction::DeserializeFrom" << std::endl;
+            std::cout << "AVAILABLE BYTES: " << reader.AvailableBytes() << std::endl;
 
-          std::cout << "Transaction:: will deserialize unsigned Without TYPE" << std::endl;
-          transaction->DeserializeUnsignedWithoutType(reader);
-          std::cout << "Transaction:: will read witness" << std::endl;
-          transaction->Witnesses = reader.ReadSerializableArray<Witness>();
-          std::cout << "Transaction:: on deserialized" << std::endl;
-          transaction->OnDeserialized();
-          return transaction;
-      }
+            TransactionType txType = (TransactionType)reader.ReadByte();
+            std::cout << "TX TYPE IS " << txType << std::endl;
+            // Looking for type in reflection cache
+            //ReflectionCache.CreateInstance<Transaction>(reader.ReadByte());
+            // No reflection on C++... so using a static Factory Method instead
+            Transaction* transaction = Transaction::CreateInstance(txType);
+            //if (transaction == null) throw new FormatException();
+
+            std::cout << "Transaction:: will deserialize unsigned Without TYPE" << std::endl;
+            transaction->DeserializeUnsignedWithoutType(reader);
+            std::cout << "Transaction:: will read witness" << std::endl;
+            transaction->Witnesses = reader.ReadSerializableArray<Witness>();
+            std::cout << "Transaction:: on deserialized" << std::endl;
+            transaction->OnDeserialized();
+            return transaction;
+        }
 
 
    };
+} // namespace neopt
+
+
+// =============================
+// static factory method pattern
+// =============================
+
+#include<payloads/MinerTransaction.hpp>
+
+namespace neopt
+{
+
+bool Transaction::ValidTransactionType(TransactionType type)
+{
+    switch(type)
+    {
+        case TransactionType::TT_MinerTransaction:
+        case TransactionType::TT_IssueTransaction:
+        case TransactionType::TT_ClaimTransaction:
+        case TransactionType::TT_EnrollmentTransaction:
+        case TransactionType::TT_RegisterTransaction:
+        case TransactionType::TT_ContractTransaction:
+        case TransactionType::TT_StateTransaction:
+        case TransactionType::TT_PublishTransaction:
+        case TransactionType::TT_InvocationTransaction:
+            return true;
+            break;
+        default:
+            return false;
+    }
+    return false;
 }
 
+
+Transaction* Transaction::CreateInstance(TransactionType type)
+{
+    switch(type)
+    {
+        case TransactionType::TT_MinerTransaction:
+            return new MinerTransaction();
+        case TransactionType::TT_IssueTransaction:
+        case TransactionType::TT_ClaimTransaction:
+        case TransactionType::TT_EnrollmentTransaction:
+        case TransactionType::TT_RegisterTransaction:
+        case TransactionType::TT_ContractTransaction:
+        case TransactionType::TT_StateTransaction:
+        case TransactionType::TT_PublishTransaction:
+        case TransactionType::TT_InvocationTransaction:
+        {
+            std::cout << "Transaction type is " << type << std::endl;
+            NEOPT_EXCEPTION("NOT IMPLEMENTED TX TYPE CreateInstance Factory yet!");
+            return nullptr;
+            break;
+        }
+        default:
+            return nullptr;
+    }
+    return nullptr;
+} // factory method Transaction::CreateInstance
+
+} // namespace neopt
+
 #endif
+

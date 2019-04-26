@@ -3,6 +3,7 @@
 // core includes
 #include<payloads/Block.hpp>
 #include<system/vhelper.hpp>
+#include<system/printable.h>
 #include<system/BinaryReader.hpp>
 
 using namespace std;
@@ -98,11 +99,15 @@ TEST(BlockDeserializeTest, Test_Block_ManualDeserialize_Including_Base)
 	// Don't need to do this manually... Witness.Test will do this
 	Witness witness = reader.ReadSerializable<Witness>();
 	EXPECT_EQ(witness.InvocationScript.size(), 325);
+	//std::cout << "Invocation:" << vhelper::ToHexString(witness.InvocationScript) << std::endl;
+	// 40884037dd265cb5f5a54802f53c2c8593b31d5b8a9c0bad4c7e366b153d878989d168080ac36b930036a9eb966b48c70bb41792e698fa021116f27c09643563b840e83ab14404d964a91dbac45f5460e88ad57196b1779478e3475334af8c1b49cd9f0213257895c60b5b92a4800eb32d785cbb39ae1f022528943909fd37deba63403677848bf98cc9dbd8fbfd7f2e4f34471866ea82ca6bffbf0f778b6931483700c17829b4bd066eb04983d3aac0bd46b9c8d03a73a8e714d3119de93cd9522e314054d16853b22014190063f77d9edf6fbccefcf71fffd1234f688823b4e429ae5fa639d0a664c842fbdfcb4d6e21f39d81c23563b92cffa09696d93c95bc4893a6401a43071d00d3e854f7f1f321afa7d5301d36f2195dc1e2643463f34ae637d2b02ae0eb11d4256c507a4f8304cea6396a7fce640f50acb301c2f6336d27717e84
 	EXPECT_EQ(witness.VerificationScript.size(), 241);
+	//std::cout << "Verification:" << vhelper::ToHexString(witness.VerificationScript) << std::endl;
+	// 55210209e7fd41dfb5c2f8dc72eb30358ac100ea8c72da18847befe06eade68cebfcb9210327da12b5c40200e9f65569476bbff2218da4f32548ff43b6387ec1416a231ee821034ff5ceeac41acf22cd5ed2da17a6df4dd8358fcb2bfb1a43208ad0feaab2746b21026ce35b29147ad09e4afe4ec4a7319095f08198fa8babbe3c56e970b143528d2221038dddc06ce687677a53d54f096d2591ba2302068cf123c1f2d75c2dddc542557921039dafd8571a641058ccc832c5e2111ea39b09c0bde36050914384f7a48bce9bf92102d02b1873a0863cd042cc717da31cea0d7cf9db32b74d4c72c01b0011503e2e2257ae
 	EXPECT_EQ(reader.AvailableBytes(), 11);
 
 	// the rest for tx is: 010000d11f7a2800000000
-
+ 
 	// 01
 	//reader.ReadVarInt(MaxTransactionsPerBlock)
 	ushort countTx = reader.ReadVarInt(types::MaxValue<ushort>());

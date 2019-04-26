@@ -134,7 +134,7 @@ namespace neopt
       // return copy (TODO: think about it).
       // MerkleTree already uses this as copy... if change this behavior, must update there too, to include a copy there
       // Copy is safer for now. Peformance comes after.
-      virtual vbyte ToArray()
+      virtual vbyte ToArray() const
       {
          return data_bytes;
       }
