@@ -15,6 +15,7 @@
 #include<system/shelper.h>
 #include<payloads/BlockBase.hpp>
 #include<payloads/Transaction.hpp>
+#include<payloads/TransactionFactory.h>
 #include<system/HashSet.hpp>
 #include<adt/MerkleTree.hpp>
 
@@ -100,7 +101,10 @@ namespace neopt
          //HashSet<UInt256> hashes = new HashSet<UInt256>();
          for (int i = 0; i < Transactions.size(); i++)
          {
+             // not as easy as first thought... 
+             // needs a factory together with a deserialization builder
              Transactions[i] = Transaction::DeserializeFrom(reader);//new Transaction(Transaction.DeserializeFrom(reader);
+             
              std::cout << "Block:: TX Deserialized" << std::endl;
              if (i == 0)
              {

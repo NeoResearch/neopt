@@ -15,6 +15,7 @@
 #include<system/shelper.h>
 #include<Witness.hpp>
 #include<payloads/TransactionType.h>
+#include<payloads/TransactionFactory.h>
 #include<payloads/TransactionAttribute.hpp>
 #include<payloads/CoinReference.hpp>
 #include<payloads/TransactionOutput.hpp>
@@ -22,6 +23,7 @@
 
 namespace neopt
 {
+    //class TransactionFactory;
 
    class Transaction : public IEquatable<Transaction>, public IInventory
    {
@@ -176,7 +178,10 @@ namespace neopt
       */
 
    public:
-        static bool ValidTransactionType(TransactionType type);
+        static bool ValidTransactionType(TransactionType type)
+        {
+            return true; // TODO: needs to protect from factory too?
+        }
 
    protected:
       Transaction(TransactionType _type) :
@@ -373,7 +378,7 @@ public:
     public:
 
         // Factory Method (defined in the end of this file after loading all subclasses)
-        static Transaction* CreateInstance(TransactionType type);
+        ////static Transaction* CreateInstance(TransactionType type);
 
         static Transaction* DeserializeFrom(IBinaryReader& reader)
         {
@@ -381,11 +386,13 @@ public:
             std::cout << "AVAILABLE BYTES: " << reader.AvailableBytes() << std::endl;
 
             TransactionType txType = (TransactionType)reader.ReadByte();
-            std::cout << "TX TYPE IS " << txType << std::endl;
+            //std::cout << "TX TYPE IS " << txType << std::endl;
             // Looking for type in reflection cache
             //ReflectionCache.CreateInstance<Transaction>(reader.ReadByte());
             // No reflection on C++... so using a static Factory Method instead
-            Transaction* transaction = Transaction::CreateInstance(txType);
+            Transaction* transaction = vhelper::DeserializeFromTypeFactory<Transaction, TransactionFactory, TransactionType>(txType);
+            
+            //Transaction* transaction = Transaction::CreateInstance(txType);
             //if (transaction == null) throw new FormatException();
 
             std::cout << "Transaction:: will deserialize unsigned Without TYPE" << std::endl;
@@ -401,65 +408,6 @@ public:
    };
 } // namespace neopt
 
-
-// =============================
-// static factory method pattern
-// =============================
-
-#include<payloads/MinerTransaction.hpp>
-
-namespace neopt
-{
-
-bool Transaction::ValidTransactionType(TransactionType type)
-{
-    switch(type)
-    {
-        case TransactionType::TT_MinerTransaction:
-        case TransactionType::TT_IssueTransaction:
-        case TransactionType::TT_ClaimTransaction:
-        case TransactionType::TT_EnrollmentTransaction:
-        case TransactionType::TT_RegisterTransaction:
-        case TransactionType::TT_ContractTransaction:
-        case TransactionType::TT_StateTransaction:
-        case TransactionType::TT_PublishTransaction:
-        case TransactionType::TT_InvocationTransaction:
-            return true;
-            break;
-        default:
-            return false;
-    }
-    return false;
-}
-
-
-Transaction* Transaction::CreateInstance(TransactionType type)
-{
-    switch(type)
-    {
-        case TransactionType::TT_MinerTransaction:
-            return new MinerTransaction();
-        case TransactionType::TT_IssueTransaction:
-        case TransactionType::TT_ClaimTransaction:
-        case TransactionType::TT_EnrollmentTransaction:
-        case TransactionType::TT_RegisterTransaction:
-        case TransactionType::TT_ContractTransaction:
-        case TransactionType::TT_StateTransaction:
-        case TransactionType::TT_PublishTransaction:
-        case TransactionType::TT_InvocationTransaction:
-        {
-            std::cout << "Transaction type is " << type << std::endl;
-            NEOPT_EXCEPTION("NOT IMPLEMENTED TX TYPE CreateInstance Factory yet!");
-            return nullptr;
-            break;
-        }
-        default:
-            return nullptr;
-    }
-    return nullptr;
-} // factory method Transaction::CreateInstance
-
-} // namespace neopt
 
 #endif
 
