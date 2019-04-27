@@ -128,8 +128,12 @@ namespace neopt
          // note that const will be removed because we trust that getHash() only updates useful stuff
          std::function<UInt256(const Transaction*)> sel = [](const Transaction* t) -> UInt256{return (const_cast<Transaction*>(t))->getHash();};
 //         std::function<UInt256(const Transaction*&)> sel = [](const Transaction*& t) -> UInt256{return (const_cast<Transaction*&>(t))->getHash();};
-         if (MerkleTree::ComputeRoot(vhelper::SelectP(Transactions, sel)) != MerkleRoot)
+        UInt256 calcRoot = MerkleTree::ComputeRoot(vhelper::SelectP(Transactions, sel));
+        if (calcRoot != MerkleRoot)
+        {
+            std::cout << "Difference: calcRoot {" << calcRoot.ToString() << "} merkle {" << MerkleRoot.ToString() << "}" << std::endl;
             NEOPT_EXCEPTION("Block ComputeRoot FormatException");
+        }
          //throw new FormatException();
 
          NEOPT_EXCEPTION("Cannot deserialize block yet");

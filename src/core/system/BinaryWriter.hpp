@@ -21,14 +21,16 @@ namespace neopt
 class BinaryWriter : public IBinaryWriter
 {
 private:
-   ostream* output;
-   bool mustDelete;
-   vbyte* data_bytes; // if available, write here
+    //ostream* output;
+    //bool mustDelete;
+    vbyte* data_bytes; // if available, write here
+    bool delete_array;
 public:
 
    // writing data on output stream
    // may not be fully portable
    // if necessary, in the future, create abstract Stream class with better cross-compatibility
+   /*
    BinaryWriter(ostream& _output) :
       output(&_output), mustDelete(false), data_bytes(nullptr)
    {
@@ -43,26 +45,49 @@ public:
       output(nullptr), mustDelete(false), data_bytes(&data)
    {
    }
+   */
+    BinaryWriter(vbyte &data) : 
+        data_bytes(&data), delete_array(false)
+    {
+    }
 
-   virtual ~BinaryWriter()
-   {
-      if(mustDelete && output)
-         delete output;
-      output = nullptr;
-      data_bytes = nullptr;
-   }
+    BinaryWriter() : 
+        data_bytes(new vbyte()), delete_array(true)
+    {
+    }
+
+    virtual ~BinaryWriter()
+    {
+        //if(mustDelete && output)
+        //   delete output;
+        if (delete_array)
+            delete data_bytes;
+        //output = nullptr;
+        data_bytes = nullptr;
+    }
 
    using IBinaryWriter::Write;
 
-   virtual void Write(byte v)
-   {
-   }
+    virtual void Write(byte v)
+    {
+        if(data_bytes)
+            data_bytes->push_back(v);
+        else
+            NEOPT_EXCEPTION("NOT IMPLEMENTED WITH OTHER BUFFER TYPE!");
+    }
 
 
-   virtual void Flush()
-   {
-      output->flush(); // don't know if actually needed
-   }
+    virtual int CountBytes() const
+    {
+        if(data_bytes)
+            return int(data_bytes->size());
+        return -1; // unknown
+    }
+
+//   virtual void Flush()
+//   {
+      //output->flush(); // don't know if actually needed
+//   }
 
 /*
    // Gets new independent reader from stream (must delete stream later)

@@ -362,6 +362,7 @@ protected:
 public:
       void SerializeUnsigned(IBinaryWriter& writer) const
       {
+          std::cout << "tx SerializeUnsigned" << std::endl;
          writer.Write((byte)Type);
          writer.Write(Version);
          SerializeExclusiveData(writer);

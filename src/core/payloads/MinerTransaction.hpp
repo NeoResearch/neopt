@@ -69,6 +69,11 @@ namespace neopt
             */
         }
 
+    protected:
+        virtual void SerializeExclusiveData(IBinaryWriter& writer) const
+        {
+            writer.Write(Nonce);
+        }
    };
 }
 

@@ -49,8 +49,8 @@ public:
       //std::ostringstream oss;
       vbyte data;
       BinaryWriter writer(data);
+      std::cout << "will write data on IVerifiable SerializeUnsigned" << std::endl;
       this->SerializeUnsigned(writer);
-      writer.Flush();
       return std::move(data);
       //return vhelper::ToArray(oss);
    }

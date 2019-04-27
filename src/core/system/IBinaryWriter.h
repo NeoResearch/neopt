@@ -7,6 +7,15 @@ using namespace std; // TODO: do not use that in the future... prefer std::vecto
 #include<system/types.h>
 #include<system/ISerializable.h>
 
+// Visual C++
+// include intrin.h
+// GCC bit inverters (very fast, assembly speed)
+//#include<byteswap.h>
+//int32_t __builtin_bswap32 (int32_t x)
+//int64_t __builtin_bswap64 (int64_t x)
+// doing manually for now
+
+
 namespace neopt
 {
 
@@ -26,32 +35,41 @@ public:
 
    virtual void Write(ushort v)
    {
+       NEOPT_EXCEPTION("Not Implemented! ushort");
    }
 
    virtual void Write(short v)
    {
+       NEOPT_EXCEPTION("Not Implemented! short");
    }
 
    virtual void Write(uint v)
    {
+       Write((byte) (((v >> 0) << 24) >> 24));
+       Write((byte) (((v >> 8) << 24) >> 24));
+       Write((byte) (((v >> 16) << 24) >> 24));
+       Write((byte) (((v >> 24) << 24) >> 24));
    }
 
    virtual void Write(int v)
    {
+       NEOPT_EXCEPTION("Not Implemented! int");
    }
 
    virtual void Write(ulong v)
    {
+       NEOPT_EXCEPTION("Not Implemented! ulong");
    }
 
    virtual void Write(long v)
    {
+       NEOPT_EXCEPTION("Not Implemented! long");
    }
 
    // writes var bytes on vector
    virtual void WriteVarBytes(const vbyte& v)
    {
-
+       NEOPT_EXCEPTION("Not Implemented! WriteVarBytes");
    }
 
 
@@ -71,7 +89,7 @@ public:
        }
    }
 
-   virtual void Flush() = 0; // don't know if actually needed
+   ///virtual void Flush() = 0; // don't know if actually needed
 
 
    virtual void WriteVarInt(long value)
@@ -98,6 +116,12 @@ public:
             this->Write(value);
         }
      }
+
+
+    virtual int CountBytes() const
+    {
+        return -1; // number of bytes on buffer, or -1 if unknown
+    }
 };
 
 }

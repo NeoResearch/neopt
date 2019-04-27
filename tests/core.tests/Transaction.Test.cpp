@@ -90,3 +90,26 @@ TEST(TransactionTests, Test_Transaction_Deserialize_SingleFromBlock_Automaticall
 
 	EXPECT_EQ(reader.AvailableBytes(), 0);
 }
+
+TEST(TransactionTests, Test_Transaction_MinerTx_DeserializeSerialize)
+{
+	// Miner Transaction
+	string block2tn = "0000d11f7a2800000000";
+
+	vbyte param = shelper::HexToBytes(block2tn);
+
+	BinaryReader reader(param);
+	EXPECT_EQ(reader.AvailableBytes(), 10);
+
+	Transaction* tx = Transaction::DeserializeFrom(reader);
+	EXPECT_EQ(reader.AvailableBytes(), 0);
+
+	vbyte dest;
+	BinaryWriter writer(dest);
+	tx->Serialize(writer);
+	EXPECT_EQ(writer.CountBytes(), 10);
+	EXPECT_EQ(dest.size(), 10);
+
+	EXPECT_EQ(param.size(), 10);
+	EXPECT_EQ(dest, param); // same hexstring
+}

@@ -135,6 +135,7 @@ public:
       return vbyte();
    }
 
+/*
    struct membuf : std::streambuf
    {
       membuf(char* begin, char* end)
@@ -142,6 +143,7 @@ public:
         this->setg(begin, begin, end);
       }
    };
+*/
 
    template<class T>
    static T AsSerializable(const vbyte& value, int start = 0)
