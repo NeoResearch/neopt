@@ -81,7 +81,7 @@ int main()
 
    // testing transaction
 
-   Transaction* t = Transaction::CreateInstance(TT_MinerTransaction);
+   Transaction* t = TransactionFactory::CreateInstance(TT_MinerTransaction);
 
    cout << "Finished sucessfully" << endl;
 

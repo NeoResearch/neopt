@@ -2,8 +2,8 @@
 #define TYPES_H
 
 // system includes
-#include<vector>
-#include<limits>
+#include <vector>
+#include <limits>
 
 // core includes
 // ... none
@@ -16,10 +16,10 @@ namespace neopt
 typedef unsigned char byte;
 
 // signed short int
-typedef short  int16;
+typedef short int16;
 
 // unsigned short int
-typedef unsigned short  uint16;
+typedef unsigned short uint16;
 
 // signed int
 typedef int int32;
@@ -30,28 +30,57 @@ typedef unsigned int uint32;
 // unsigned long
 typedef unsigned long ulong;
 
-
 // byte array definition
 typedef std::vector<byte> vbyte;
 
-#define NEOPT_EXCEPTION(str) { printf("neopt error(%s): %s\n", __func__,  str); exit(1); }
+#define NEOPT_EXCEPTION(str)                            \
+    {                                                   \
+        printf("neopt error(%s): %s\n", __func__, str); \
+        exit(1);                                        \
+    }
 
 class types
 {
-public:
-   template<class T>
-   static T MaxValue()
-   {
-      return std::numeric_limits<T>::max();
-   }
+  public:
+    template <class T>
+    static T MaxValue()
+    {
+        return std::numeric_limits<T>::max();
+    }
 
-   template<class T>
-   static T MinValue()
-   {
-      return std::numeric_limits<T>::min();
-   }
+    template <class T>
+    static T MinValue()
+    {
+        return std::numeric_limits<T>::min();
+    }
 };
 
-}
+template <typename T>
+struct MakeStatic
+{
+    // the const guarantees that 'global state' is read-only for static purposes only
+    static const T& object()
+    {
+        static T t;
+        return t;
+    }
+};
+
+/*
+// Example static Singleton Class
+class MyStaticSingletonClass final
+{
+  public:
+    // const must be added to ensure global state is read-only
+    // this is not a standard singleton, and it is much safer
+    void hi() const 
+    {
+    }
+  private:
+    friend struct MakeStatic<MyStaticSingletonClass>;
+};
+*/
+
+} // namespace neopt
 
 #endif

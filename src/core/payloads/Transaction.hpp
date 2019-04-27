@@ -23,7 +23,6 @@
 
 namespace neopt
 {
-    //class TransactionFactory;
 
    class Transaction : public IEquatable<Transaction>, public IInventory
    {
@@ -386,14 +385,12 @@ public:
             std::cout << "AVAILABLE BYTES: " << reader.AvailableBytes() << std::endl;
 
             TransactionType txType = (TransactionType)reader.ReadByte();
-            //std::cout << "TX TYPE IS " << txType << std::endl;
             // Looking for type in reflection cache
             //ReflectionCache.CreateInstance<Transaction>(reader.ReadByte());
             // No reflection on C++... so using a static Factory Method instead
-            Transaction* transaction = vhelper::DeserializeFromTypeFactory<Transaction, TransactionFactory, TransactionType>(txType);
-            
-            //Transaction* transaction = Transaction::CreateInstance(txType);
-            //if (transaction == null) throw new FormatException();
+            Transaction* transaction = TransactionFactory::CreateInstance(txType);
+            if (transaction == nullptr)
+                NEOPT_EXCEPTION("Transaction DeserializeFrom error: FormatException");
 
             std::cout << "Transaction:: will deserialize unsigned Without TYPE" << std::endl;
             transaction->DeserializeUnsignedWithoutType(reader);

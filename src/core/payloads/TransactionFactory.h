@@ -19,31 +19,24 @@ namespace neopt
     class TransactionFactory 
     {
     private:
-        // singleton
-        static TransactionFactory* _factory;
+        friend struct MakeStatic<TransactionFactory>;
 
-    private:
+        // this ensures no one will create instances for this (except me and my friends...)
         TransactionFactory() 
         {
         }
 
     public:
-        static const TransactionFactory& Default()
-        {
-            if(!_factory)
-                _factory = new TransactionFactory();
-            return *_factory;
-        }
 
-        // use singleton on static public method
+        // factory: use static public method
         static Transaction* CreateInstance(TransactionType type)
         {
-            Default().CreateInstance(type);
+            return MakeStatic<TransactionFactory>().object().Create(type);
         }
 
-    private:
-        // must be implemented externally
-        Transaction* FactoryCreateInstance(TransactionType type);
+        // another option to invoke method
+        // must be implemented externally (to resolve forward-dec. dependencies)
+        Transaction* Create(TransactionType type) const;
     };
 
 } // namespace neopt

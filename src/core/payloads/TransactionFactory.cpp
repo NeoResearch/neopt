@@ -10,9 +10,7 @@
 using namespace std;
 using namespace neopt;
 
-TransactionFactory* neopt::TransactionFactory::_factory = nullptr;
-
-Transaction* TransactionFactory::FactoryCreateInstance(TransactionType type)
+Transaction* TransactionFactory::Create(TransactionType type) const
 {
     switch(type)
     {
