@@ -105,6 +105,14 @@ TEST(BinaryWriterReaderTests, Test_WriteReadUInt64_0x0102030405060708)
 	ulong val = 72623859790382856L; 
 	writer.Write(val);
 
+	EXPECT_EQ(vdata[0], 0x08);
+	EXPECT_EQ(vdata[1], 0x07);
+	EXPECT_EQ(vdata[2], 0x06);
+	EXPECT_EQ(vdata[3], 0x05);
+	EXPECT_EQ(vdata[4], 0x04);
+	EXPECT_EQ(vdata[5], 0x03);
+	EXPECT_EQ(vdata[6], 0x02);
+	EXPECT_EQ(vdata[7], 0x01);
 	BinaryReader reader(vdata);
 	ulong val2 = reader.ReadUInt64();
 	EXPECT_EQ(val, val2);

@@ -6,21 +6,24 @@
 #include<payloads/Transaction.hpp>
 #include<payloads/TransactionType.h>
 #include<payloads/MinerTransaction.hpp>
+#include<payloads/ContractTransaction.hpp>
 
 using namespace std;
 using namespace neopt;
 
 Transaction* TransactionFactory::Create(TransactionType type) const
 {
+    cout << "TX FACTORY WILL GENERATE FOR TYPE: " << type << endl;
     switch(type)
     {
         case TransactionType::TT_MinerTransaction:
             return new MinerTransaction();
+        case TransactionType::TT_ContractTransaction:
+            return new ContractTransaction();
         case TransactionType::TT_IssueTransaction:
         case TransactionType::TT_ClaimTransaction:
         case TransactionType::TT_EnrollmentTransaction:
         case TransactionType::TT_RegisterTransaction:
-        case TransactionType::TT_ContractTransaction:
         case TransactionType::TT_StateTransaction:
         case TransactionType::TT_PublishTransaction:
         case TransactionType::TT_InvocationTransaction:

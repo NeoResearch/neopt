@@ -134,9 +134,10 @@ namespace neopt
             std::cout << "Difference: calcRoot {" << calcRoot.ToString() << "} merkle {" << MerkleRoot.ToString() << "}" << std::endl;
             NEOPT_EXCEPTION("Block ComputeRoot FormatException");
         }
+        std::cout << "PASSED FROM Merkle" << std::endl;
          //throw new FormatException();
 
-         NEOPT_EXCEPTION("Cannot deserialize block yet");
+         //NEOPT_EXCEPTION("Cannot deserialize block yet");
       }
 
       //using BlockBase::DeserializeUnsigned; // TODO: why not get this automatically?
