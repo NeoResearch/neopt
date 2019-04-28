@@ -13,8 +13,18 @@ ostream& neopt::operator<<(ostream &os, const vbyte &obj)
 	return os << ss.str();
 }
 
+// how to print this?
+/*
+ostream& operator<<(ostream &os, const decimal::decimal64& obj)
+{
+   stringstream ss;
+	ss << ((long)obj);
+	return os << ss.str();
+}
+*/
+
 template<class T>
-ostream& neopt::operator<<(ostream &os, const vector<T> &obj)
+ostream& neopt::operator<<(ostream &os, const vector<T>& obj)
 {
 	os << "vector(" << obj.size() << ") [";
 

@@ -2,7 +2,7 @@
 #define FIXED8_H
 
 // c++ standard part
-// ... none
+#include<decimal/decimal>
 
 // neopt core part
 #include<system/types.h>
@@ -11,6 +11,7 @@
 #include<system/IComparable.h>
 #include<system/ISerializable.h>
 #include<numbers/nhelper.h>
+#include<system/printable.h>
 
 // TODO: perhaps this class should be an interface too... just like BigInteger.
 // if this is fully compatible, let's keep this way
@@ -173,17 +174,14 @@ namespace neopt
          writer.Write(value);
       }
 
-      string ToString()
-      {
-         NEOPT_EXCEPTION("Not implemented Fixed8 ToString");
-         return "";//((decimal)this).ToString(CultureInfo.InvariantCulture);
-      }
-
-      string ToString(string format)
-      {
-         NEOPT_EXCEPTION("Not implemented Fixed8 ToString");
-         return ""; //((decimal)this).ToString(format);
-      }
+    //string ToString(string format)
+    virtual string ToString() const
+    {
+        std::stringstream ss;
+        ss << this->value / D << ".";
+        ss << std::setfill('0') << std::setw(8) << this->value % D;
+        return ss.str();
+    }
 
 /*
       static bool TryParse(string s, out Fixed8 result)
@@ -227,12 +225,17 @@ namespace neopt
          return this->value == that.value;
       }
 
-/*
-        public static explicit operator decimal(Fixed8 value)
-        {
-            return value.value / (decimal)D;
-        }
 
+// TODO: support decimal
+/*
+    decimal::decimal64 decimal() const
+    {
+        return this->value / (decimal::decimal64)D;
+    }
+*/
+
+
+/*
         public static explicit operator long(Fixed8 value)
         {
             return value.value / D;
