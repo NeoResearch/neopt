@@ -11,6 +11,7 @@
 #include<IScriptContainer.h>
 #include<ISnapshot.h> // TODO: remove if possible
 
+#include<numbers/UInt256.hpp>
 #include<numbers/UInt160.hpp>
 #include<numbers/Fixed8.hpp>
 #include<Witness.hpp>
@@ -25,7 +26,7 @@ namespace neopt
 
 // WARNING: escaping from the "Diamond of Death"
 // making ISerializable a virtual inheritance
-class TransactionOutput //: public ISerializable
+class TransactionOutput : public ISerializable
 {
 public:
 
