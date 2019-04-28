@@ -112,3 +112,42 @@ TEST(vhelperTests, Test_Select_Byte_HexString_0x0102030405)
    EXPECT_EQ(v2[3], "04");
    EXPECT_EQ(v2[4], "05");
 }
+
+
+TEST(vhelperTests, Test_Concat)
+{
+	vbyte param1 = {0x01, 0x02, 0x03};
+	vbyte param2 = {0x04, 0x05, 0x06};
+	vbyte param3 = vhelper::Concat(param1, param2);
+	EXPECT_EQ(vhelper::ToHexString(param3), "010203040506");
+}
+
+TEST(vhelperTests, Test_Concat2)
+{
+	vbyte param1 = {0x01, 0x02, 0x03};
+	vbyte param2 = {0x04, 0x05, 0x06};
+	vbyte param3 = param1;
+	param3.insert(param3.end(), param2.begin(), param2.end());
+	EXPECT_EQ(vhelper::Concat(param1, param2), param3);
+}
+
+
+TEST(vhelperTests, Test_vhelper_Skip)
+{
+	vbyte param1 = {0x01, 0x02, 0x03};
+	vbyte param2 = vhelper::Skip(param1, 1);
+	vbyte param3 = {0x02, 0x03};
+	EXPECT_EQ(param2, param3);
+}
+
+TEST(vhelperTests, Test_vhelper_Skip2)
+{
+	vbyte param1 = {0x01, 0x02, 0x03};
+	EXPECT_EQ(vhelper::Skip(param1, 2), vbyte(1,0x03));
+}
+
+TEST(vhelperTests, Test_vhelper_Skip10)
+{
+	vbyte param1 = {0x01, 0x02, 0x03};
+	EXPECT_EQ(vhelper::Skip(param1, 10), vbyte(0));
+}

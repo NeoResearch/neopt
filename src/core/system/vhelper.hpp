@@ -131,8 +131,13 @@ public:
 
    static vbyte Skip(const vbyte& v, int count)
    {
-      NEOPT_EXCEPTION("Not implemented Skip");
-      return vbyte();
+      if(count < v.size())
+      {
+        vbyte p(v.begin()+count, v.end());
+        return std::move(p);
+      }
+      else
+        return std::move(vbyte(0));
    }
 
 /*

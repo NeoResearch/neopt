@@ -67,13 +67,12 @@ public:
       return bytes;
    }
 
-   // read int16 in little-endian format
-   virtual int16 ReadInt16()
-   {
-      vbyte bytes = ReadBytes(2);
-      int16 val = bytes[0] | (bytes[1]<<8);
-      return val;
-   }
+    // read int16 in little-endian format
+    virtual int16 ReadInt16()
+    {
+        uint16 val = ReadUInt16();
+        return (int16) val;
+    }
 
    // read uint16 in little-endian format
    virtual uint16 ReadUInt16()
@@ -83,13 +82,12 @@ public:
       return val;
    }
 
-   // read int32 in little-endian format
-   virtual int32 ReadInt32()
-   {
-      vbyte bytes = ReadBytes(4);
-      int32 val = bytes[0] | (bytes[1]<<8) | (bytes[2]<<16) | (bytes[3]<<24);
-      return val;
-   }
+    // read int32 in little-endian format
+    virtual int32 ReadInt32()
+    {
+        uint32 val = ReadUInt32();
+        return (int) val;
+    }
 
    // read uint32 in little-endian format
    virtual uint32 ReadUInt32()
@@ -99,15 +97,12 @@ public:
       return val;
    }
 
-   // little-endian
-   virtual long ReadInt64()
-   {
-      vbyte bytes = ReadBytes(8);
-      uint32 val1 = bytes[0] | (bytes[1]<<8) | (bytes[2]<<16) | (bytes[3]<<24);
-      long val2 = bytes[4] | (bytes[5]<<8) | (bytes[6]<<16) | (bytes[7]<<24);
-      long val = val1 | val2 << 32;
-      return val;
-   }
+    // little-endian
+    virtual long ReadInt64()
+    {
+        ulong val = ReadUInt64();
+        return (long) val;
+    }
 
    // little-endian
    virtual ulong ReadUInt64()

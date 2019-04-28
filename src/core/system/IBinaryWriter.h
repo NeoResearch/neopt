@@ -35,12 +35,13 @@ public:
 
    virtual void Write(ushort v)
    {
-       NEOPT_EXCEPTION("Not Implemented! ushort");
+       Write((byte) (((v >> 0) << 8) >> 8));
+       Write((byte) (((v >> 8) << 8) >> 8));
    }
 
    virtual void Write(short v)
    {
-       NEOPT_EXCEPTION("Not Implemented! short");
+       Write(ushort(v));
    }
 
    virtual void Write(uint v)
@@ -53,17 +54,24 @@ public:
 
    virtual void Write(int v)
    {
-       NEOPT_EXCEPTION("Not Implemented! int");
+       Write(uint(v));
    }
 
    virtual void Write(ulong v)
    {
-       NEOPT_EXCEPTION("Not Implemented! ulong");
+       Write((byte) (((v >> 0 ) << 56) >> 56));
+       Write((byte) (((v >> 8 ) << 56) >> 56));
+       Write((byte) (((v >> 16) << 56) >> 56));
+       Write((byte) (((v >> 24) << 56) >> 56));
+       Write((byte) (((v >> 32) << 56) >> 56));
+       Write((byte) (((v >> 40) << 56) >> 56));
+       Write((byte) (((v >> 48) << 56) >> 56));
+       Write((byte) (((v >> 56) << 56) >> 56));
    }
 
    virtual void Write(long v)
    {
-       NEOPT_EXCEPTION("Not Implemented! long");
+       Write(ulong(v));
    }
 
    // writes var bytes on vector

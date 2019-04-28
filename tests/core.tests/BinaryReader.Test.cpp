@@ -100,3 +100,13 @@ TEST(BinaryReaderTest, Test_Read_All_0x010203)
 	EXPECT_EQ(source[1], 0x02);
 	EXPECT_EQ(source[2], 0x03);
 }
+
+
+TEST(BinaryReaderTest, Test_Read_All_UInt64_0x0102030405060708)
+{
+	vbyte param = {0x08,0x07,0x06,0x05,0x04,0x03,0x02,0x01};
+	BinaryReader reader(param);
+	ulong val = reader.ReadUInt64();
+	EXPECT_EQ(val, 72623859790382856L);
+}
+
