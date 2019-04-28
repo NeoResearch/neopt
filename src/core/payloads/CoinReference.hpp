@@ -28,8 +28,24 @@ class CoinReference //: public ISerializable
 {
 public:
 
+   UInt256 PrevHash;
+   ushort PrevIndex;
+
+   int Size() const
+   {
+      return PrevHash.Size() + sizeof(ushort);
+   }
+
+   virtual void Deserialize(IBinaryReader& reader)
+   {
+      PrevHash = reader.ReadSerializable<UInt256>();
+      PrevIndex = reader.ReadUInt16();
+   }
+
    virtual void Serialize(IBinaryWriter& writer) const
    {
+      writer.Write(PrevHash);
+      writer.Write(PrevIndex);
    }
 
 };

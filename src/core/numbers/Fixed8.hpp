@@ -55,7 +55,7 @@ namespace neopt
          return Fixed8();
       }
 
-      int Size()
+      int Size() const
       {
          // hope it's 8 bytes...
          return sizeof(long);

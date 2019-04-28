@@ -81,7 +81,7 @@ public:
    }
 
 
-   virtual void Write(ISerializable& value)
+   virtual void Write(const ISerializable& value)
    {
       value.Serialize(*this);
    }

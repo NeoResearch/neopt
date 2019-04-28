@@ -12,6 +12,7 @@
 #include<ISnapshot.h> // TODO: remove if possible
 
 #include<numbers/UInt160.hpp>
+#include<numbers/Fixed8.hpp>
 #include<Witness.hpp>
 #include<wallets/KeyPair.hpp>
 #include<crypto/Crypto.h>
@@ -28,9 +29,33 @@ class TransactionOutput //: public ISerializable
 {
 public:
 
-   virtual void Serialize(IBinaryWriter& writer) const
+   UInt256 AssetId;
+   Fixed8 Value;
+   UInt160 ScriptHash;
+
+   int Size() const
    {
+      return AssetId.Size() + Value.Size() + ScriptHash.Size();
+   } 
+
+   void Deserialize(IBinaryReader& reader)
+   {
+      this->AssetId = reader.ReadSerializable<UInt256>();
+      this->Value = reader.ReadSerializable<Fixed8>();
+
+      // TODO: compare this!! operator<= for Fixed8
+      //if (Value <= Fixed8::Zero()) 
+      //   NEOPT_EXCEPTION("TransactionOutput Deserialize FormatException");
+      this->ScriptHash = reader.ReadSerializable<UInt160>();
    }
+
+   void Serialize(IBinaryWriter& writer) const
+   {
+      writer.Write(AssetId);
+      writer.Write(Value);
+      writer.Write(ScriptHash);
+   }
+
 
 };
 
