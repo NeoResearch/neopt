@@ -210,9 +210,8 @@ namespace neopt
       }
 
    protected:
-      virtual void DeserializeExclusiveData(IBinaryReader& reader)
-      {
-      }
+    // makes transaction class abstract
+    virtual void DeserializeExclusiveData(IBinaryReader& reader) = 0;
 
    public:
 
