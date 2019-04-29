@@ -19,12 +19,13 @@ namespace neopt
       MerkleTreeNode* LeftChild;
       MerkleTreeNode* RightChild;
 
-      MerkleTreeNode()
+      MerkleTreeNode() :
+        LeftChild(nullptr), RightChild(nullptr)
       {
       }
 
       MerkleTreeNode(const UInt256& _hash) :
-         Hash(_hash)
+         Hash(_hash), LeftChild(nullptr), RightChild(nullptr)
       {
       }
 
@@ -36,6 +37,23 @@ namespace neopt
       bool IsRoot()
       {
          return Parent == nullptr;
+      }
+
+      string ToString() const
+      {
+          stringstream ss;
+          ss << "MTNode{(this=" << this << "); " << Hash.ToString() << " ; left=" << LeftChild << " right=" << RightChild << "}"; 
+          return ss.str();
+      }
+
+      static void PrintMTArray(const std::vector<MerkleTreeNode*>& L)
+      {
+          stringstream ss;
+          ss << "MPTList[";
+          for(unsigned i=0; i<L.size(); i++)
+            ss << L[i]->ToString() << "\t";
+          ss << "]";
+          std::cout << ss.str() << std::endl;
       }
    };
 
@@ -76,6 +94,8 @@ namespace neopt
 
       static MerkleTreeNode* Build(const std::vector<MerkleTreeNode*>& leaves)
       {
+          std::cout << "Build with MerkleTreeNodes: " << leaves.size() << std::endl;
+          MerkleTreeNode::PrintMTArray(leaves);
            if (leaves.size() == 0)
                NEOPT_EXCEPTION("MerkleTree Build ArgumentException");
            if (leaves.size() == 1)
@@ -110,7 +130,10 @@ namespace neopt
             NEOPT_EXCEPTION("MerkleTree ComputeRoot ArgumentException");
          if (hashes.size() == 1)
             return hashes[0];
+         std::cout << "MERKLE BUILD: SIZE IS " << hashes.size() << std::endl;
          MerkleTree tree(hashes);
+         std::cout << "MERKLE INITIALIZED" << std::endl;
+         
          return tree.root->Hash;
       }
 
