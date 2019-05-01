@@ -22,8 +22,6 @@
 namespace neopt
 {
 
-// WARNING: escaping from the "Diamond of Death"
-// making ISerializable a virtual inheritance
 class CoinReference : public ISerializable
 {
 public:

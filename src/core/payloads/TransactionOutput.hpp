@@ -24,8 +24,6 @@
 namespace neopt
 {
 
-// WARNING: escaping from the "Diamond of Death"
-// making ISerializable a virtual inheritance
 class TransactionOutput : public ISerializable
 {
 public:

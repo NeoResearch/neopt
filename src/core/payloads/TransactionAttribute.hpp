@@ -15,9 +15,7 @@
 namespace neopt
 {
 
-// WARNING: escaping from the "Diamond of Death"
-// making ISerializable a virtual inheritance
-class TransactionAttribute //: public ISerializable
+class TransactionAttribute : public ISerializable
 {
 public:
 
@@ -27,6 +25,15 @@ public:
 
    virtual void Serialize(IBinaryWriter& writer) const
    {
+      writer.Write((byte)Usage);
+      if (Usage == TransactionAttributeUsage::TAU_DescriptionUrl)
+         writer.Write((byte)Data.size());
+      else if (Usage == TransactionAttributeUsage::TAU_Description || Usage >= TransactionAttributeUsage::TAU_Remark)
+         writer.WriteVarInt(Data.size());
+      if (Usage == TransactionAttributeUsage::TAU_ECDH02 || Usage == TransactionAttributeUsage::TAU_ECDH03)
+         writer.Write(Data, 1, 32);
+      else
+         writer.Write(Data);
    }
 
    virtual void Deserialize(IBinaryReader& reader)

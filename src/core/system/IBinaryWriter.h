@@ -33,6 +33,13 @@ public:
          this->Write(data[i]);
    }
 
+   // Writes a region of a byte array to the current stream
+   virtual void Write(const vbyte& data, int index, int count)
+   {
+       vbyte part(data.begin()+index, data.begin()+index+count);
+       this->Write(part);
+   }
+
    virtual void Write(ushort v)
    {
        Write((byte) (((v >> 0) << 8) >> 8));
@@ -75,9 +82,10 @@ public:
    }
 
    // writes var bytes on vector
-   virtual void WriteVarBytes(const vbyte& v)
+   virtual void WriteVarBytes(const vbyte& value)
    {
-       NEOPT_EXCEPTION("Not Implemented! WriteVarBytes");
+        this->WriteVarInt(value.size());
+        this->Write(value);
    }
 
 
