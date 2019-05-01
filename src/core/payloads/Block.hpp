@@ -188,6 +188,10 @@ namespace neopt
       }
 
 
+      virtual void Serialize(IBinaryWriter& writer) const
+      {
+         NEOPT_EXCEPTION("Serialize not implemented for Block");
+      }
 
    };
 }

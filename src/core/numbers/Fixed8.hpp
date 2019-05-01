@@ -169,7 +169,7 @@ namespace neopt
          //return FromDecimal(decimal.Parse(s, NumberStyles.Float, CultureInfo.InvariantCulture));
       }
 
-      void Serialize(IBinaryWriter& writer)
+      void Serialize(IBinaryWriter& writer) const
       {
          writer.Write(value);
       }

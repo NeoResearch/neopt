@@ -25,10 +25,10 @@ public:
    virtual void Deserialize(IBinaryReader& reader) = 0;
 
    //virtual vbyte ToArray() const = 0;
-   virtual void Serialize(IBinaryWriter& writer) const
-   {
+   virtual void Serialize(IBinaryWriter& writer) const = 0;
+   //{
       // TODO: make pure virtual = 0
-   }
+   //}
 
 
 };

@@ -347,7 +347,7 @@ public:
       // serialization
 
 public:
-      void Serialize(IBinaryWriter& writer)
+      void Serialize(IBinaryWriter& writer) const
       {
          this->SerializeUnsigned(writer);
          IBinaryWriter::WriteArray<Witness>(writer, Witnesses);

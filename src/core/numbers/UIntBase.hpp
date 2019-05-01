@@ -125,7 +125,7 @@ namespace neopt
       /// <summary>
       /// Method Serialize writes the data_bytes array into a BinaryWriter object
       /// </summary>
-      virtual void Serialize(IBinaryWriter& writer)
+      virtual void Serialize(IBinaryWriter& writer) const
       {
         writer.Write(data_bytes);
       }
