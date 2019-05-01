@@ -22,11 +22,13 @@ namespace neopt
       MerkleTreeNode() :
         LeftChild(nullptr), RightChild(nullptr)
       {
+          std::cout << "MerkleTreeNode()" << std::endl;
       }
 
       MerkleTreeNode(const UInt256& _hash) :
          Hash(_hash), LeftChild(nullptr), RightChild(nullptr)
       {
+          std::cout << "MerkleTreeNode(UInt256)" << std::endl;
       }
 
       bool IsLeaf()
@@ -71,6 +73,11 @@ namespace neopt
 
       MerkleTree(const std::vector<UInt256>& hashes)
       {
+          std::cout << "MerkleTree(hashes=" << hashes.size() << "): [";
+          for(unsigned i=0; i<hashes.size(); i++)
+            std::cout << hashes[i].ToString() << ";";
+          std::cout << "]" << std::endl;
+          
            if (hashes.size() == 0)
                NEOPT_EXCEPTION("MerkleTree ArgumentException");
            // TODO: create Select pattern
@@ -118,7 +125,17 @@ namespace neopt
 
                //UInt256 newHash(Crypto::Default().Hash256(vhelper::Concat(parents[i]->LeftChild.Hash.ToArray(), parents[i]->RightChild.Hash.ToArray())));
                //parents[i]->Hash = new UInt256(Crypto.Default.Hash256(parents[i].LeftChild.Hash.ToArray().Concat(parents[i].RightChild.Hash.ToArray()).ToArray()));
-               parents[i]->Hash = Crypto::Default().Hash256(vhelper::Concat(parents[i]->LeftChild->Hash.ToArray(), parents[i]->RightChild->Hash.ToArray()));
+               //vbyte cat = vhelper::Concat(vhelper::Reverse(parents[i]->LeftChild->Hash.ToArray()), vhelper::Reverse(parents[i]->RightChild->Hash.ToArray()));
+
+               std::cout << "left:\t" << parents[i]->LeftChild->Hash.ToArray() << std::endl;
+               std::cout << "right:\t" << parents[i]->RightChild->Hash.ToArray() << std::endl;
+               vbyte cat = vhelper::Concat(parents[i]->LeftChild->Hash.ToArray(), parents[i]->RightChild->Hash.ToArray());
+               std::cout << "cat:" << cat << std::endl;
+               vbyte h = Crypto::Default().Hash256(cat);
+               std::cout << "h:" << h << std::endl;
+               parents[i]->Hash = UInt256( h );
+               std::cout << "NEW HASH=" << parents[i]->Hash.ToString() << std::endl;
+
            }
            return Build(parents); //TailCall
       }

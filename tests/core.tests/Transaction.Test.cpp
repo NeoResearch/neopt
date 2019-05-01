@@ -76,7 +76,7 @@ TEST(TransactionTests, Test_Transaction_Deserialize_MinerTx_SingleFromBlock_Manu
 	// finishes Tx deserialization
 }
 
-TEST(TransactionTests, Test_Transaction_Deserialize_SingleFromBlock_Automatically)
+TEST(TransactionTests, Test_Transaction_Deserialize_MinerTx_B1_Automatically)
 {
 	// Miner Transaction
 	string block2tn = "0000d11f7a2800000000";
@@ -89,6 +89,11 @@ TEST(TransactionTests, Test_Transaction_Deserialize_SingleFromBlock_Automaticall
 	Transaction* tx = Transaction::DeserializeFrom(reader);
 
 	EXPECT_EQ(reader.AvailableBytes(), 0);
+
+	UInt256 txHash = tx->getHash();
+
+	EXPECT_EQ(txHash.ToString(), "0x8e3a32ba3a7e8bdb0ad9a2ad064713e45bd20eb0dab0d2e77df5b5ce985276d0");
+	// included in Block 1 - TestNet
 }
 
 TEST(TransactionTests, Test_Transaction_MinerTx_DeserializeSerialize)
@@ -192,4 +197,44 @@ TEST(TransactionTests, Test_Transaction_Deserialize_ContractTx_TestNetBlock74_Ma
 	EXPECT_EQ(reader.AvailableBytes(), 0);
 
 	// finishes Tx deserialization
+}
+
+TEST(TransactionTests, Test_Transaction_Deserialize_MinerTx_B74_Automatically)
+{
+	// Miner Transaction
+	string block2tn = "00000b5a404600000000";
+
+	vbyte param = shelper::HexToBytes(block2tn);
+
+	BinaryReader reader(param);
+	EXPECT_EQ(reader.AvailableBytes(), 10);
+
+	Transaction* tx = Transaction::DeserializeFrom(reader);
+
+	EXPECT_EQ(reader.AvailableBytes(), 0);
+
+	UInt256 txHash = tx->getHash();
+
+	EXPECT_EQ(txHash.ToString(), "0xf2195b0382fca1d8648fe0f9bdbf441ac4f651f614bfbf5d92ba842a9698e9f1");
+	// included in Block 74 - TestNet
+}
+
+TEST(TransactionTests, Test_Transaction_Deserialize_ContractTx_B74_Automatically)
+{
+	// Contract Transaction
+	string block2tn = "800000014a4dfb91023b1b2086029e03af739d9ceab35fffa8d528de9a6fee3e62bbecbd0000019b7cffdaa674beae0f930ebe6085af9093e5fe56b34a5c220ccdcf6efc336fc50000c16ff286230067f97110a66136d38badc7b9f88eab013027ce4901fd04014099546819767644bbef323e428aab48c8801e66b8c7fb452dcd11205c13f5b198c9b37e9aa6808d6c3a74e50931d3413115e2a86a4a4a99fcae894219c092ca6340a0de35bc6c04c25b8f6cca46b91a35144db40fc94967293500f08c58df81f7c9ecb59cc13bcaca4d932e27a8d9a8204f48d488b6ccdfccd830c22bf4b7353dd64039346418372b541dfe7fdc99611bfc59cee881044da2912cb2404b885c6472310a2b771153e6a0022abb11aa41288ef98a2aed1bb42714fa6a1c6e85e415b8bb4045cc681dbe07155b554b0291f0352546223e49e3192c221249c29eb97651aec3c5f2f6adfc85a87cfdfef3a15d57391cf99190e8d80b01fcc1ebf8f48c745957f154210209e7fd41dfb5c2f8dc72eb30358ac100ea8c72da18847befe06eade68cebfcb9210327da12b5c40200e9f65569476bbff2218da4f32548ff43b6387ec1416a231ee821034ff5ceeac41acf22cd5ed2da17a6df4dd8358fcb2bfb1a43208ad0feaab2746b21026ce35b29147ad09e4afe4ec4a7319095f08198fa8babbe3c56e970b143528d2221038dddc06ce687677a53d54f096d2591ba2302068cf123c1f2d75c2dddc542557921039dafd8571a641058ccc832c5e2111ea39b09c0bde36050914384f7a48bce9bf92102d02b1873a0863cd042cc717da31cea0d7cf9db32b74d4c72c01b0011503e2e2257ae";
+
+	vbyte param = shelper::HexToBytes(block2tn);
+
+	BinaryReader reader(param);
+	EXPECT_EQ(reader.AvailableBytes(), 615);
+
+	Transaction* tx = Transaction::DeserializeFrom(reader);
+
+	EXPECT_EQ(reader.AvailableBytes(), 0);
+
+	UInt256 txHash = tx->getHash();
+
+	EXPECT_EQ(txHash.ToString(), "0x4feb0081f9425cab84269127bef0a871a84d4408f09923d17ebb257cd231b362");
+	// included in Block 74 - TestNet
 }
