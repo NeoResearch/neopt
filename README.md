@@ -55,9 +55,9 @@ The project proposal is divided into modules:
 ### How to build
 
 #### On Linux
-First, install `openssl` dependency. But don't be afraid, just type `make openssl` and be happy :)
+First, install `openssl` dependency (and others). But don't be afraid, for `debian-like` systems just type `make vendor` and be happy :)
 
-After that, type `make` (`make cli`) to build `neopt-cli` and put the binary on `build` folder (tests will run automatically).
+After that, type `make` (`make cli`) to build `neopt-cli` and put the binary on `bin` folder (tests will run automatically).
 
 To run tests only, type `make test` to invoke all tests from `tests` folder.
 

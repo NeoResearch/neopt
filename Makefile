@@ -1,4 +1,4 @@
-OPTIONS=-O0 -g # -Ofast
+OPTIONS=-g --std=c++11 -O0 # -Ofast
 
 OPENSSL_PATH=src/core/crypto/openssl
 CORE_PATH=src/core
@@ -9,13 +9,25 @@ all: test cli
 	@echo "sucessfully built neopt-cli on build/ directory"
 
 cli: # building neopt-cli
-	g++   $(OPTIONS) --std=c++11 -Isrc/cli -Isrc -Isrc/core -I$(PLUGINS_PATH)/ImportBlocks -I$(OPENSSL_PATH)/include $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl  src/cli/Program.cpp  $(PLUGINS_PATH)/ImportBlocks/ImportBlocks.cpp $(PLUGINS_PATH)/ImportBlocks/ImportBlocksSettings.cpp $(CORE_PATH)/NeoSystem.cpp $(CORE_PATH)/plugin/PluginSystem.cpp  $(CORE_PATH)/system/printable.cpp $(CORE_PATH)/payloads/TransactionFactory.cpp -o build/neopt-cli
+	g++   $(OPTIONS)  -Isrc/cli -Isrc -Isrc/core -I$(PLUGINS_PATH)/ImportBlocks -I$(OPENSSL_PATH)/include $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl  src/cli/Program.cpp  $(PLUGINS_PATH)/ImportBlocks/ImportBlocks.cpp $(PLUGINS_PATH)/ImportBlocks/ImportBlocksSettings.cpp $(CORE_PATH)/NeoSystem.cpp $(CORE_PATH)/plugin/PluginSystem.cpp  $(CORE_PATH)/system/printable.cpp $(CORE_PATH)/payloads/TransactionFactory.cpp -o bin/neopt-cli
 
 test:
-	cd tests && $(MAKE) tests
+	cd tests && $(MAKE) test
+
+test-coverage:
+	cd tests && $(MAKE) test-coverage
+
+run:
+	./bin/neopt-cli
+
+vendor: openssl clang gtests
 
 openssl:
 	cd src/core && ./linux_get_build_openssl.sh
 
-run:
-	./build/neopt-cli
+clang:
+	sudo apt install clang clang-format clang-tidy
+
+gtests:
+	cd tests && ./linux_install_gtestlib.sh
+	sudo apt install lcov

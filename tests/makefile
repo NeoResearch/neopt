@@ -6,13 +6,13 @@ GTEST_PATH=gtestlib/googletest
 GMOCK_PATH=gtestlib/googlemock
 
 all:
-	@echo "please type 'make tests'"
+	@echo "please type 'make test'"
 
 #all: $(FILENAME)
 #	@echo "Executing core test for: $(FILENAME)"
 
 # todo: not too great structure... cleaning every time to ensure tests are updated.
-tests: clean core.test #$(FILENAME)
+test: clean core.test #$(FILENAME)
 	@echo "Executed tests"
 	./core.test
 
@@ -25,7 +25,7 @@ core.test : core.Test.cpp
 #	g++ --coverage -O0 -I../src/core --std=c++11 -I$(OPENSSL_PATH)/include $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(CORE_PATH)/payloads/TransactionFactory.cpp -I$(GTEST_PATH)/include -L$(GMOCK_PATH)/gtest -L$(GMOCK_PATH) -lgtest -lgtest_main  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl $< -o $@
 #	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(GMOCK_PATH):$(GMOCK_PATH)/gtest && ./$@
 
-coverage:
+test-coverage:
 	mkdir -p reports
 	lcov --directory . --capture --output-file reports/app.info
 	(cd reports && genhtml app.info)
