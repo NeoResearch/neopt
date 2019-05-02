@@ -2,22 +2,20 @@
 #define IINVENTORY_HPP
 
 // c++ standard part
-#include<vector>
+#include <vector>
 
 // neopt core part
-#include<IVerifiable.hpp>
-#include<ISnapshot.h> // TODO: remove if possible
+#include <ISnapshot.h> // remove if possible
+#include <IVerifiable.hpp>
 
-#include<numbers/UInt256.hpp>
-#include<InventoryType.h>
+#include <InventoryType.h>
+#include <numbers/UInt256.hpp>
 
-namespace neopt
-{
+namespace neopt {
 
 class IInventory : public IVerifiable
 {
 public:
-
    virtual UInt256 getHash() = 0;
 
    virtual InventoryType getInventoryType() = 0;
@@ -25,6 +23,6 @@ public:
    virtual bool Verify(ISnapshot& snapshot) = 0;
 };
 
-}
+} // namespace neopt
 
 #endif

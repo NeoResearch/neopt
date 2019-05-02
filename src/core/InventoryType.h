@@ -1,5 +1,5 @@
-#ifndef INVENTORY_TYPE_H
-#define INVENTORY_TYPE_H
+#ifndef CORE_INVENTORYTYPE_H
+#define CORE_INVENTORYTYPE_H
 
 // c++ standard part
 // none
@@ -17,6 +17,6 @@ enum InventoryType // int, not byte
    IT_Consensus = 0xe0
 };
 
-}
+} // namespace neopt
 
-#endif
+#endif // CORE_INVENTORYTYPE_H

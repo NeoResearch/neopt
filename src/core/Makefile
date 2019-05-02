@@ -17,4 +17,5 @@ libneocrypto_openssl.a:
 
 lint:
 	clang-format -i main.cpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
-	clang-tidy main.cpp -checks=*,-fuchsia-default-arguments -format-style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}' -- -std=c++11 -I.
+	clang-tidy main.cpp -checks=*,-fuchsia-default-arguments -- -std=c++11 -I.
+	clang-tidy *.hpp -checks=*,-fuchsia-default-arguments,-llvm-header-guard,-google-runtime-references -- -I. -std=c++11
