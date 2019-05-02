@@ -39,6 +39,9 @@ Recommended configuration for vscode:
 }
 ```
 
+#### Ensuring code style
+You can use `make lint` command to format files automatically (using `clang-format`) and also the linter to verify programming practices (using `clang-tidy`).
+
 ### Which are the main modules?
 
 The project proposal is divided into modules:
