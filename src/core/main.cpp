@@ -5,31 +5,33 @@
 // now, this main is just for simple testing
 
 // system includes
-#include<iostream>
-#include<vector>
+#include <cassert>
+#include <iostream>
+#include <vector>
 
 // neopt core includes
-#include<system/IEquatable.h>
-#include<numbers/UIntBase.hpp>
-#include<numbers/UInt160.hpp>
-#include<IScriptContainer.h>
-#include<IVerifiable.hpp>
-#include<IInventory.hpp>
-#include<payloads/Block.hpp>
-#include<payloads/MinerTransaction.hpp>
-#include<payloads/Transaction.hpp>
-#include<crypto/ICrypto.h>
-#include<crypto/Crypto.h>
-#include<numbers/Fixed8.hpp>
-#include<wallets/whelper.hpp>
-#include<plugin/PluginSystem.h>
-#include<system/BinaryReader.hpp>
-#include<system/printable.h>
+#include <IInventory.hpp>
+#include <IScriptContainer.h>
+#include <IVerifiable.hpp>
+#include <crypto/Crypto.h>
+#include <crypto/ICrypto.h>
+#include <numbers/Fixed8.hpp>
+#include <numbers/UInt160.hpp>
+#include <numbers/UIntBase.hpp>
+#include <payloads/Block.hpp>
+#include <payloads/MinerTransaction.hpp>
+#include <payloads/Transaction.hpp>
+#include <plugin/PluginSystem.h>
+#include <system/BinaryReader.hpp>
+#include <system/IEquatable.h>
+#include <system/printable.h>
+#include <wallets/whelper.hpp>
 
 using namespace std;
 using namespace neopt;
 
-int main()
+int
+main()
 {
    Block block;
    IEquatable<int>* ieq = nullptr;
@@ -65,7 +67,7 @@ int main()
    vbyte sig = lib.SignData(lib.Sha256(vbyte()), priv, mypubkey);
    cout << "sig:" << sig << endl;
 
-   assert(lib.VerifySignature(vbyte(0), sig, mypubkey) == 1);
+   assert(lib.VerifySignature(vbyte(0), sig, mypubkey));
    /*
    strange fail. TODO: investigate in the future
    digest: [32]0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
@@ -74,14 +76,15 @@ int main()
    sig:[64]0x49cdf1429642fdf5e1ca25ca71278b216f0f0f2c251c3bfb56bca67f454aa0ea135cb98efbfafce69d2ee088c3c9dbe2c9bfcb8255dc3c3a5c52cb92264aa500
    neopt-core-test: main.cpp:62: int main(): Assertion `lib.VerifySignature(vbyte(0), sig, mypubkey) == 1' failed.
    */
-   assert(lib.VerifySignature(vbyte(1), sig, mypubkey) == 0);
-   assert(lib.VerifySignature(vbyte(1,3), lib.SignData(lib.Sha256(vbyte(1,3)), priv, mypubkey), mypubkey) == 1);
+   assert(lib.VerifySignature(vbyte(1), sig, mypubkey) == false);
+   assert(lib.VerifySignature(vbyte(1, 3), lib.SignData(lib.Sha256(vbyte(1, 3)), priv, mypubkey), mypubkey) == true);
 
    PluginSystem plugins;
 
    // testing transaction
 
    Transaction* t = TransactionFactory::CreateInstance(TT_MinerTransaction);
+   std::cout << t->getHash().ToString() << std::endl;
 
    cout << "Finished sucessfully" << endl;
 

@@ -1,8 +1,8 @@
-#include<gtest/gtest.h>
+#include <gtest/gtest.h>
 
 // core includes
-#include<system/vhelper.hpp>
-#include<system/shelper.h>
+#include <system/shelper.h>
+#include <system/vhelper.hpp>
 
 using namespace std;
 using namespace neopt;
@@ -73,18 +73,18 @@ TEST(BinaryReaderTest, Test_TOIStream_HexToBytes_Block2_TN)
 
 TEST(vhelperTests, Test_Where_Even_0x0102030405)
 {
-	vbyte param = {0x01, 0x02, 0x03, 0x04, 0x05};
-   std::function<bool(const byte&)> sel = [](const byte& b){return b % 2 == 0;};
+   vbyte param = { 0x01, 0x02, 0x03, 0x04, 0x05 };
+   std::function<bool(const byte&)> sel = [](const byte& b) { return b % 2 == 0; };
 
    vbyte v2 = vhelper::Where(param, sel);
-	EXPECT_EQ(v2.size(), 2);
+   EXPECT_EQ(v2.size(), 2);
    EXPECT_EQ(v2[0], 0x02);
    EXPECT_EQ(v2[1], 0x04);
 }
 
 TEST(vhelperTests, Test_ToHexString_0x0102030405)
 {
-	vbyte param = {0x01, 0x02, 0x03, 0x04, 0x05};
+   vbyte param = { 0x01, 0x02, 0x03, 0x04, 0x05 };
    string s = vhelper::ToHexString(param);
 
    EXPECT_EQ(s, "0102030405");
@@ -98,14 +98,13 @@ TEST(vhelperTests, Test_ToHexString_0x01)
    EXPECT_EQ(s, "01");
 }
 
-
 TEST(vhelperTests, Test_Select_Byte_HexString_0x0102030405)
 {
-	vbyte param = {0x01, 0x02, 0x03, 0x04, 0x05};
-   std::function<string(const byte&)> sel = [](const byte& b) -> string {return vhelper::ToHexString(b);};
+   vbyte param = { 0x01, 0x02, 0x03, 0x04, 0x05 };
+   std::function<string(const byte&)> sel = [](const byte& b) -> string { return vhelper::ToHexString(b); };
 
    vector<string> v2 = vhelper::Select(param, sel);
-	EXPECT_EQ(v2.size(), param.size());
+   EXPECT_EQ(v2.size(), param.size());
    EXPECT_EQ(v2[0], "01");
    EXPECT_EQ(v2[1], "02");
    EXPECT_EQ(v2[2], "03");
@@ -113,41 +112,39 @@ TEST(vhelperTests, Test_Select_Byte_HexString_0x0102030405)
    EXPECT_EQ(v2[4], "05");
 }
 
-
 TEST(vhelperTests, Test_Concat)
 {
-	vbyte param1 = {0x01, 0x02, 0x03};
-	vbyte param2 = {0x04, 0x05, 0x06};
-	vbyte param3 = vhelper::Concat(param1, param2);
-	EXPECT_EQ(vhelper::ToHexString(param3), "010203040506");
+   vbyte param1 = { 0x01, 0x02, 0x03 };
+   vbyte param2 = { 0x04, 0x05, 0x06 };
+   vbyte param3 = vhelper::Concat(param1, param2);
+   EXPECT_EQ(vhelper::ToHexString(param3), "010203040506");
 }
 
 TEST(vhelperTests, Test_Concat2)
 {
-	vbyte param1 = {0x01, 0x02, 0x03};
-	vbyte param2 = {0x04, 0x05, 0x06};
-	vbyte param3 = param1;
-	param3.insert(param3.end(), param2.begin(), param2.end());
-	EXPECT_EQ(vhelper::Concat(param1, param2), param3);
+   vbyte param1 = { 0x01, 0x02, 0x03 };
+   vbyte param2 = { 0x04, 0x05, 0x06 };
+   vbyte param3 = param1;
+   param3.insert(param3.end(), param2.begin(), param2.end());
+   EXPECT_EQ(vhelper::Concat(param1, param2), param3);
 }
-
 
 TEST(vhelperTests, Test_vhelper_Skip)
 {
-	vbyte param1 = {0x01, 0x02, 0x03};
-	vbyte param2 = vhelper::Skip(param1, 1);
-	vbyte param3 = {0x02, 0x03};
-	EXPECT_EQ(param2, param3);
+   vbyte param1 = { 0x01, 0x02, 0x03 };
+   vbyte param2 = vhelper::Skip(param1, 1);
+   vbyte param3 = { 0x02, 0x03 };
+   EXPECT_EQ(param2, param3);
 }
 
 TEST(vhelperTests, Test_vhelper_Skip2)
 {
-	vbyte param1 = {0x01, 0x02, 0x03};
-	EXPECT_EQ(vhelper::Skip(param1, 2), vbyte(1,0x03));
+   vbyte param1 = { 0x01, 0x02, 0x03 };
+   EXPECT_EQ(vhelper::Skip(param1, 2), vbyte(1, 0x03));
 }
 
 TEST(vhelperTests, Test_vhelper_Skip10)
 {
-	vbyte param1 = {0x01, 0x02, 0x03};
-	EXPECT_EQ(vhelper::Skip(param1, 10), vbyte(0));
+   vbyte param1 = { 0x01, 0x02, 0x03 };
+   EXPECT_EQ(vhelper::Skip(param1, 10), vbyte(0));
 }

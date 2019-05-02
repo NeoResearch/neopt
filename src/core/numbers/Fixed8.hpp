@@ -2,7 +2,7 @@
 #define FIXED8_H
 
 // c++ standard part
-#include<decimal/decimal>
+//#include<decimal/decimal>
 
 // neopt core part
 #include<system/types.h>

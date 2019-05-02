@@ -9,7 +9,7 @@
 #include<sstream>
 #include<iomanip> // fill zero for hex
 #include<ostream>
-#include<decimal/decimal>
+//#include<decimal/decimal>
 
 // neo core
 #include "types.h"

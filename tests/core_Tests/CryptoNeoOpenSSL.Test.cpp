@@ -1,45 +1,45 @@
-#include<gtest/gtest.h>
+#include <gtest/gtest.h>
 
 // core includes
-#include<crypto/ICrypto.h>
-#include<crypto/Crypto.h>
+#include <crypto/Crypto.h>
+#include <crypto/ICrypto.h>
 //#include<system/vhelper.hpp>
 
 using namespace neopt;
 
 TEST(CryptoTest, Test_Hash160_Empty)
 {
-	Crypto crypto;
+   Crypto crypto;
    vbyte v(0); // '': empty byte array
-	EXPECT_EQ(crypto.Hash160(v), crypto.RIPEMD160(crypto.Sha256(v)));
+   EXPECT_EQ(crypto.Hash160(v), crypto.RIPEMD160(crypto.Sha256(v)));
 }
 
 TEST(CryptoTest, Test_Hash160_Zero)
 {
-	Crypto crypto;
+   Crypto crypto;
    vbyte v(1, 0); // 0x00
-	EXPECT_EQ(crypto.Hash160(v), crypto.RIPEMD160(crypto.Sha256(v)));
+   EXPECT_EQ(crypto.Hash160(v), crypto.RIPEMD160(crypto.Sha256(v)));
 }
 
 TEST(CryptoTest, Test_Hash256_Empty)
 {
-	Crypto crypto;
+   Crypto crypto;
    vbyte v(0); // '': empty byte array
-	EXPECT_EQ(crypto.Hash256(v), crypto.Sha256(crypto.Sha256(v)));
+   EXPECT_EQ(crypto.Hash256(v), crypto.Sha256(crypto.Sha256(v)));
 }
 
 TEST(CryptoTest, Test_Hash256_Zero)
 {
-	Crypto crypto;
+   Crypto crypto;
    vbyte v(1, 0); // 0x00
-	EXPECT_EQ(crypto.Hash256(v), crypto.Sha256(crypto.Sha256(v)));
+   EXPECT_EQ(crypto.Hash256(v), crypto.Sha256(crypto.Sha256(v)));
 }
 
 // verification tests
 
 TEST(CryptoTest, Test_SignData_EmptyMessage)
 {
-	Crypto crypto;
+   Crypto crypto;
    vbyte msg(0); // '': empty message
 
    // creating private/public key pair (random each test)
@@ -50,5 +50,5 @@ TEST(CryptoTest, Test_SignData_EmptyMessage)
    vbyte sig = crypto.SignData(crypto.Sha256(msg), myprivkey, mypubkey);
 
    // test if signature matches public key for message
-	EXPECT_EQ(crypto.VerifySignature(msg, sig, mypubkey), 1);
+   EXPECT_EQ(crypto.VerifySignature(msg, sig, mypubkey), 1);
 }

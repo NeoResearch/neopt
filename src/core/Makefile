@@ -2,7 +2,10 @@ OPTIONS=-O0 -g # -Ofast
 
 OPENSSL_PATH=crypto/openssl
 
-all: #simple testing
+all: lint neopt-core-test #simple testing
+
+
+neopt-core-test:
 	g++   $(OPTIONS) --std=c++11 -I. -I$(OPENSSL_PATH)/include crypto/CryptoNeoOpenSSL.cpp -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl main.cpp system/printable.cpp payloads/TransactionFactory.cpp plugin/PluginSystem.cpp -o neopt-core-test
 
 # no need to build external lib for now
@@ -11,3 +14,7 @@ withlib: libneocrypto_openssl.a
 libneocrypto_openssl.a:
 	g++ -c $(OPTIONS) --std=c++11 -I. -Icrypto/openssl/include crypto/CryptoNeoOpenSSL.cpp -Lcrypto/openssl -llinux-openssl-crypto-x86_64 -lpthread -ldl -static -o libneocrypto_openssl.o
 	ar rvs libneocrypto_openssl.a libneocrypto_openssl.o
+
+lint:
+	clang-format -i main.cpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	clang-tidy main.cpp -checks=*,-fuchsia-default-arguments -format-style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}' -- -std=c++11 -I.
