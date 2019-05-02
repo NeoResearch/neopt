@@ -9,18 +9,20 @@
                 "limitSymbolsToIncludedHeaders": true
             },
             "includePath": [
-                "${workspaceFolder}",
-                "${workspaceFolder}/src",
-                "${workspaceFolder}/src/cli",
-                "${workspaceFolder}/src/core",
-                "${workspaceFolder}/src/plugins",
+                "${workspaceFolder}/src/core/**",
+                "${workspaceFolder}/src/core/payloads/**",
+                "${workspaceFolder}/src/plugins/**",
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/src/cli/**",
                 "${workspaceFolder}/src/plugins/ImportBlocks",
-                "${workspaceFolder}/tests/gtestlib/googletest/include"
+                "${workspaceFolder}/tests/gtestlib/googletest/include/**",
+                "${workspaceFolder}/tests/gtestlib/googlemock/include/**"
             ],
-            "defines": [],
+            "defines": ["_DEBUG_"],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c11",
-            "cppStandard": "c++17",
+            "cppStandard": "c++11",
             "intelliSenseMode": "clang-x64"
         }
     ],

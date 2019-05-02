@@ -1,4 +1,4 @@
-FILENAME :=  $(patsubst %.Test.cpp,%.core.test,$(wildcard core.tests/*.Test.cpp))
+#FILENAME :=  $(patsubst %.Test.cpp,%.core.test,$(wildcard core.tests/*.Test.cpp))
 
 OPENSSL_PATH=../src/core/crypto/openssl
 CORE_PATH=../src/core
@@ -12,13 +12,18 @@ all:
 #	@echo "Executing core test for: $(FILENAME)"
 
 # todo: not too great structure... cleaning every time to ensure tests are updated.
-tests: clean $(FILENAME)
-	@echo "Executed core test for: $(FILENAME)"
+tests: clean core.test #$(FILENAME)
+	@echo "Executed tests"
+	./core.test
+
+core.test : core.Test.cpp
+	#g++ --coverage -O0 -I../src/core --std=c++11 -I$(OPENSSL_PATH)/include $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(CORE_PATH)/payloads/TransactionFactory.cpp -I$(GTEST_PATH)/include -L$(GMOCK_PATH)/gtest -L$(GMOCK_PATH) -lgtest -lgtest_main  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl $< -o $@
+	g++ --coverage -g -O0 --std=c++11 -I$(CORE_PATH) -I$(GTEST_PATH)/include -I$(OPENSSL_PATH)/include -pthread $< -o $@ $(GMOCK_PATH)/gtest/libgtest_main.a $(GMOCK_PATH)/gtest/libgtest.a $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(CORE_PATH)/payloads/TransactionFactory.cpp -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl
 
 # compiling core tests
-%.core.test : %.Test.cpp
-	g++ --coverage -O0 -I../src/core --std=c++11 -I$(OPENSSL_PATH)/include $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(CORE_PATH)/payloads/TransactionFactory.cpp -I$(GTEST_PATH)/include -L$(GMOCK_PATH)/gtest -L$(GMOCK_PATH) -lgtest -lgtest_main  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl $< -o $@
-	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(GMOCK_PATH):$(GMOCK_PATH)/gtest && ./$@
+#%.core.test : %.Test.cpp
+#	g++ --coverage -O0 -I../src/core --std=c++11 -I$(OPENSSL_PATH)/include $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(CORE_PATH)/payloads/TransactionFactory.cpp -I$(GTEST_PATH)/include -L$(GMOCK_PATH)/gtest -L$(GMOCK_PATH) -lgtest -lgtest_main  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl $< -o $@
+#	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(GMOCK_PATH):$(GMOCK_PATH)/gtest && ./$@
 
 coverage:
 	mkdir -p reports
@@ -28,7 +33,6 @@ coverage:
 # cleaning tests
 clean:
 	rm -f *.test
-	rm -f core.tests/*.test
 	rm -f *.gcda
 	rm -f *.gcno
 	rm -f *.info

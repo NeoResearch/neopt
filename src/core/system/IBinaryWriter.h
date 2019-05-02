@@ -1,11 +1,11 @@
-#ifndef IBINARYWRITER_H
-#define IBINARYWRITER_H
-
-using namespace std; // TODO: do not use that in the future... prefer std::vector instead
+#ifndef NEOPT_IBINARYWRITER_H
+#define NEOPT_IBINARYWRITER_H
 
 // neopt core part
-#include<system/types.h>
-#include<system/ISerializable.h>
+#include "types.h"
+#include "ISerializable.h"
+
+using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 
 // Visual C++
 // include intrin.h

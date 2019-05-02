@@ -1,5 +1,5 @@
-#ifndef PRINTABLE_H
-#define PRINTABLE_H
+#ifndef NEOPT_PRINTABLE_H
+#define NEOPT_PRINTABLE_H
 
 // Printable methods
 
@@ -12,8 +12,8 @@
 #include<decimal/decimal>
 
 // neo core
-#include<system/types.h>
-#include<system/vhelper.hpp>
+#include "types.h"
+#include "vhelper.hpp"
 
 namespace neopt
 {

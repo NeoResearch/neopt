@@ -4,29 +4,27 @@
 // Vector Helper: vhelper
 
 // system
-#include<vector>
-#include<algorithm>
-#include<sstream>
-#include<iomanip> // fill zero for hex
-#include<functional>
+#include <algorithm>
+#include <functional>
+#include <iomanip> // fill zero for hex
+#include <sstream>
+#include <vector>
 
 // neo core
-#include<system/types.h>
+#include "types.h"
 //#include<system/printable.h>
-#include<system/ISerializable.h>
-#include<system/IBinaryReader.h>
-#include<system/BinaryReader.hpp>
+#include "IBinaryReader.h"
+#include "ISerializable.h"
 
-using namespace std; // TODO: avoid!
+// neo core hpp
+#include "BinaryReader.hpp"
 
-namespace neopt
-{
+namespace neopt {
 
 // vector helper class
 class vhelper
 {
 public:
-
    template<class T>
    static vector<T> Reverse(const vector<T>& v)
    {
@@ -44,7 +42,7 @@ public:
       return std::move(v);
    }
 
-/*
+   /*
    template<class T>
    static void Concat(vector<T>& v1, vector<T>& v2) // will empty v2 and put after v1
    {
@@ -72,9 +70,9 @@ public:
    {
       vector<T> v(v1);
       v.erase(std::remove_if(v.begin(),
-                                v.end(),
-                                [&sel](const T& val){return !sel(val);}
-                             ), v.end());
+                             v.end(),
+                             [&sel](const T& val) { return !sel(val); }),
+              v.end());
       return std::move(v);
    }
 
@@ -86,9 +84,9 @@ public:
    {
       vector<T2> ret(v1.size());
       std::transform(v1.begin(),
-                   v1.end(),
-                   ret.begin(),
-                   [&sel](const T1& a) -> T2 { return sel(a); });
+                     v1.end(),
+                     ret.begin(),
+                     [&sel](const T1& a) -> T2 { return sel(a); });
       return std::move(ret);
    }
 
@@ -98,19 +96,18 @@ public:
    {
       vector<T2> ret(v1.size());
       std::transform(v1.begin(),
-                   v1.end(),
-                   ret.begin(),
-                   [&sel](const T1* a) -> T2 { return sel(a); });
+                     v1.end(),
+                     ret.begin(),
+                     [&sel](const T1* a) -> T2 { return sel(a); });
       return std::move(ret);
    }
-
 
    static string ToHexString(const vbyte& v)
    {
       //std::cout << "ToHexString!!!!" << std::endl;
       stringstream ss;
       // TODO: check if format is this
-      for(unsigned i=0; i<v.size(); i++) // TODO: use foreach
+      for (unsigned i = 0; i < v.size(); i++) // TODO: use foreach
          ss << std::setfill('0') << std::setw(2) << std::hex << (int)v[i];
       //std::cout << "ToHexString!!!! RESULT = " << ss.str() << std::endl;
 
@@ -119,7 +116,7 @@ public:
 
    static string ToHexString(const byte& b)
    {
-      return ToHexString(vbyte(1,b));
+      return ToHexString(vbyte(1, b));
    }
 
    static int GetVarSize(const vbyte& v)
@@ -131,16 +128,14 @@ public:
 
    static vbyte Skip(const vbyte& v, int count)
    {
-      if(count < v.size())
-      {
-        vbyte p(v.begin()+count, v.end());
-        return std::move(p);
-      }
-      else
-        return std::move(vbyte(0));
+      if (count < v.size()) {
+         vbyte p(v.begin() + count, v.end());
+         return std::move(p);
+      } else
+         return std::move(vbyte(0));
    }
 
-/*
+   /*
    struct membuf : std::streambuf
    {
       membuf(char* begin, char* end)
@@ -157,16 +152,14 @@ public:
       //using (MemoryStream ms = new MemoryStream(value, start, value.Length - start, false))
       //using (BinaryReader reader = new BinaryReader(ms, Encoding.UTF8))
       //std::istream* in = vhelper::ToIStream(value, start);
-      vbyte part(value.begin()+start, value.end());
+      vbyte part(value.begin() + start, value.end());
       BinaryReader reader(part); //new BinaryReader(in, ((int)value.size())-start);//this->GetNewReader(in);
 
       T obj = reader.ReadSerializable<T>();
       //delete reader;
       return std::move(obj);
    }
-
 };
-
 }
 
 #endif

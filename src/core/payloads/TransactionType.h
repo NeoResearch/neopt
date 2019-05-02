@@ -1,5 +1,5 @@
-#ifndef TRANSACTION_TYPE_H
-#define TRANSACTION_TYPE_H
+#ifndef NEOPT_TRANSACTION_TYPE_H
+#define NEOPT_TRANSACTION_TYPE_H
 
 // c++ standard part
 // none

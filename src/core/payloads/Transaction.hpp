@@ -1,10 +1,16 @@
-#ifndef TRANSACTION_HPP
-#define TRANSACTION_HPP
+#ifndef NEOPT_TRANSACTION_HPP
+#define NEOPT_TRANSACTION_HPP
 
 // c++ standard part
 #include<vector>
 
+#ifdef _DEBUG_
+#define TESTE
+#endif 
+
 // neopt core part
+#include <payloads/TransactionType.h>
+
 #include<system/ISerializable.h>
 #include<system/IEquatable.h>
 #include<IInventory.hpp>
@@ -14,7 +20,6 @@
 #include<numbers/Fixed8.hpp>
 #include<system/shelper.h>
 #include<Witness.hpp>
-#include<payloads/TransactionType.h>
 #include<payloads/TransactionFactory.h>
 #include<payloads/TransactionAttribute.hpp>
 #include<payloads/CoinReference.hpp>

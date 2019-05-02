@@ -1,5 +1,5 @@
-#ifndef SHELPER_H
-#define SHELPER_H
+#ifndef NEOPT_SHELPER_H
+#define NEOPT_SHELPER_H
 
 // String Helper: shelper
 
@@ -9,7 +9,7 @@
 #include<sstream>
 
 // neo core
-#include<system/types.h>
+#include "types.h"
 
 using namespace std; // TODO: avoid!
 

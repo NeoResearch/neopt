@@ -1,22 +1,21 @@
-#ifndef ISNAPSHOT_H
-#define ISNAPSHOT_H
+#ifndef NEOPT_ISNAPSHOT_H
+#define NEOPT_ISNAPSHOT_H
 
-// if possible, this class should be removed in the future. TODO
+// system includes
+// ...
 
-using namespace std; // TODO: do not use that in the future... prefer std::vector instead
+// neopt core
+#include "system/types.h"
 
-namespace neopt
-{
+namespace neopt {
 
 class ISnapshot
 {
 public:
    // TODO: what's needed here?
 
-   uint Height;
-
+   uint32 Height;
 };
-
 }
 
 #endif

@@ -1,4 +1,5 @@
 *~
+core.test
 *.tar.gz
 gtestlib
 *.gcda

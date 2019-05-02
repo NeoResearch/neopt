@@ -1,5 +1,5 @@
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef NEOPT_TYPES_H
+#define NEOPT_TYPES_H
 
 // system includes
 #include <vector>
@@ -13,6 +13,7 @@ namespace neopt
 // basic types for Neo core
 
 // the simplest chunk of information
+// TODO: migrate to C++17 byte type
 typedef unsigned char byte;
 
 // signed short int

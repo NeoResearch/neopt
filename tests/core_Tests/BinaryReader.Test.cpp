@@ -1,8 +1,11 @@
+//#include<gtest/gtest.h>
 #include<gtest/gtest.h>
 
 // core includes
 #include<system/BinaryReader.hpp>
 #include<system/vhelper.hpp>
+#include<system/types.h>
+
 
 using namespace std;
 using namespace neopt;
