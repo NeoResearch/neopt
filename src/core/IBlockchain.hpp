@@ -2,25 +2,24 @@
 #define IBLOCKCHAIN_HPP
 
 // c++ standard part
-#include<vector>
+#include <vector>
 
 // neopt core part
-#include<system/ISerializable.h>
-#include<IScriptContainer.h>
-#include<ISnapshot.h>
+#include <IScriptContainer.h>
+#include <ISnapshot.h>
+#include <system/ISerializable.h>
 
-#include<numbers/UInt160.hpp>
-#include<Witness.hpp>
-#include<wallets/KeyPair.hpp>
-#include<crypto/ICrypto.h>
-#include<payloads/Block.hpp>
+#include <Witness.hpp>
+#include <crypto/ICrypto.h>
+#include <numbers/UInt160.hpp>
+#include <payloads/Block.hpp>
+#include <wallets/KeyPair.hpp>
 
 // TODO: fix, this .h should never include .hpp
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 
-namespace neopt
-{
+namespace neopt {
 
 class IBlockchain
 {
@@ -28,9 +27,8 @@ private:
    ISnapshot* currentSnapshot;
 
 public:
-
-// TODO: move singleton to Blockchain implementation, this is just an interface
-/*
+   // TODO: move singleton to Blockchain implementation, this is just an interface
+   /*
    static IBlockchain* _singleton;
 
    static IBlockchain& Singleton()
@@ -39,22 +37,20 @@ public:
    }
 */
 
-   IBlockchain() :
-      currentSnapshot(nullptr)
+   IBlockchain()
+     : currentSnapshot(nullptr)
    {
    }
 
    virtual uint Height()
    {
-      if(!currentSnapshot)
+      if (!currentSnapshot)
          return 0; // TODO: fix this
       return currentSnapshot->Height;
    }
 
-
    // method to import blocks
    virtual void OnImport(std::vector<Block>& blocks) = 0;
-
 };
 
 }

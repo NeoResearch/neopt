@@ -4,13 +4,12 @@
 // WARNING: do not include .hpp here, or things may break!
 
 // system includes
-#include<vector>
+#include <vector>
 
 // core includes
 //#include<plugin/IPlugin.h>
 
-namespace neopt
-{
+namespace neopt {
 
 // forward declaration of PluginSystem
 class PluginSystem;
@@ -31,7 +30,6 @@ public:
    NeoSystem(PluginSystem& _pluginSystem, IBlockchain& _blockchain);
 
    // what to put here?
-
 };
 
 }

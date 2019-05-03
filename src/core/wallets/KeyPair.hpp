@@ -8,20 +8,18 @@
 // ... none
 
 // neopt core part
-#include<system/types.h>
-#include<crypto/ecc/ECPoint.hpp>
+#include <crypto/ecc/ECPoint.hpp>
+#include <system/types.h>
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 
-namespace neopt
-{
+namespace neopt {
 
 class KeyPair
 {
 public:
    vbyte PrivateKey;
    ECPoint PublicKey;
-
 };
 
 }

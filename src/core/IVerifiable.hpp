@@ -2,33 +2,31 @@
 #define IVERIFIABLE_H
 
 // c++ standard part
-#include<vector>
-#include<ostream>
-#include<sstream>
+#include <ostream>
+#include <sstream>
+#include <vector>
 
 // neopt core part
 // vscode intellisense bug: 'ISerializable' not found with angled notation, use quotes instead... (???)
-#include"system/ISerializable.h"
-#include<IScriptContainer.h>
-#include<ISnapshot.h> // TODO: remove if possible
+#include "system/ISerializable.h"
+#include <IScriptContainer.h>
+#include <ISnapshot.h> // TODO: remove if possible
 
-#include<numbers/UInt160.hpp>
-#include<Witness.hpp>
-#include<wallets/KeyPair.hpp>
-#include<crypto/Crypto.h>
+#include <Witness.hpp>
+#include <crypto/Crypto.h>
+#include <numbers/UInt160.hpp>
+#include <wallets/KeyPair.hpp>
 
-#include<system/BinaryWriter.hpp>
+#include <system/BinaryWriter.hpp>
 
-
-namespace neopt
-{
+namespace neopt {
 
 // WARNING: escaping from the "Diamond of Death"
 // making ISerializable a virtual inheritance
-class IVerifiable : public IScriptContainer, virtual public ISerializable
+class IVerifiable : public IScriptContainer
+  , virtual public ISerializable
 {
 public:
-
    virtual std::vector<Witness> getWitnesses() = 0;
 
    // TODO: if possible, remove ISnapshot from here
@@ -55,7 +53,6 @@ public:
       return std::move(data);
       //return vhelper::ToArray(oss);
    }
-
 };
 
 }

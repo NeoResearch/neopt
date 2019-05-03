@@ -5,29 +5,27 @@
 // ... none
 
 // neopt core part
-#include<system/types.h>
+#include <system/types.h>
 
 // partially ported from neo-hypervm and from original specification:
 // https://referencesource.microsoft.com/#System.Numerics/System/Numerics/BigInteger.cs
 
 // this class is intended to be a general interface, allowing different implementations on different languages
 
-namespace neopt
+namespace neopt {
+class BigInteger
 {
-   class BigInteger
-   {
-   public:
-   	const static BigInteger Min;
-   	const static BigInteger One;
-   	const static BigInteger Zero;
-      const static BigInteger MinusOne;
+public:
+   const static BigInteger Min;
+   const static BigInteger One;
+   const static BigInteger Zero;
+   const static BigInteger MinusOne;
 
-      BigInteger(int32 value);
-      BigInteger(const BigInteger &value);
+   BigInteger(int32 value);
+   BigInteger(const BigInteger& value);
 
-      // what is needed here?
-
-   };
+   // what is needed here?
+};
 }
 
 #endif

@@ -4,28 +4,26 @@
 // Wallet Helper: whelper
 
 // system
-#include<vector>
-#include<sstream>
-#include<limits>
+#include <limits>
+#include <sstream>
+#include <vector>
 
 // neo core
-#include<system/types.h>
-#include<numbers/UInt160.hpp>
-#include<IVerifiable.hpp>
-#include<crypto/ICrypto.h>
-#include<system/vhelper.hpp>
-#include<system/Buffer.hpp>
-#include<ProtocolSettings.hpp>
-#include<wallets/KeyPair.hpp>
+#include <IVerifiable.hpp>
+#include <ProtocolSettings.hpp>
+#include <crypto/ICrypto.h>
+#include <numbers/UInt160.hpp>
+#include <system/Buffer.hpp>
+#include <system/types.h>
+#include <system/vhelper.hpp>
+#include <wallets/KeyPair.hpp>
 
-namespace neopt
-{
+namespace neopt {
 
 // wallets helper class
 class whelper
 {
 public:
-
    static string ToAddress(const ProtocolSettings& settings, const UInt160& scriptHash)
    {
       vbyte data(21);
@@ -38,9 +36,9 @@ public:
    {
       vbyte data = chelper::Base58CheckDecode(address);
       if (data.size() != 21)
-          NEOPT_EXCEPTION("Format Exception ToScriptHash");
+         NEOPT_EXCEPTION("Format Exception ToScriptHash");
       if (data[0] != settings.AddressVersion)
-          NEOPT_EXCEPTION("Format Exception ToScriptHash");
+         NEOPT_EXCEPTION("Format Exception ToScriptHash");
       return UInt160(vhelper::Skip(data, 1));
    }
 };

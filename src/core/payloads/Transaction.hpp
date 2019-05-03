@@ -2,103 +2,102 @@
 #define NEOPT_TRANSACTION_HPP
 
 // c++ standard part
-#include<vector>
+#include <vector>
 
 #ifdef _DEBUG_
 #define TESTE
-#endif 
+#endif
 
 // neopt core part
 #include <payloads/TransactionType.h>
 
-#include<system/ISerializable.h>
-#include<system/IEquatable.h>
-#include<IInventory.hpp>
-#include<system/IComparable.h>
-#include<numbers/UIntBase.hpp>
-#include<numbers/BigInteger.h>
-#include<numbers/Fixed8.hpp>
-#include<system/shelper.h>
-#include<Witness.hpp>
-#include<payloads/TransactionFactory.h>
-#include<payloads/TransactionAttribute.hpp>
-#include<payloads/CoinReference.hpp>
-#include<payloads/TransactionOutput.hpp>
+#include <IInventory.hpp>
+#include <Witness.hpp>
+#include <numbers/BigInteger.h>
+#include <numbers/Fixed8.hpp>
+#include <numbers/UIntBase.hpp>
+#include <payloads/CoinReference.hpp>
+#include <payloads/TransactionAttribute.hpp>
+#include <payloads/TransactionFactory.h>
+#include <payloads/TransactionOutput.hpp>
+#include <system/IComparable.h>
+#include <system/IEquatable.h>
+#include <system/ISerializable.h>
+#include <system/shelper.h>
 
+namespace neopt {
 
-namespace neopt
+class Transaction : public IEquatable<Transaction>
+  , public IInventory
 {
+public:
+   const int MaxTransactionSize = 102400;
+   /// <summary>
+   /// Maximum number of attributes that can be contained within a transaction
+   /// </summary>
+   const int MaxTransactionAttributes = 16;
 
-   class Transaction : public IEquatable<Transaction>, public IInventory
+   const TransactionType Type;
+   byte Version;
+   std::vector<TransactionAttribute> Attributes;
+   std::vector<CoinReference> Inputs;
+   std::vector<TransactionOutput> Outputs;
+   std::vector<Witness> Witnesses;
+
+private:
+   Fixed8 _feePerByte;
+
+public:
+   /// <summary>
+   /// The <c>NetworkFee</c> for the transaction divided by its <c>Size</c>.
+   /// <para>Note that this property must be used with care. Getting the value of this property multiple times will return the same result. The value of this property can only be obtained after the transaction has been completely built (no longer modified).</para>
+   /// </summary>
+   Fixed8 getFeePerByte()
    {
-   public:
-      const int MaxTransactionSize = 102400;
-      /// <summary>
-      /// Maximum number of attributes that can be contained within a transaction
-      /// </summary>
-      const int MaxTransactionAttributes = 16;
+      if (_feePerByte == -Fixed8::Satoshi())
+         _feePerByte = NetworkFee() / Size();
+      return _feePerByte;
+   }
 
-      const TransactionType Type;
-      byte Version;
-      std::vector<TransactionAttribute> Attributes;
-      std::vector<CoinReference> Inputs;
-      std::vector<TransactionOutput> Outputs;
-      std::vector<Witness> Witnesses;
+private:
+   UInt256* _hash;
 
-   private:
-      Fixed8 _feePerByte;
-   public:
-      /// <summary>
-      /// The <c>NetworkFee</c> for the transaction divided by its <c>Size</c>.
-      /// <para>Note that this property must be used with care. Getting the value of this property multiple times will return the same result. The value of this property can only be obtained after the transaction has been completely built (no longer modified).</para>
-      /// </summary>
-      Fixed8 getFeePerByte()
-      {
-         if (_feePerByte == -Fixed8::Satoshi())
-             _feePerByte = NetworkFee() / Size();
-         return _feePerByte;
+public:
+   UInt256 getHash()
+   {
+      if (_hash == nullptr)
+         _hash = new UInt256(Crypto::Default().Hash256(this->GetHashData()));
+      return *_hash; // do not move this
+   }
+
+   InventoryType getInventoryType()
+   {
+      return InventoryType::IT_TX;
+   }
+
+   bool IsLowPriority()
+   {
+      return true; // TODO: fix
+      //return NetworkFee < ProtocolSettings.Default.LowPriorityThreshold;
+   }
+
+private:
+   Fixed8 _network_fee;
+
+public:
+   virtual Fixed8 NetworkFee()
+   {
+      if (_network_fee == -Fixed8::Satoshi()) {
+         // TODO: make this part
+         //Fixed8 input = References.Values.Where(p => p.AssetId.Equals(Blockchain.UtilityToken.Hash)).Sum(p => p.Value);
+         //Fixed8 output = Outputs.Where(p => p.AssetId.Equals(Blockchain.UtilityToken.Hash)).Sum(p => p.Value);
+         //_network_fee = input - output - SystemFee;
       }
+      return _network_fee;
+   }
 
-   private:
-      UInt256* _hash;
-   public:
-      UInt256 getHash()
-      {
-          if (_hash == nullptr)
-               _hash = new UInt256(Crypto::Default().Hash256(this->GetHashData()));
-          return *_hash; // do not move this
-      }
-
-      InventoryType getInventoryType()
-      {
-         return InventoryType::IT_TX;
-      }
-
-      bool IsLowPriority()
-      {
-         return true; // TODO: fix
-         //return NetworkFee < ProtocolSettings.Default.LowPriorityThreshold;
-      }
-
-
-   private:
-      Fixed8 _network_fee;
-
-   public:
-      virtual Fixed8 NetworkFee()
-      {
-          if (_network_fee == -Fixed8::Satoshi())
-          {
-              // TODO: make this part
-              //Fixed8 input = References.Values.Where(p => p.AssetId.Equals(Blockchain.UtilityToken.Hash)).Sum(p => p.Value);
-              //Fixed8 output = Outputs.Where(p => p.AssetId.Equals(Blockchain.UtilityToken.Hash)).Sum(p => p.Value);
-              //_network_fee = input - output - SystemFee;
-          }
-          return _network_fee;
-      }
-
-// TODO:
-/*
+   // TODO:
+   /*
       private IReadOnlyDictionary<CoinReference, TransactionOutput> _references;
         public IReadOnlyDictionary<CoinReference, TransactionOutput> References
         {
@@ -126,36 +125,35 @@ namespace neopt
             }
         }
 */
-      virtual int Size()
-      {
-         // TODO: calculate this
-         return 0;//sizeof(TransactionType) + sizeof(byte) + Attributes.GetVarSize() + Inputs.GetVarSize() + Outputs.GetVarSize() + Witnesses.GetVarSize();
-      }
+   virtual int Size()
+   {
+      // TODO: calculate this
+      return 0; //sizeof(TransactionType) + sizeof(byte) + Attributes.GetVarSize() + Inputs.GetVarSize() + Outputs.GetVarSize() + Witnesses.GetVarSize();
+   }
 
-      virtual Fixed8 SystemFee()
-      {
-         //TODO:  make this
-         //return ProtocolSettings.Default.SystemFee.TryGetValue(Type, out Fixed8 fee) ? fee : Fixed8.Zero;
-         return Fixed8::Zero();
-      }
+   virtual Fixed8 SystemFee()
+   {
+      //TODO:  make this
+      //return ProtocolSettings.Default.SystemFee.TryGetValue(Type, out Fixed8 fee) ? fee : Fixed8.Zero;
+      return Fixed8::Zero();
+   }
 
+   // IVerifiable
+   virtual std::vector<Witness> getWitnesses()
+   {
+      return Witnesses;
+   }
 
-      // IVerifiable
-      virtual std::vector<Witness> getWitnesses()
-      {
-         return Witnesses;
-      }
+   // IVerifiable
+   virtual vbyte GetMessage()
+   {
+      return this->GetHashData();
+   }
 
-      // IVerifiable
-      virtual vbyte GetMessage()
-      {
-          return this->GetHashData();
-      }
-
-      // IVerifiable
-      virtual std::vector<UInt160> GetScriptHashesForVerifying(ISnapshot& snapshot)
-      {
-         /*
+   // IVerifiable
+   virtual std::vector<UInt160> GetScriptHashesForVerifying(ISnapshot& snapshot)
+   {
+      /*
          if (References == null) throw new InvalidOperationException();
          HashSet<UInt160> hashes = new HashSet<UInt160>(Inputs.Select(p => References[p].ScriptHash));
          hashes.UnionWith(Attributes.Where(p => p.Usage == TransactionAttributeUsage.Script).Select(p => new UInt160(p.Data)));
@@ -170,10 +168,10 @@ namespace neopt
          }
          return hashes.OrderBy(p => p).ToArray();
          */
-         return std::vector<UInt160>(0);
-      }
+      return std::vector<UInt160>(0);
+   }
 
-    /*
+   /*
    protected:
       Transaction() : // TODO: remove
          Type(TransactionType::TT_MinerTransaction) // TODO: remove
@@ -181,94 +179,95 @@ namespace neopt
       }
       */
 
-   public:
-        static bool ValidTransactionType(TransactionType type)
-        {
-            return true; // TODO: needs to protect from factory too?
-        }
-
-   protected:
-      Transaction(TransactionType _type) :
-         Type(_type),_feePerByte(-Fixed8::Satoshi()), _hash(nullptr), _network_fee(-Fixed8::Satoshi())
-      {
-         if(!Transaction::ValidTransactionType(Type))
-         {
-            std::cout << "Tx type is: " << Type << std::endl;
-            NEOPT_EXCEPTION("UNKNOWN TX TYPE!");
-         }
-      }
-
-   public:
-      virtual ~Transaction()
-      {
-         if(_hash)
-            delete _hash;
-         _hash = nullptr;
-      }
-
-      bool Equals(const Transaction* other)
-      {
-         if(other == nullptr)
-            return false;
-         // (other == nullptr ? false : CompareTo(*other) == 0) // TODO: make shorter?
-         return false;//CompareTo(*other) == 0;
-      }
-
-   protected:
-    // makes transaction class abstract
-    virtual void DeserializeExclusiveData(IBinaryReader& reader) = 0;
-
-   public:
-
-      void Deserialize(IBinaryReader& reader)
-      {
-         this->DeserializeUnsigned(reader);
-
-         std::cout << std::endl << "GOING TO TX WITNESS PART!!" << std::endl;
-         Witnesses = reader.ReadSerializableArray<Witness>();
-         OnDeserialized();
-      }
-
-      void DeserializeUnsigned(IBinaryReader& reader)
-      {
-         TransactionType txType = (TransactionType)reader.ReadByte();
-         std::cout << "READ TX TYPE: " << txType << std::endl;
-         if (txType != Type)
-            NEOPT_EXCEPTION("Transaction::DeserializeUnsigned FormatException");
-         DeserializeUnsignedWithoutType(reader);
-      }
-
-private:
-      void DeserializeUnsignedWithoutType(IBinaryReader& reader)
-      {
-         Version = reader.ReadByte();
-         std::cout << "Transaction:: will read exclusive data" << std::endl;
-         DeserializeExclusiveData(reader);
-         std::cout << "Transaction:: will read arrays" << std::endl;
-         std::cout << "Transaction:: will read array 1" << std::endl;
-         Attributes = reader.ReadSerializableArray<TransactionAttribute>(MaxTransactionAttributes);
-         std::cout << "Transaction:: will read array 2" << std::endl;
-         Inputs = reader.ReadSerializableArray<CoinReference>();
-         std::cout << "Transaction:: will read array 3" << std::endl;
-         Outputs = reader.ReadSerializableArray<TransactionOutput>(types::MaxValue<ushort>() + 1);
-      }
+public:
+   static bool ValidTransactionType(TransactionType type)
+   {
+      return true; // TODO: needs to protect from factory too?
+   }
 
 protected:
-      virtual void OnDeserialized()
-      {
+   Transaction(TransactionType _type)
+     : Type(_type)
+     , _feePerByte(-Fixed8::Satoshi())
+     , _hash(nullptr)
+     , _network_fee(-Fixed8::Satoshi())
+   {
+      if (!Transaction::ValidTransactionType(Type)) {
+         std::cout << "Tx type is: " << Type << std::endl;
+         NEOPT_EXCEPTION("UNKNOWN TX TYPE!");
       }
-
+   }
 
 public:
-       virtual bool Verify(ISnapshot& snapshot)
-       {
-          std::vector<Transaction*> mempool(0);
-          return Verify(snapshot, mempool);
-       }
+   virtual ~Transaction()
+   {
+      if (_hash)
+         delete _hash;
+      _hash = nullptr;
+   }
 
-       virtual bool Verify(ISnapshot& snapshot, std::vector<Transaction*>& mempool)
-       {
-          /*
+   bool Equals(const Transaction* other)
+   {
+      if (other == nullptr)
+         return false;
+      // (other == nullptr ? false : CompareTo(*other) == 0) // TODO: make shorter?
+      return false; //CompareTo(*other) == 0;
+   }
+
+protected:
+   // makes transaction class abstract
+   virtual void DeserializeExclusiveData(IBinaryReader& reader) = 0;
+
+public:
+   void Deserialize(IBinaryReader& reader)
+   {
+      this->DeserializeUnsigned(reader);
+
+      std::cout << std::endl
+                << "GOING TO TX WITNESS PART!!" << std::endl;
+      Witnesses = reader.ReadSerializableArray<Witness>();
+      OnDeserialized();
+   }
+
+   void DeserializeUnsigned(IBinaryReader& reader)
+   {
+      TransactionType txType = (TransactionType)reader.ReadByte();
+      std::cout << "READ TX TYPE: " << txType << std::endl;
+      if (txType != Type)
+         NEOPT_EXCEPTION("Transaction::DeserializeUnsigned FormatException");
+      DeserializeUnsignedWithoutType(reader);
+   }
+
+private:
+   void DeserializeUnsignedWithoutType(IBinaryReader& reader)
+   {
+      Version = reader.ReadByte();
+      std::cout << "Transaction:: will read exclusive data" << std::endl;
+      DeserializeExclusiveData(reader);
+      std::cout << "Transaction:: will read arrays" << std::endl;
+      std::cout << "Transaction:: will read array 1" << std::endl;
+      Attributes = reader.ReadSerializableArray<TransactionAttribute>(MaxTransactionAttributes);
+      std::cout << "Transaction:: will read array 2" << std::endl;
+      Inputs = reader.ReadSerializableArray<CoinReference>();
+      std::cout << "Transaction:: will read array 3" << std::endl;
+      Outputs = reader.ReadSerializableArray<TransactionOutput>(types::MaxValue<ushort>() + 1);
+   }
+
+protected:
+   virtual void OnDeserialized()
+   {
+   }
+
+public:
+   virtual bool Verify(ISnapshot& snapshot)
+   {
+      std::vector<Transaction*> mempool(0);
+      return Verify(snapshot, mempool);
+   }
+
+   virtual bool Verify(ISnapshot& snapshot, std::vector<Transaction*>& mempool)
+   {
+      /*
             if (Size > MaxTransactionSize) return false;
             for (int i = 1; i < Inputs.Length; i++)
                 for (int j = 0; j < i; j++)
@@ -318,98 +317,91 @@ public:
             if (!VerifyReceivingScripts()) return false;
             return this.VerifyWitnesses(snapshot);
             */
-       }
+   }
 
-    private:
-       bool VerifyReceivingScripts()
-       {
-            //TODO: run ApplicationEngine
-            //foreach (UInt160 hash in Outputs.Select(p => p.ScriptHash).Distinct())
-            //{
-            //    ContractState contract = Blockchain.Default.GetContract(hash);
-            //    if (contract == null) continue;
-            //    if (!contract.Payable) return false;
-            //    using (StateReader service = new StateReader())
-            //    {
-            //        ApplicationEngine engine = new ApplicationEngine(TriggerType.VerificationR, this, Blockchain.Default, service, Fixed8.Zero);
-            //        engine.LoadScript(contract.Script, false);
-            //        using (ScriptBuilder sb = new ScriptBuilder())
-            //        {
-            //            sb.EmitPush(0);
-            //            sb.Emit(OpCode.PACK);
-            //            sb.EmitPush("receiving");
-            //            engine.LoadScript(sb.ToArray(), false);
-            //        }
-            //        if (!engine.Execute()) return false;
-            //        if (engine.EvaluationStack.Count != 1 || !engine.EvaluationStack.Pop().GetBoolean()) return false;
-            //    }
-            //}
-            return true;
-       }
+private:
+   bool VerifyReceivingScripts()
+   {
+      //TODO: run ApplicationEngine
+      //foreach (UInt160 hash in Outputs.Select(p => p.ScriptHash).Distinct())
+      //{
+      //    ContractState contract = Blockchain.Default.GetContract(hash);
+      //    if (contract == null) continue;
+      //    if (!contract.Payable) return false;
+      //    using (StateReader service = new StateReader())
+      //    {
+      //        ApplicationEngine engine = new ApplicationEngine(TriggerType.VerificationR, this, Blockchain.Default, service, Fixed8.Zero);
+      //        engine.LoadScript(contract.Script, false);
+      //        using (ScriptBuilder sb = new ScriptBuilder())
+      //        {
+      //            sb.EmitPush(0);
+      //            sb.Emit(OpCode.PACK);
+      //            sb.EmitPush("receiving");
+      //            engine.LoadScript(sb.ToArray(), false);
+      //        }
+      //        if (!engine.Execute()) return false;
+      //        if (engine.EvaluationStack.Count != 1 || !engine.EvaluationStack.Pop().GetBoolean()) return false;
+      //    }
+      //}
+      return true;
+   }
 
-
-
-      // serialization
+   // serialization
 
 public:
-      void Serialize(IBinaryWriter& writer) const
-      {
-         this->SerializeUnsigned(writer);
-         IBinaryWriter::WriteArray<Witness>(writer, Witnesses);
-      }
+   void Serialize(IBinaryWriter& writer) const
+   {
+      this->SerializeUnsigned(writer);
+      IBinaryWriter::WriteArray<Witness>(writer, Witnesses);
+   }
 
 protected:
-      virtual void SerializeExclusiveData(IBinaryWriter& writer) const
-      {
-      }
+   virtual void SerializeExclusiveData(IBinaryWriter& writer) const
+   {
+   }
 
 public:
-      void SerializeUnsigned(IBinaryWriter& writer) const
-      {
-          std::cout << "tx SerializeUnsigned" << std::endl;
-         writer.Write((byte)Type);
-         writer.Write(Version);
-         SerializeExclusiveData(writer);
-         IBinaryWriter::WriteArray<TransactionAttribute>(writer, Attributes);
-         //writer.Write(Attributes);
-         IBinaryWriter::WriteArray<CoinReference>(writer, Inputs);
-         //writer.Write(Inputs);
-         IBinaryWriter::WriteArray<TransactionOutput>(writer, Outputs);
-         //writer.Write(Outputs);
-      }
+   void SerializeUnsigned(IBinaryWriter& writer) const
+   {
+      std::cout << "tx SerializeUnsigned" << std::endl;
+      writer.Write((byte)Type);
+      writer.Write(Version);
+      SerializeExclusiveData(writer);
+      IBinaryWriter::WriteArray<TransactionAttribute>(writer, Attributes);
+      //writer.Write(Attributes);
+      IBinaryWriter::WriteArray<CoinReference>(writer, Inputs);
+      //writer.Write(Inputs);
+      IBinaryWriter::WriteArray<TransactionOutput>(writer, Outputs);
+      //writer.Write(Outputs);
+   }
 
-      // strange static methods (could be elsewhere?)
-    public:
+   // strange static methods (could be elsewhere?)
+public:
+   // Factory Method (defined in the end of this file after loading all subclasses)
+   ////static Transaction* CreateInstance(TransactionType type);
 
-        // Factory Method (defined in the end of this file after loading all subclasses)
-        ////static Transaction* CreateInstance(TransactionType type);
+   static Transaction* DeserializeFrom(IBinaryReader& reader)
+   {
+      std::cout << "Transaction::DeserializeFrom" << std::endl;
+      std::cout << "AVAILABLE BYTES: " << reader.AvailableBytes() << std::endl;
 
-        static Transaction* DeserializeFrom(IBinaryReader& reader)
-        {
-            std::cout << "Transaction::DeserializeFrom" << std::endl;
-            std::cout << "AVAILABLE BYTES: " << reader.AvailableBytes() << std::endl;
+      TransactionType txType = (TransactionType)reader.ReadByte();
+      // Looking for type in reflection cache
+      //ReflectionCache.CreateInstance<Transaction>(reader.ReadByte());
+      // No reflection on C++... so using a static Factory Method instead
+      Transaction* transaction = TransactionFactory::CreateInstance(txType);
+      if (transaction == nullptr)
+         NEOPT_EXCEPTION("Transaction DeserializeFrom error: FormatException");
 
-            TransactionType txType = (TransactionType)reader.ReadByte();
-            // Looking for type in reflection cache
-            //ReflectionCache.CreateInstance<Transaction>(reader.ReadByte());
-            // No reflection on C++... so using a static Factory Method instead
-            Transaction* transaction = TransactionFactory::CreateInstance(txType);
-            if (transaction == nullptr)
-                NEOPT_EXCEPTION("Transaction DeserializeFrom error: FormatException");
-
-            std::cout << "Transaction:: will deserialize unsigned Without TYPE" << std::endl;
-            transaction->DeserializeUnsignedWithoutType(reader);
-            std::cout << "Transaction:: will read witness" << std::endl;
-            transaction->Witnesses = reader.ReadSerializableArray<Witness>();
-            std::cout << "Transaction:: on deserialized" << std::endl;
-            transaction->OnDeserialized();
-            return transaction;
-        }
-
-
-   };
+      std::cout << "Transaction:: will deserialize unsigned Without TYPE" << std::endl;
+      transaction->DeserializeUnsignedWithoutType(reader);
+      std::cout << "Transaction:: will read witness" << std::endl;
+      transaction->Witnesses = reader.ReadSerializableArray<Witness>();
+      std::cout << "Transaction:: on deserialized" << std::endl;
+      transaction->OnDeserialized();
+      return transaction;
+   }
+};
 } // namespace neopt
 
-
 #endif
-

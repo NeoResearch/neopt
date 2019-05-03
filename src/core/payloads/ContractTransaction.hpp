@@ -2,44 +2,40 @@
 #define CONTRACT_TRANSACTION_HPP
 
 // c++ standard part
-#include<vector>
+#include <vector>
 
 // neopt core part
-#include<payloads/Transaction.hpp>
-#include<payloads/TransactionType.h>
+#include <payloads/Transaction.hpp>
+#include <payloads/TransactionType.h>
 
+namespace neopt {
 
-namespace neopt
+class ContractTransaction : public Transaction
 {
+public:
+   ContractTransaction()
+     : Transaction(TT_ContractTransaction)
+   {
+   }
 
-    class ContractTransaction : public Transaction
-    {
-    public:
+protected:
+   virtual void DeserializeExclusiveData(IBinaryReader& reader)
+   {
+      std::cout << "ContractTX::DeserializeExclusiveData" << std::endl;
+      if (Transaction::Version != 0)
+         NEOPT_EXCEPTION("ContractTx FormatException");
+   }
 
-        ContractTransaction() :
-            Transaction(TT_ContractTransaction)
-        {
-        }
+   void OnDeserialized()
+   {
+      Transaction::OnDeserialized();
+   }
 
-    protected:
-
-        virtual void DeserializeExclusiveData(IBinaryReader& reader)
-        {
-            std::cout << "ContractTX::DeserializeExclusiveData" << std::endl;
-            if (Transaction::Version != 0)
-                NEOPT_EXCEPTION("ContractTx FormatException");
-        }
-
-        void OnDeserialized()
-        {
-            Transaction::OnDeserialized();
-        }
-
-    protected:
-        virtual void SerializeExclusiveData(IBinaryWriter& writer) const
-        {
-        }
-   };
+protected:
+   virtual void SerializeExclusiveData(IBinaryWriter& writer) const
+   {
+   }
+};
 }
 
 #endif

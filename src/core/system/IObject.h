@@ -2,14 +2,13 @@
 #define IOBJECT_H
 
 // system includes
-#include<vector>
+#include <vector>
 
 // if possible, this class should be removed in the future. TODO
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 
-namespace neopt
-{
+namespace neopt {
 
 class IObject
 {

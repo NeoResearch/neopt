@@ -16,6 +16,29 @@ libneocrypto_openssl.a:
 	ar rvs libneocrypto_openssl.a libneocrypto_openssl.o
 
 lint:
-	clang-format -i main.cpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
-	clang-tidy main.cpp -checks=*,-fuchsia-default-arguments -- -std=c++11 -I.
-	clang-tidy *.hpp -checks=*,-fuchsia-default-arguments,-llvm-header-guard,-google-runtime-references -- -I. -std=c++11
+	clang-tidy main.cpp -checks=*,-fuchsia-default-arguments -- -std=c++11 -x c++ -I.
+	clang-tidy *.hpp -checks=*,-fuchsia-default-arguments,-llvm-header-guard,-google-runtime-references -- -I. -std=c++11 -x c++
+	clang-tidy *.h -checks=*,-fuchsia-default-arguments,-llvm-header-guard,-google-runtime-references -- -I. -std=c++11 -x c++
+	clang-tidy *.cpp -checks=*,-fuchsia-default-arguments,-llvm-header-guard,-google-runtime-references -- -I. -std=c++11 -x c++
+
+fmt:
+	clang-format -i *.cpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	clang-format -i *.h -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	clang-format -i *.hpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd adt && clang-format -i *.hpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd crypto && clang-format -i *.cpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd crypto && clang-format -i *.h -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd crypto && clang-format -i *.hpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd payloads && clang-format -i *.cpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd payloads && clang-format -i *.h -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd payloads && clang-format -i *.hpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd wallets && clang-format -i *.hpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd system && clang-format -i *.cpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd system && clang-format -i *.h -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd system && clang-format -i *.hpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd plugin && clang-format -i *.cpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd plugin && clang-format -i *.h -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd plugin && clang-format -i *.hpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd numbers && clang-format -i *.h -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd numbers && clang-format -i *.hpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'
+	cd json && clang-format -i *.hpp -style='{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}'

@@ -4,25 +4,22 @@
 // WARNING: do not include .hpp here, or things may break!
 
 // system includes
-#include<vector>
-#include<string>
+#include <string>
+#include <vector>
 
 // core includes
-#include<NeoSystem.h>
-#include<system/types.h>
-#include<plugin/LogLevel.h>
+#include <NeoSystem.h>
+#include <plugin/LogLevel.h>
+#include <system/types.h>
 //#include<system/IConfigurationSection.h> // TODO: perhaps not good .hpp here
 
 /*
-#include<plugin/IPlugin.h>
 #include<plugin/ILogPlugin.h>
+#include<plugin/IPlugin.h>
 #include<plugin/LogLevel.h>
 */
 
-
-
-namespace neopt
-{
+namespace neopt {
 
 // forward declaration
 class IPlugin;
@@ -31,7 +28,6 @@ class ILogPlugin;
 class PluginSystem
 {
 public:
-
    neopt::NeoSystem* neoSystem;
 
    std::vector<IPlugin*> Plugins;
@@ -82,7 +78,6 @@ public:
 
 public:
    void Log(const std::string& source, LogLevel level, const std::string& message);
-
 };
 
 }

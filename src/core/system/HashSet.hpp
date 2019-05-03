@@ -2,18 +2,17 @@
 #define HASH_SET_HPP
 
 // system includes
-#include<vector>
-#include<iostream>
-#include<unordered_set>
+#include <iostream>
+#include <unordered_set>
+#include <vector>
 
 // neopt core part
-#include<system/types.h>
+#include <system/types.h>
 //#include<numbers/nhelper.h>
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 
-namespace neopt
-{
+namespace neopt {
 
 template<class T>
 class HashSet
@@ -31,8 +30,6 @@ private:
    std::unordered_set<T, baseT_hash> hashes;
 
 public:
-
-
    HashSet()
    {
    }
@@ -49,8 +46,6 @@ public:
       hashes.emplace(obj);
       return true;
    }
-
-
 };
 
 }

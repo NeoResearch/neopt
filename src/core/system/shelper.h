@@ -4,23 +4,21 @@
 // String Helper: shelper
 
 // system
-#include<vector>
-#include<algorithm>
-#include<sstream>
+#include <algorithm>
+#include <sstream>
+#include <vector>
 
 // neo core
 #include "types.h"
 
 using namespace std; // TODO: avoid!
 
-namespace neopt
-{
+namespace neopt {
 
 // string helper class
 class shelper
 {
 public:
-
    static bool StartsWith(const string& v, string value)
    {
       // TODO: implement
@@ -39,18 +37,15 @@ public:
    {
       // TODO: implement
       //NEOPT_EXCEPTION("Not implemented yet: HexToBytes");
-      vbyte bytes(hex.length()/2);
+      vbyte bytes(hex.length() / 2);
 
-      for (uint i = 0; i < hex.length(); i += 2)
-      {
+      for (uint i = 0; i < hex.length(); i += 2) {
          std::string byteString = hex.substr(i, 2);
-         byte b = (byte) strtol(byteString.c_str(), NULL, 16);
-         bytes[i/2] = b;
+         byte b = (byte)strtol(byteString.c_str(), NULL, 16);
+         bytes[i / 2] = b;
       }
       return bytes;
    }
-
-
 };
 
 // TODO: define all operators here that are necessary

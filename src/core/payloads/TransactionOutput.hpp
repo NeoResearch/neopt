@@ -2,32 +2,29 @@
 #define TRANSACTION_OUTPUT_HPP
 
 // c++ standard part
-#include<vector>
-#include<ostream>
-#include<sstream>
+#include <ostream>
+#include <sstream>
+#include <vector>
 
 // neopt core part
-#include<system/ISerializable.h>
-#include<IScriptContainer.h>
-#include<ISnapshot.h> // TODO: remove if possible
+#include <IScriptContainer.h>
+#include <ISnapshot.h> // TODO: remove if possible
+#include <system/ISerializable.h>
 
-#include<numbers/UInt256.hpp>
-#include<numbers/UInt160.hpp>
-#include<numbers/Fixed8.hpp>
-#include<Witness.hpp>
-#include<wallets/KeyPair.hpp>
-#include<crypto/Crypto.h>
+#include <Witness.hpp>
+#include <crypto/Crypto.h>
+#include <numbers/Fixed8.hpp>
+#include <numbers/UInt160.hpp>
+#include <numbers/UInt256.hpp>
+#include <wallets/KeyPair.hpp>
 
-#include<system/BinaryWriter.hpp>
+#include <system/BinaryWriter.hpp>
 
-
-namespace neopt
-{
+namespace neopt {
 
 class TransactionOutput : public ISerializable
 {
 public:
-
    UInt256 AssetId;
    Fixed8 Value;
    UInt160 ScriptHash;
@@ -35,7 +32,7 @@ public:
    int Size() const
    {
       return AssetId.Size() + Value.Size() + ScriptHash.Size();
-   } 
+   }
 
    void Deserialize(IBinaryReader& reader)
    {
@@ -43,7 +40,7 @@ public:
       this->Value = reader.ReadSerializable<Fixed8>();
 
       // TODO: compare this!! operator<= for Fixed8
-      //if (Value <= Fixed8::Zero()) 
+      //if (Value <= Fixed8::Zero())
       //   NEOPT_EXCEPTION("TransactionOutput Deserialize FormatException");
       this->ScriptHash = reader.ReadSerializable<UInt160>();
    }
@@ -54,8 +51,6 @@ public:
       writer.Write(Value);
       writer.Write(ScriptHash);
    }
-
-
 };
 
 }

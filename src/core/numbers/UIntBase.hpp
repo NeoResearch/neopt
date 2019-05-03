@@ -2,91 +2,90 @@
 #define UINTBASE_HPP
 
 // c++ standard part
-#include<vector>
+#include <vector>
 
 // neopt core part
-#include<system/ISerializable.h>
-#include<system/IBinaryReader.h>
-#include<system/IBinaryWriter.h>
-#include<system/IEquatable.h>
-#include<system/IObject.h>
-#include<system/vhelper.hpp>
+#include <system/IBinaryReader.h>
+#include <system/IBinaryWriter.h>
+#include <system/IEquatable.h>
+#include <system/IObject.h>
+#include <system/ISerializable.h>
+#include <system/vhelper.hpp>
 
-namespace neopt
+namespace neopt {
+/// <summary>
+/// Base class for little-endian unsigned integers. Two classes inherit from this: UInt160 and UInt256.
+/// Only basic comparison/serialization are proposed for these classes. For arithmetic purposes, use BigInteger class.
+/// </summary>
+class UIntBase : public IEquatable<UIntBase>
+  , public ISerializable //, public IObject (TODO: add only if very necessary)
 {
+protected: // TODO: make private?
    /// <summary>
-   /// Base class for little-endian unsigned integers. Two classes inherit from this: UInt160 and UInt256.
-   /// Only basic comparison/serialization are proposed for these classes. For arithmetic purposes, use BigInteger class.
+   /// Storing unsigned int in a little-endian byte array.
    /// </summary>
-   class UIntBase : public IEquatable<UIntBase>, public ISerializable //, public IObject (TODO: add only if very necessary)
+   vbyte data_bytes;
+
+public:
+   /// <summary>
+   /// Number of bytes of the unsigned int.
+   /// Currently, inherited classes use 20-bytes (UInt160) or 32-bytes (UInt256)
+   /// </summary>
+   int Size() const
    {
-   protected: // TODO: make private?
-      /// <summary>
-      /// Storing unsigned int in a little-endian byte array.
-      /// </summary>
-      vbyte data_bytes;
+      return (int)data_bytes.size();
+   }
 
-   public:
-      /// <summary>
-      /// Number of bytes of the unsigned int.
-      /// Currently, inherited classes use 20-bytes (UInt160) or 32-bytes (UInt256)
-      /// </summary>
-      int Size() const
-      {
-         return (int)data_bytes.size();
-      }
+protected:
+   // data it's automatically initialized with given size.
+   UIntBase(int bytes) // TODO: = 0 (default)
+     : data_bytes(vbyte(bytes))
+   {
+   }
 
-   protected:
+   /// <summary>
+   /// Base constructor receives the intended number of bytes and a byte array.
+   /// </summary>
+   UIntBase(int bytes, vbyte value)
+   {
+      if (value.size() != (unsigned)bytes)
+         NEOPT_EXCEPTION("ArgumentException"); //throw new ArgumentException(); // TODO: throw or NOT? exceptions are not good for performance...
+      this->data_bytes = value;                // receiving value (use move semantics?)
+   }
 
-      // data it's automatically initialized with given size.
-      UIntBase(int bytes) // TODO: = 0 (default)
-         : data_bytes(vbyte(bytes))
-      {
-      }
+protected:
+   /// <summary>
+   /// Deserialize function reads the expected size in bytes from the given BinaryReader and stores in data_bytes array.
+   /// </summary>
+   virtual void Deserialize(IBinaryReader& reader)
+   {
+      std::cout << "UIntBase::Deserialize (" << data_bytes.size() << ")" << std::endl;
+      std::cout << "Reader size =" << reader.AvailableBytes() << std::endl;
+      reader.Read(data_bytes, 0, data_bytes.size());
+   }
 
-      /// <summary>
-      /// Base constructor receives the intended number of bytes and a byte array.
-      /// </summary>
-      UIntBase(int bytes, vbyte value)
-      {
-         if (value.size() != (unsigned)bytes)
-            NEOPT_EXCEPTION("ArgumentException");//throw new ArgumentException(); // TODO: throw or NOT? exceptions are not good for performance...
-         this->data_bytes = value; // receiving value (use move semantics?)
-      }
+public:
+   /// <summary>
+   /// Method Equals returns true if objects are equal, false otherwise
+   /// If null is passed as parameter, this method returns false. If it's a self-reference, it returns true.
+   /// </summary>
+   virtual bool Equals(UIntBase* other)
+   {
+      if (other == nullptr)
+         return false;
+      if (this == other)
+         return true;
+      if (data_bytes.size() != other->data_bytes.size())
+         return false;
+      return (data_bytes == other->data_bytes);
+   }
 
-   protected:
-      /// <summary>
-      /// Deserialize function reads the expected size in bytes from the given BinaryReader and stores in data_bytes array.
-      /// </summary>
-      virtual void Deserialize(IBinaryReader& reader)
-      {
-         std::cout << "UIntBase::Deserialize (" << data_bytes.size() << ")" << std::endl;
-         std::cout << "Reader size =" << reader.AvailableBytes() << std::endl;
-         reader.Read(data_bytes, 0, data_bytes.size());
-      }
-
-   public:
-      /// <summary>
-      /// Method Equals returns true if objects are equal, false otherwise
-      /// If null is passed as parameter, this method returns false. If it's a self-reference, it returns true.
-      /// </summary>
-      virtual bool Equals(UIntBase* other)
-      {
-         if (other == nullptr)
-            return false;
-         if (this == other)
-            return true;
-         if (data_bytes.size() != other->data_bytes.size())
-            return false;
-         return (data_bytes == other->data_bytes);
-      }
-
-      /// <summary>
-      /// Method Equals returns true if objects are equal, false otherwise
-      /// If null is passed as parameter or if it's not a UIntBase object, this method returns false.
-      /// </summary>
-      // TODO: add only if very necessary!!
-      /*
+   /// <summary>
+   /// Method Equals returns true if objects are equal, false otherwise
+   /// If null is passed as parameter or if it's not a UIntBase object, this method returns false.
+   /// </summary>
+   // TODO: add only if very necessary!!
+   /*
       bool Equals(IObject* obj)
       {
          if (ReferenceEquals(obj, null))
@@ -97,15 +96,15 @@ namespace neopt
       }
       */
 
-      /// <summary>
-      /// Method GetHashCode returns a 32-bit int representing a hash code, composed of the first 4 bytes.
-      /// </summary>
-      virtual int GetHashCode()
-      {
-         return IObject::ToInt32(data_bytes, 0);
-      }
+   /// <summary>
+   /// Method GetHashCode returns a 32-bit int representing a hash code, composed of the first 4 bytes.
+   /// </summary>
+   virtual int GetHashCode()
+   {
+      return IObject::ToInt32(data_bytes, 0);
+   }
 
-      /*
+   /*
       /// <summary>
       /// Method Parse receives a big-endian hex string and stores as a UInt160 or UInt256 little-endian byte array
       /// Example: Parse("0xa400ff00ff00ff00ff00ff00ff00ff00ff00ff01") should create UInt160 01ff00ff00ff00ff00ff00ff00ff00ff00ff00a4
@@ -122,23 +121,22 @@ namespace neopt
       }
       */
 
-      /// <summary>
-      /// Method Serialize writes the data_bytes array into a BinaryWriter object
-      /// </summary>
-      virtual void Serialize(IBinaryWriter& writer) const
-      {
-        writer.Write(data_bytes);
-      }
+   /// <summary>
+   /// Method Serialize writes the data_bytes array into a BinaryWriter object
+   /// </summary>
+   virtual void Serialize(IBinaryWriter& writer) const
+   {
+      writer.Write(data_bytes);
+   }
 
-
-      // return copy (TODO: think about it).
-      // MerkleTree already uses this as copy... if change this behavior, must update there too, to include a copy there
-      // Copy is safer for now. Peformance comes after.
-      virtual vbyte ToArray() const
-      {
-         return data_bytes;
-      }
-/*
+   // return copy (TODO: think about it).
+   // MerkleTree already uses this as copy... if change this behavior, must update there too, to include a copy there
+   // Copy is safer for now. Peformance comes after.
+   virtual vbyte ToArray() const
+   {
+      return data_bytes;
+   }
+   /*
       /// <summary>
       /// Method ToArray() returns the byte array data_bytes, which stores the little-endian unsigned int
       /// </summary>
@@ -149,7 +147,7 @@ namespace neopt
       }
 */
 
-/*
+   /*
       /// <summary>
       /// Method ToArray() returns the byte array data_bytes, which stores the little-endian unsigned int
       /// </summary>
@@ -160,18 +158,18 @@ namespace neopt
       }
 */
 
-      /// <summary>
-      /// Method ToString returns a big-endian string starting by "0x" representing the little-endian unsigned int
-      /// Example: if this is storing 20-bytes 01ff00ff00ff00ff00ff00ff00ff00ff00ff00a4, ToString() should return "0xa400ff00ff00ff00ff00ff00ff00ff00ff00ff01"
-      /// </summary>
-      virtual string ToString() const
-      {
-         stringstream ss;
-         ss << "0x" << vhelper::ToHexString(vhelper::Reverse(data_bytes));
-         return ss.str();
-      }
+   /// <summary>
+   /// Method ToString returns a big-endian string starting by "0x" representing the little-endian unsigned int
+   /// Example: if this is storing 20-bytes 01ff00ff00ff00ff00ff00ff00ff00ff00ff00a4, ToString() should return "0xa400ff00ff00ff00ff00ff00ff00ff00ff00ff01"
+   /// </summary>
+   virtual string ToString() const
+   {
+      stringstream ss;
+      ss << "0x" << vhelper::ToHexString(vhelper::Reverse(data_bytes));
+      return ss.str();
+   }
 
-      /*
+   /*
 
           /// <summary>
           /// Method TryParse tries to parse a big-endian hex string and stores it as a UInt160 or UInt256 little-endian bytes array
@@ -234,7 +232,7 @@ namespace neopt
           }
 
           */
-   };
+};
 }
 
 #endif

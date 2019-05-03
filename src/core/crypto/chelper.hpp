@@ -4,23 +4,21 @@
 // Crypto Helper: chelper
 
 // system
-#include<vector>
-#include<sstream>
+#include <sstream>
+#include <vector>
 
 // neo core
-#include<system/types.h>
-#include<numbers/UInt160.hpp>
+#include <numbers/UInt160.hpp>
+#include <system/types.h>
 
 using namespace std; // TODO: avoid!
 
-namespace neopt
-{
+namespace neopt {
 
 // crypto helper class
 class chelper
 {
 public:
-
    static UInt160 ToScriptHash(const vbyte& v)
    {
       NEOPT_EXCEPTION("Not implemented: ToScriptHash");
@@ -38,7 +36,6 @@ public:
       NEOPT_EXCEPTION("Not implemented: Base58CheckDecode");
       return vbyte(0);
    }
-
 };
 
 // TODO: define all operators here that are necessary

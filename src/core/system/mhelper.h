@@ -4,26 +4,23 @@
 // Map Helper: mhelper
 
 // system
-#include<map>
-#include<sstream>
+#include <map>
+#include <sstream>
 
 // neo core
 #include "types.h"
 
-namespace neopt
-{
+namespace neopt {
 
 // map helper class
 class mhelper
 {
 public:
-
    template<class T1, class T2>
-   static bool ContainsKey(const std::map<T1,T2>& m, const T1& key)
+   static bool ContainsKey(const std::map<T1, T2>& m, const T1& key)
    {
       return m.count(key);
    }
-
 };
 
 // TODO: define all operators here that are necessary

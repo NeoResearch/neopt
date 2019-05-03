@@ -5,17 +5,15 @@
 // ... none
 
 // neopt core part
-#include<numbers/UInt256.hpp>
+#include <numbers/UInt256.hpp>
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 
-namespace neopt
-{
+namespace neopt {
 
 class ProtocolSettings
 {
 public:
-
    static const int AddressVersion = 21;
 };
 

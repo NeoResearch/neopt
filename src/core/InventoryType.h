@@ -7,8 +7,7 @@
 // neopt core part
 // ... none
 
-namespace neopt
-{
+namespace neopt {
 
 enum InventoryType // int, not byte
 {

@@ -4,27 +4,28 @@
 // Printable methods
 
 // system
-#include<vector>
-#include<iostream>
-#include<sstream>
-#include<iomanip> // fill zero for hex
-#include<ostream>
+#include <iomanip> // fill zero for hex
+#include <iostream>
+#include <ostream>
+#include <sstream>
+#include <vector>
 //#include<decimal/decimal>
 
 // neo core
 #include "types.h"
 #include "vhelper.hpp"
 
-namespace neopt
-{
+namespace neopt {
 
-std::ostream& operator<<(std::ostream &os, const vbyte &obj);
+std::ostream&
+operator<<(std::ostream& os, const vbyte& obj);
 
 // how to print this?
 //std::ostream& operator<<(std::ostream &os, const decimal::decimal64 &obj);
 
 template<class T>
-std::ostream& operator<<(std::ostream &os, const std::vector<T> &obj);
+std::ostream&
+operator<<(std::ostream& os, const std::vector<T>& obj);
 
 }
 

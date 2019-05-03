@@ -5,112 +5,113 @@
 //#include<decimal/decimal>
 
 // neopt core part
-#include<system/types.h>
-#include<numbers/BigInteger.h>
-#include<system/IEquatable.h>
-#include<system/IComparable.h>
-#include<system/ISerializable.h>
-#include<numbers/nhelper.h>
-#include<system/printable.h>
+#include <numbers/BigInteger.h>
+#include <numbers/nhelper.h>
+#include <system/IComparable.h>
+#include <system/IEquatable.h>
+#include <system/ISerializable.h>
+#include <system/printable.h>
+#include <system/types.h>
 
 // TODO: perhaps this class should be an interface too... just like BigInteger.
 // if this is fully compatible, let's keep this way
 
-namespace neopt
+namespace neopt {
+/// <summary>
+/// Accurate to 10^-8 64-bit fixed-point numbers minimize rounding errors.
+/// By controlling the accuracy of the multiplier, rounding errors can be completely eliminated.
+/// </summary>
+class Fixed8 : public IComparable<Fixed8>
+  , public IEquatable<Fixed8>
+  , public ISerializable //IFormattable,
 {
-   /// <summary>
-   /// Accurate to 10^-8 64-bit fixed-point numbers minimize rounding errors.
-   /// By controlling the accuracy of the multiplier, rounding errors can be completely eliminated.
-   /// </summary>
-   class Fixed8 : public IComparable<Fixed8>, public IEquatable<Fixed8>, public ISerializable //IFormattable,
+private:
+   static const long D = 100000000; // 100M
+
+protected:
+   long value;
+
+public:
+   static const Fixed8 MaxValue()
    {
-   private:
-      static const long D = 100000000; // 100M
+      return Fixed8(types::MaxValue<long>());
+   }
 
-   protected:
-      long value;
+   static const Fixed8 MinValue()
+   {
+      return Fixed8(types::MinValue<long>());
+   }
 
-   public:
-      static const Fixed8 MaxValue()
-      {
-         return Fixed8(types::MaxValue<long>());
-      }
+   static const Fixed8 One()
+   {
+      return Fixed8(D);
+   }
 
-      static const Fixed8 MinValue()
-      {
-         return Fixed8(types::MinValue<long>());
-      }
+   static const Fixed8 Satoshi()
+   {
+      return Fixed8(1);
+   }
 
-      static const Fixed8 One()
-      {
-         return Fixed8(D);
-      }
+   static const Fixed8 Zero()
+   {
+      return Fixed8();
+   }
 
-      static const Fixed8 Satoshi()
-      {
-         return Fixed8(1);
-      }
+   int Size() const
+   {
+      // hope it's 8 bytes...
+      return sizeof(long);
+   }
 
-      static const Fixed8 Zero()
-      {
-         return Fixed8();
-      }
+   Fixed8(long data = 0)
+     : value(data)
+   {
+   }
 
-      int Size() const
-      {
-         // hope it's 8 bytes...
-         return sizeof(long);
-      }
+   Fixed8 Abs()
+   {
+      if (value >= 0)
+         return *this;
 
-      Fixed8(long data = 0)
-         : value(data)
-      {
-      }
+      return Fixed8(-value);
+   }
 
-      Fixed8 Abs()
-      {
-         if (value >= 0)
-            return *this;
+   Fixed8 Ceiling()
+   {
+      long remainder = value % D;
+      if (remainder == 0)
+         return *this;
+      if (remainder > 0)
+         return Fixed8(value - remainder + D);
+      else
+         return Fixed8(value - remainder);
+   }
 
-         return Fixed8(-value);
-      }
+   int CompareTo(const Fixed8& other) const
+   {
+      if (value == other.value)
+         return 0;
+      return (value < other.value) ? -1 : 1;
+   }
 
-      Fixed8 Ceiling()
-      {
-         long remainder = value % D;
-         if (remainder == 0)
-            return *this;
-         if (remainder > 0)
-             return Fixed8(value - remainder + D);
-         else
-             return Fixed8(value - remainder);
-      }
+   void Deserialize(IBinaryReader& reader)
+   {
+      value = reader.ReadInt64();
+   }
 
-      int CompareTo(const Fixed8& other) const
-      {
-         if(value == other.value)
-            return 0;
-         return (value < other.value)? -1 : 1;
-      }
+   bool Equals(const Fixed8* other)
+   {
+      return value == other->value;
+   }
 
-      void Deserialize(IBinaryReader& reader)
-      {
-         value = reader.ReadInt64();
-      }
-
-      bool Equals(const Fixed8* other)
-      {
-         return value == other->value;
-      }
-
-/*
+   /*
       bool Equals(object* obj)
       {
          if (!(obj is Fixed8)) return false;
          return Equals((Fixed8)obj);
       }
 */
-/*
+   /*
       static Fixed8 FromDecimal(decimal value)
       {
          value *= D;
@@ -122,17 +123,17 @@ namespace neopt
          };
       }
 */
-      long GetData()
-      {
-         return value;
-      }
+   long GetData()
+   {
+      return value;
+   }
 
-      int GetHashCode()
-      {
-         return 0; // TODO //value.GetHashCode();
-      }
+   int GetHashCode()
+   {
+      return 0; // TODO //value.GetHashCode();
+   }
 
-/*
+   /*
       static Fixed8 Max(Fixed8 first, params Fixed8[] others)
       {
          foreach (Fixed8 other in others)
@@ -143,47 +144,46 @@ namespace neopt
          return first;
       }
 */
-      // first has priority on ties
-      static Fixed8 Max(const Fixed8& first, const Fixed8& other)
-      {
-         if(first.CompareTo(other) < 0)
-            return other;
-         else
-            return first;
-      }
+   // first has priority on ties
+   static Fixed8 Max(const Fixed8& first, const Fixed8& other)
+   {
+      if (first.CompareTo(other) < 0)
+         return other;
+      else
+         return first;
+   }
 
-      // first has priority on ties
-      static Fixed8 Min(const Fixed8& first, const Fixed8& other)
-      {
-         if(first.CompareTo(other) > 0)
-            return other;
-         else
-            return first;
-      }
+   // first has priority on ties
+   static Fixed8 Min(const Fixed8& first, const Fixed8& other)
+   {
+      if (first.CompareTo(other) > 0)
+         return other;
+      else
+         return first;
+   }
 
+   static Fixed8 Parse(string s)
+   {
+      NEOPT_EXCEPTION("Not implemented Fixed8 Parse");
+      return Fixed8();
+      //return FromDecimal(decimal.Parse(s, NumberStyles.Float, CultureInfo.InvariantCulture));
+   }
 
-      static Fixed8 Parse(string s)
-      {
-         NEOPT_EXCEPTION("Not implemented Fixed8 Parse");
-         return Fixed8();
-         //return FromDecimal(decimal.Parse(s, NumberStyles.Float, CultureInfo.InvariantCulture));
-      }
+   void Serialize(IBinaryWriter& writer) const
+   {
+      writer.Write(value);
+   }
 
-      void Serialize(IBinaryWriter& writer) const
-      {
-         writer.Write(value);
-      }
+   //string ToString(string format)
+   virtual string ToString() const
+   {
+      std::stringstream ss;
+      ss << this->value / D << ".";
+      ss << std::setfill('0') << std::setw(8) << this->value % D;
+      return ss.str();
+   }
 
-    //string ToString(string format)
-    virtual string ToString() const
-    {
-        std::stringstream ss;
-        ss << this->value / D << ".";
-        ss << std::setfill('0') << std::setw(8) << this->value % D;
-        return ss.str();
-    }
-
-/*
+   /*
       static bool TryParse(string s, out Fixed8 result)
       {
          decimal d;
@@ -206,36 +206,34 @@ namespace neopt
       }
 */
 
-      // ========================== OPERATORS
+   // ========================== OPERATORS
 
-      // overloaded minus (-) operator
-      Fixed8 operator- () const
-      {
-         return std::move(Fixed8(this->value));
-      }
+   // overloaded minus (-) operator
+   Fixed8 operator-() const
+   {
+      return std::move(Fixed8(this->value));
+   }
 
-      Fixed8 operator /(long y) const
-      {
-         Fixed8 result(this->value / y);
-         return std::move(result);
-      }
+   Fixed8 operator/(long y) const
+   {
+      Fixed8 result(this->value / y);
+      return std::move(result);
+   }
 
-      bool operator== (const Fixed8& that) const
-      {
-         return this->value == that.value;
-      }
+   bool operator==(const Fixed8& that) const
+   {
+      return this->value == that.value;
+   }
 
-
-// TODO: support decimal
-/*
+   // TODO: support decimal
+   /*
     decimal::decimal64 decimal() const
     {
         return this->value / (decimal::decimal64)D;
     }
 */
 
-
-/*
+   /*
         public static explicit operator long(Fixed8 value)
         {
             return value.value / D;
@@ -331,7 +329,7 @@ namespace neopt
             return value;
         }
        */
-    };
+};
 }
 
 #endif

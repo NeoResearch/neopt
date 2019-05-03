@@ -2,16 +2,14 @@
 #define CONFIGURATION_SECTION_HPP
 
 // system includes
-#include<iostream>
-#include<sstream>
+#include <iostream>
+#include <sstream>
 
-namespace neopt
-{
+namespace neopt {
 
 class ConfigurationSection
 {
 public:
-
    static ConfigurationSection AddJsonBuild(std::string path, bool optional = false)
    {
       // TODO: implement
@@ -31,9 +29,7 @@ public:
       std::cout << "TODO: Empty configuration!" << std::endl;
       return ConfigurationSection();
    }
-
 };
-
 
 }
 

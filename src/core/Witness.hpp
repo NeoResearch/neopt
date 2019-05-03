@@ -4,66 +4,64 @@
 // system includes
 
 // core includes
-#include<system/ISerializable.h>
-#include<system/types.h>
-#include<numbers/UInt160.hpp>
-#include<json/JObject.hpp>
-#include<crypto/chelper.hpp>
+#include <crypto/chelper.hpp>
+#include <json/JObject.hpp>
+#include <numbers/UInt160.hpp>
+#include <system/ISerializable.h>
+#include <system/types.h>
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 
-namespace neopt
+namespace neopt {
+
+class Witness : public ISerializable
 {
+public:
+   vbyte InvocationScript;
+   vbyte VerificationScript;
 
-   class Witness : public ISerializable
+private:
+   UInt160* _scriptHash;
+
+public:
+   virtual UInt160& getScriptHash()
    {
-   public:
-      vbyte InvocationScript;
-      vbyte VerificationScript;
-
-   private:
-      UInt160* _scriptHash;
-
-   public:
-      virtual UInt160& getScriptHash()
-      {
-         if (_scriptHash == nullptr)
-         {
-             _scriptHash = new UInt160(chelper::ToScriptHash(VerificationScript));
-         }
-         return *_scriptHash;
+      if (_scriptHash == nullptr) {
+         _scriptHash = new UInt160(chelper::ToScriptHash(VerificationScript));
       }
+      return *_scriptHash;
+   }
 
-      int Size() const
-      {
-         return vhelper::GetVarSize(InvocationScript) + vhelper::GetVarSize(InvocationScript);
-      }
+   int Size() const
+   {
+      return vhelper::GetVarSize(InvocationScript) + vhelper::GetVarSize(InvocationScript);
+   }
 
    //private: // WHY PRIVATE?
-   public:
-      // ISerializable class
-      virtual void Deserialize(IBinaryReader& reader)
-      {
-         InvocationScript = reader.ReadVarBytes(65536);
-         VerificationScript = reader.ReadVarBytes(65536);
-      }
+public:
+   // ISerializable class
+   virtual void Deserialize(IBinaryReader& reader)
+   {
+      InvocationScript = reader.ReadVarBytes(65536);
+      VerificationScript = reader.ReadVarBytes(65536);
+   }
 
-      // ISerializable class
-      virtual void Serialize(IBinaryWriter& writer) const
-      {
-         writer.WriteVarBytes(InvocationScript);
-         writer.WriteVarBytes(VerificationScript);
-      }
+   // ISerializable class
+   virtual void Serialize(IBinaryWriter& writer) const
+   {
+      writer.WriteVarBytes(InvocationScript);
+      writer.WriteVarBytes(VerificationScript);
+   }
 
-   public:
-      JObject ToJson()
-      {
-        JObject json;
-        json["invocation"] = vhelper::ToHexString(InvocationScript);
-        json["verification"] = vhelper::ToHexString(VerificationScript);
-        return json;
-      }
-  };
+public:
+   JObject ToJson()
+   {
+      JObject json;
+      json["invocation"] = vhelper::ToHexString(InvocationScript);
+      json["verification"] = vhelper::ToHexString(VerificationScript);
+      return json;
+   }
+};
 
 }
 

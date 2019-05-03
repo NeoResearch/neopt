@@ -2,37 +2,34 @@
 #define BLOCK_BASE_HPP
 
 // c++ standard part
-#include<vector>
+#include <vector>
 
 // neopt core part
-#include<IVerifiable.hpp>
+#include <IVerifiable.hpp>
 //#include<system/IEquatable.h>
 //#include<system/IComparable.h>
-#include<IInventory.hpp>
-#include<numbers/UIntBase.hpp>
-#include<numbers/BigInteger.h>
-#include<system/shelper.h>
-#include<crypto/Crypto.h>
+#include <IInventory.hpp>
+#include <crypto/Crypto.h>
+#include <numbers/BigInteger.h>
+#include <numbers/UIntBase.hpp>
+#include <system/shelper.h>
 //#include<Transaction.hpp>
 
-namespace neopt
-{
+namespace neopt {
 
-   class BlockBase : public IVerifiable
-   {
-   public:
-      uint Version;
-      UInt256 PrevHash;
-      UInt256 MerkleRoot;
-      uint Timestamp;
-      uint Index;
-      ulong ConsensusData;
-      UInt160 NextConsensus;
-      Witness witness;
+class BlockBase : public IVerifiable
+{
+public:
+   uint Version;
+   UInt256 PrevHash;
+   UInt256 MerkleRoot;
+   uint Timestamp;
+   uint Index;
+   ulong ConsensusData;
+   UInt160 NextConsensus;
+   Witness witness;
 
 public:
-
-
    virtual void Deserialize(IBinaryReader& reader)
    {
       std::cout << "BlockBase::Deserialize" << std::endl;
@@ -46,16 +43,16 @@ public:
 
    virtual void DeserializeUnsigned(IBinaryReader& reader)
    {
-       Version = reader.ReadUInt32();
-       PrevHash = reader.ReadSerializable<UInt256>();
-       MerkleRoot = reader.ReadSerializable<UInt256>();
-       Timestamp = reader.ReadUInt32();
-       Index = reader.ReadUInt32();
-       ConsensusData = reader.ReadUInt64();
-       NextConsensus = reader.ReadSerializable<UInt160>();
+      Version = reader.ReadUInt32();
+      PrevHash = reader.ReadSerializable<UInt256>();
+      MerkleRoot = reader.ReadSerializable<UInt256>();
+      Timestamp = reader.ReadUInt32();
+      Index = reader.ReadUInt32();
+      ConsensusData = reader.ReadUInt64();
+      NextConsensus = reader.ReadSerializable<UInt160>();
    }
 
-/*
+   /*
       // IEquatable
       bool Equals(const Block* other)
       {
@@ -126,7 +123,7 @@ public:
 
 
 */
-   };
+};
 }
 
 #endif

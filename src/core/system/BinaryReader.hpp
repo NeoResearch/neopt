@@ -2,20 +2,19 @@
 #define BINARYREADER_HPP
 
 // system includes
-#include<vector>
-#include<iostream>
-#include<fstream>
-#include<assert.h>
+#include <assert.h>
+#include <fstream>
+#include <iostream>
+#include <vector>
 
 // neopt core part
-#include<system/types.h>
-#include<system/IBinaryReader.h>
-#include<numbers/nhelper.h>
+#include <numbers/nhelper.h>
+#include <system/IBinaryReader.h>
+#include <system/types.h>
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 
-namespace neopt
-{
+namespace neopt {
 
 // this BinaryReader is not meant to be fully portable
 // if necessary, think on a better portability class and re-write over IBinaryReader interface
@@ -24,10 +23,10 @@ class BinaryReader : public IBinaryReader
 private:
    struct wrap_vector_as_istream : std::streambuf
    {
-       wrap_vector_as_istream(std::vector<char>& v)
-       {
-           this->setg(&v[0], &v[0], &v[0]+v.size());
-       }
+      wrap_vector_as_istream(std::vector<char>& v)
+      {
+         this->setg(&v[0], &v[0], &v[0] + v.size());
+      }
    };
 
 private:
@@ -35,13 +34,15 @@ private:
    bool mustDelete;
    int byteCount; // byte count must be precise here (or -1, meaning no limits)
    wrap_vector_as_istream* databuf;
-public:
 
+public:
    // reading data from input stream
    // may not be fully portable
    // if necessary, in the future, create abstract Stream class with better cross-compatibility
-   BinaryReader(istream& _input, int _byteCount = -1) :
-      input(&_input), mustDelete(false), byteCount(_byteCount)
+   BinaryReader(istream& _input, int _byteCount = -1)
+     : input(&_input)
+     , mustDelete(false)
+     , byteCount(_byteCount)
    {
       // ifstream reference would fit here (reading files)
       //std::cout << "BinaryReader::byteCountA = " << byteCount << std::endl;
@@ -50,15 +51,17 @@ public:
       databuf = nullptr;
    }
 
-   BinaryReader(istream* _input, int _byteCount = -1) :
-      input(_input), mustDelete(true), byteCount(_byteCount)
+   BinaryReader(istream* _input, int _byteCount = -1)
+     : input(_input)
+     , mustDelete(true)
+     , byteCount(_byteCount)
    {
       //std::cout << "BinaryReader::byteCountB = " << byteCount << std::endl;
       // -1 means no limit is known
       assert(byteCount >= -1);
       databuf = nullptr;
    }
-/*
+   /*
    struct membufx : std::streambuf
    {
       //membufx(char* begin, char* end)
@@ -69,7 +72,7 @@ public:
       }
    };
 */
-/*
+   /*
    template<typename CharT, typename TraitsT = std::char_traits<CharT> >
    class vectorwrapbuf : public std::basic_streambuf<CharT, TraitsT> {
    public:
@@ -79,8 +82,9 @@ public:
    };
 */
 
-   explicit BinaryReader(vbyte& bytes) :
-      mustDelete(true), byteCount(bytes.size())
+   explicit BinaryReader(vbyte& bytes)
+     : mustDelete(true)
+     , byteCount(bytes.size())
    {
       //std::cout << "BinaryReader::byteCountC = " << byteCount << std::endl;
       //char* buffer = (char*)bytes.data();
@@ -107,9 +111,9 @@ public:
 
    virtual ~BinaryReader()
    {
-      if(mustDelete)
+      if (mustDelete)
          delete input;
-      if(databuf)
+      if (databuf)
          delete databuf;
    }
 
@@ -123,8 +127,7 @@ public:
       return input->good();
    }
 
-
-/*
+   /*
    // Gets new independent reader from stream (must delete stream later)
    virtual IBinaryReader* GetNewReader(std::istream* stream) const
    {
@@ -137,7 +140,6 @@ public:
       std::ifstream f(name.c_str());
       return f.good();
    }
-
 
    // native function
 
@@ -208,7 +210,7 @@ public:
       }
       */
       ////input->read(&b, 1);
-      if(byteCount > 0)
+      if (byteCount > 0)
          byteCount--;
       return b;
    }
@@ -216,7 +218,7 @@ public:
    string ReadVarString(int max = 0x1000000)
    {
       NEOPT_EXCEPTION("BinaryReader::not implemented! varstring");
-       return ""; // TODO // Encoding.UTF8.GetString(this->ReadVarBytes(max));
+      return ""; // TODO // Encoding.UTF8.GetString(this->ReadVarBytes(max));
    }
 };
 

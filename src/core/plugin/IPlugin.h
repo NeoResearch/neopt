@@ -2,18 +2,17 @@
 #define IPLUGIN_H
 
 // system includes
-#include<iostream>
-#include<vector>
-#include<string>
-#include<sstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 // core includes
-#include<plugin/LogLevel.h>
-#include<plugin/PluginSystem.h>
-#include<system/ConfigurationSection.hpp>
+#include <plugin/LogLevel.h>
+#include <plugin/PluginSystem.h>
+#include <system/ConfigurationSection.hpp>
 
-namespace neopt
-{
+namespace neopt {
 
 class IPlugin
 {
@@ -22,7 +21,6 @@ public:
    PluginSystem* pluginSystem;
 
 public: // TODO: make friend of PluginSystem? (protect?)
-
    virtual void Configure() = 0;
 
    // TODO: check if void* is better than string vector
@@ -30,25 +28,23 @@ public: // TODO: make friend of PluginSystem? (protect?)
 
    virtual std::string getConfigPath()
    {
-      if(!pluginSystem || pluginSystem->Path == "")
+      if (!pluginSystem || pluginSystem->Path == "")
          return "";
       std::stringstream ss;
-      ss << pluginSystem->Path << "/" << Name() << "/" << "config.json";
+      ss << pluginSystem->Path << "/" << Name() << "/"
+         << "config.json";
       return ss.str();
    }
 
    ConfigurationSection GetConfiguration()
    {
-       return ConfigurationSection::AddJsonBuild(getConfigPath(), true).GetSection("PluginConfiguration");
+      return ConfigurationSection::AddJsonBuild(getConfigPath(), true).GetSection("PluginConfiguration");
    }
 
 protected:
-
-
 public:
-
-   IPlugin() :
-      pluginSystem(nullptr)
+   IPlugin()
+     : pluginSystem(nullptr)
    {
    }
 
@@ -62,7 +58,7 @@ public:
    // General Log (initially avoiding name hiding)
    virtual void GLog(std::string& message, LogLevel level = LogLevel::Info)
    {
-       std::cout << Name() << " " << level << " " << message << std::endl;
+      std::cout << Name() << " " << level << " " << message << std::endl;
    }
 };
 

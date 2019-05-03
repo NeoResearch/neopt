@@ -2,66 +2,65 @@
 #define JOBJECT_HPP
 
 // c++ standard part
-#include<vector>
-#include<map>
-#include<cmath> // NAN
+#include <cmath> // NAN
+#include <map>
+#include <vector>
 
 // neopt core part
-#include<system/ISerializable.h>
-#include<system/IEquatable.h>
-#include<system/IComparable.h>
-#include<numbers/UIntBase.hpp>
-#include<system/shelper.h>
-#include<system/mhelper.h>
-#include<system/ITextReader.h>
+#include <numbers/UIntBase.hpp>
+#include <system/IComparable.h>
+#include <system/IEquatable.h>
+#include <system/ISerializable.h>
+#include <system/ITextReader.h>
+#include <system/mhelper.h>
+#include <system/shelper.h>
 
-namespace neopt
+namespace neopt {
+
+class JObject
 {
+public:
+   //static JObject Null() = null;
+private:
+   map<string, JObject> properties;
 
-   class JObject
+public:
+   JObject& operator[](string name)
    {
-   public:
-      //static JObject Null() = null;
-   private:
-      map<string, JObject> properties;
+      return properties[name];
+   }
 
-   public:
-      JObject& operator[](string name)
-      {
-         return properties[name];
-      }
+   const map<string, JObject> Properties()
+   {
+      return properties;
+   }
 
-      const map<string, JObject> Properties()
-      {
-         return properties;
-      }
+   virtual bool AsBoolean()
+   {
+      return true;
+   }
 
-      virtual bool AsBoolean()
-      {
-         return true;
-      }
+   virtual double AsNumber()
+   {
+      return NAN;
+   }
 
-      virtual double AsNumber()
-      {
-         return NAN;
-      }
+   virtual string AsString()
+   {
+      return "[object Object]";
+   }
 
-      virtual string AsString()
-      {
-         return "[object Object]";
-      }
+   bool ContainsProperty(string key)
+   {
+      return mhelper::ContainsKey(properties, key);
+   }
 
-      bool ContainsProperty(string key)
-      {
-         return mhelper::ContainsKey(properties, key);
-      }
-
-      static JObject Parse(ITextReader& reader, int max_nest = 100)
-      {
-         if (max_nest < 0)
-            NEOPT_EXCEPTION("FormatException");
-         //throw new FormatException();
-         /*
+   static JObject Parse(ITextReader& reader, int max_nest = 100)
+   {
+      if (max_nest < 0)
+         NEOPT_EXCEPTION("FormatException");
+      //throw new FormatException();
+      /*
          SkipSpace(reader);
          char firstChar = (char)reader.Peek();
          if (firstChar == '\"' || firstChar == '\'')
@@ -101,24 +100,24 @@ namespace neopt
          reader.Read();
          return obj;
          */
-         return JObject();
-      }
+      return JObject();
+   }
 
-      static JObject Parse(string value, int max_nest = 100)
-      {
-         /*
+   static JObject Parse(string value, int max_nest = 100)
+   {
+      /*
          using (StringReader reader = new StringReader(value))
          {
              return Parse(reader, max_nest);
          }
          */
-         return JObject();
-      }
+      return JObject();
+   }
 
-   private:
-      static JObject ParseNull(ITextReader& reader)
-      {
-         /*
+private:
+   static JObject ParseNull(ITextReader& reader)
+   {
+      /*
          char firstChar = (char)reader.Read();
          if (firstChar == 'n')
          {
@@ -132,27 +131,25 @@ namespace neopt
          }
          throw new FormatException();
          */
-         return JObject();
-      }
+      return JObject();
+   }
 
-   protected:
-
-      static void SkipSpace(ITextReader& reader)
-      {
-         /*
+protected:
+   static void SkipSpace(ITextReader& reader)
+   {
+      /*
          while (reader.Peek() == ' ' || reader.Peek() == '\t' || reader.Peek() == '\r' || reader.Peek() == '\n')
          {
              reader.Read();
          }
          */
-      }
+   }
 
-   public:
-
-      // TODO: implement as operator<<
-      string ToString()
-      {
-         /*
+public:
+   // TODO: implement as operator<<
+   string ToString()
+   {
+      /*
          StringBuilder sb = new StringBuilder();
          sb.Append('{');
          foreach (KeyValuePair<string, JObject> pair in properties)
@@ -181,10 +178,10 @@ namespace neopt
          }
          return sb.ToString();
          */
-         return "";
-      }
+      return "";
+   }
 
-/*
+   /*
            public virtual T TryGetEnum<T>(T defaultValue = default, bool ignoreCase = false) where T : Enum
            {
                return defaultValue;
@@ -215,13 +212,13 @@ namespace neopt
                return value == null ? null : new JString(value);
           }
           */
-   public:
-      JObject& operator=(const string value)
-      {
-         NEOPT_EXCEPTION("Not implemented: operator= JObject string")
-         return *this;
-      }
-   };
+public:
+   JObject& operator=(const string value)
+   {
+      NEOPT_EXCEPTION("Not implemented: operator= JObject string")
+      return *this;
+   }
+};
 }
 
 #endif

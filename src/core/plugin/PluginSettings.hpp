@@ -12,13 +12,11 @@
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 
-namespace neopt
-{
+namespace neopt {
 
 class PluginSettings
 {
 public:
-
    //static const int AddressVersion = 21;
 };
 

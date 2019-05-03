@@ -2,26 +2,22 @@
 #define TRANSACTION_ATTRIBUTE_HPP
 
 // c++ standard part
-#include<vector>
+#include <vector>
 
 // neopt core part
-#include<system/types.h>
-#include<system/ISerializable.h>
-#include<system/IBinaryWriter.h>
-#include<system/IBinaryReader.h>
-#include<payloads/TransactionAttributeUsage.hpp>
+#include <payloads/TransactionAttributeUsage.hpp>
+#include <system/IBinaryReader.h>
+#include <system/IBinaryWriter.h>
+#include <system/ISerializable.h>
+#include <system/types.h>
 
-
-namespace neopt
-{
+namespace neopt {
 
 class TransactionAttribute : public ISerializable
 {
 public:
-
    TransactionAttributeUsage Usage;
    vbyte Data;
-
 
    virtual void Serialize(IBinaryWriter& writer) const
    {
@@ -53,7 +49,6 @@ public:
          NEOPT_EXCEPTION("TransactionAttribute Deserialize FormatException");
       //throw new FormatException();
    }
-
 };
 
 }

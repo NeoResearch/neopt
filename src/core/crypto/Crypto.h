@@ -6,9 +6,9 @@
 // implementation of Crypto
 
 // system includes
-#include <string>
-#include <cstring>
 #include <assert.h>
+#include <cstring>
+#include <string>
 
 /*
 // third-party includes
@@ -16,15 +16,13 @@
 
 #include <openssl/ec.h>      // for EC_GROUP_new_by_curve_name, EC_GROUP_free, EC_KEY_new, EC_KEY_set_group, EC_KEY_generate_key, EC_KEY_free
 #include <openssl/ecdsa.h>   // for ECDSA_do_sign, ECDSA_do_verify
-#include <openssl/sha.h>
 #include <openssl/ripemd.h>
+#include <openssl/sha.h>
 */
 // core includes
-#include<crypto/ICrypto.h>
+#include <crypto/ICrypto.h>
 
-
-namespace neopt
-{
+namespace neopt {
 
 // cryptography for Neo
 class Crypto : public ICrypto
@@ -33,17 +31,16 @@ private:
    static ICrypto* _crypto;
 
 public:
-
    static const ICrypto& Default()
    {
-      if(_crypto == nullptr)
+      if (_crypto == nullptr)
          _crypto = new Crypto();
       return *_crypto;
    }
 
    static void Free()
    {
-      if(_crypto != nullptr)
+      if (_crypto != nullptr)
          delete _crypto;
       _crypto = nullptr;
    }
@@ -88,19 +85,17 @@ public:
 
    virtual vbyte GeneratePrivateKey(vbyte& vpubkey) const;
 
-
    // manually added
    static vbyte FromHexString(std::string hex)
    {
-      vbyte bytes(hex.length()/2);
+      vbyte bytes(hex.length() / 2);
       for (unsigned int i = 0; i < hex.length(); i += 2) {
-        std::string byteString = hex.substr(i, 2);
-        byte b = (byte) strtol(byteString.c_str(), NULL, 16);
-        bytes[i] = b;
+         std::string byteString = hex.substr(i, 2);
+         byte b = (byte)strtol(byteString.c_str(), NULL, 16);
+         bytes[i] = b;
       }
       return bytes;
    }
-
 };
 
 }

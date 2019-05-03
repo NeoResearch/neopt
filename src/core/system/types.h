@@ -2,14 +2,13 @@
 #define NEOPT_TYPES_H
 
 // system includes
-#include <vector>
 #include <limits>
+#include <vector>
 
 // core includes
 // ... none
 
-namespace neopt
-{
+namespace neopt {
 // basic types for Neo core
 
 // the simplest chunk of information
@@ -34,37 +33,37 @@ typedef unsigned long ulong;
 // byte array definition
 typedef std::vector<byte> vbyte;
 
-#define NEOPT_EXCEPTION(str)                            \
-    {                                                   \
-        printf("neopt error(%s): %s\n", __func__, str); \
-        exit(1);                                        \
-    }
+#define NEOPT_EXCEPTION(str)                          \
+   {                                                  \
+      printf("neopt error(%s): %s\n", __func__, str); \
+      exit(1);                                        \
+   }
 
 class types
 {
-  public:
-    template <class T>
-    static T MaxValue()
-    {
-        return std::numeric_limits<T>::max();
-    }
+public:
+   template<class T>
+   static T MaxValue()
+   {
+      return std::numeric_limits<T>::max();
+   }
 
-    template <class T>
-    static T MinValue()
-    {
-        return std::numeric_limits<T>::min();
-    }
+   template<class T>
+   static T MinValue()
+   {
+      return std::numeric_limits<T>::min();
+   }
 };
 
-template <typename T>
+template<typename T>
 struct MakeStatic
 {
-    // the const guarantees that 'global state' is read-only for static purposes only
-    static const T& object()
-    {
-        static T t;
-        return t;
-    }
+   // the const guarantees that 'global state' is read-only for static purposes only
+   static const T& object()
+   {
+      static T t;
+      return t;
+   }
 };
 
 /*
