@@ -8,6 +8,7 @@
 #include "core_Tests/CoinReference.Test.cpp"
 #include "core_Tests/CryptoNeoOpenSSL.Test.cpp"
 #include "core_Tests/ICrypto.Test.cpp"
+#include "core_Tests/MerkleTree.Test.cpp"
 #include "core_Tests/Transaction.Test.cpp"
 #include "core_Tests/UInt160.Test.cpp"
 #include "core_Tests/Witness.Test.cpp"

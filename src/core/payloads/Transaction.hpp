@@ -63,7 +63,8 @@ private:
    UInt256* _hash;
 
 public:
-   UInt256 getHash()
+   // must remove this virtual, and perhaps use GetHashData for this (only for testing)
+   virtual UInt256 getHash()
    {
       if (_hash == nullptr)
          _hash = new UInt256(Crypto::Default().Hash256(this->GetHashData()));

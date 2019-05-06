@@ -27,5 +27,7 @@
     },
     "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}",
     "gtest-adapter.supportLocation": true,
-    "gtest-adapter.debugConfig": "Debug Core Tests"
+    "gtest-adapter.debugConfig": "Debug Core Tests",
+    "C_Cpp.loggingLevel": "Warning",
+    "C_Cpp.intelliSenseEngine": "Tag Parser"
 }

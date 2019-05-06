@@ -35,7 +35,7 @@ public:
 
    static vbyte HexToBytes(const string& hex)
    {
-      // TODO: implement
+      // TODO: implement (begin 0x)
       //NEOPT_EXCEPTION("Not implemented yet: HexToBytes");
       vbyte bytes(hex.length() / 2);
 
