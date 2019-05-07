@@ -18,10 +18,6 @@
 #include <numbers/Fixed8.hpp>
 #include <numbers/UInt160.hpp>
 #include <numbers/UIntBase.hpp>
-#include <payloads/Block.hpp>
-#include <payloads/MinerTransaction.hpp>
-#include <payloads/Transaction.hpp>
-#include <plugin/PluginSystem.h>
 #include <system/BinaryReader.hpp>
 #include <system/IEquatable.h>
 #include <system/printable.h>
@@ -33,14 +29,12 @@ using namespace neopt;
 int
 main()
 {
-   Block block;
    IEquatable<int>* ieq = nullptr;
    UIntBase* uint = nullptr;
    UInt160 uint160;
    IScriptContainer* iscript = nullptr;
    IVerifiable* iverifiable = nullptr;
    IInventory* iinventory = nullptr;
-   Transaction* tx = nullptr;
 
    Crypto lib;
    vbyte v;
@@ -78,13 +72,6 @@ main()
    */
    std::cout <<  lib.VerifySignature(vbyte(1), sig, mypubkey) << std::endl;
    std::cout <<  lib.VerifySignature(vbyte(1, 3), lib.SignData(lib.Sha256(vbyte(1, 3)), priv, mypubkey), mypubkey) << std::endl;
-
-   PluginSystem plugins;
-
-   // testing transaction
-
-   Transaction* t = TransactionFactory::CreateInstance(TT_MinerTransaction);
-   std::cout << t->getHash().ToString() << std::endl;
 
    cout << "Finished sucessfully" << endl;
 

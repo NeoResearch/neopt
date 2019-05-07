@@ -5,8 +5,8 @@
 #include<vector>
 
 // neopt core part
-#include<core/IBlockchain.hpp>
-#include<core/NeoSystem.h>
+#include<ledger/IBlockchain.hpp>
+#include<ledger/NeoSystem.h>
 
 using namespace std; // TODO: do not use that in the future... prefer std::vector instead
 

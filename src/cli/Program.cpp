@@ -3,8 +3,8 @@
 #include<iostream>
 
 // core includes
-#include<core/NeoSystem.h>
-#include<core/plugin/PluginSystem.h>
+#include<ledger/NeoSystem.h>
+#include<ledger/plugin/PluginSystem.h>
 //#include<core/wallets/Wallet.h>
 
 // ledger includes

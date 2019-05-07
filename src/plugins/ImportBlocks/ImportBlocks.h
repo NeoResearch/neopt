@@ -5,11 +5,11 @@
 #include<vector>
 
 // core includes
-#include<core/plugin/IPlugin.h>
+#include<ledger/plugin/IPlugin.h>
 
 // WARNING: this .hpp include is very risky an may break plugin
-#include<core/IBlockchain.hpp>
-#include<core/plugin/PluginSettings.hpp>
+#include<ledger/IBlockchain.hpp>
+#include<ledger/plugin/PluginSettings.hpp>
 
 
 // local includes

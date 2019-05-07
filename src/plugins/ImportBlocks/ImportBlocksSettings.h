@@ -5,7 +5,7 @@
 #include <functional>
 
 // core includes
-#include<core/plugin/PluginSettings.hpp> // TODO: risky include
+#include<ledger/plugin/PluginSettings.hpp> // TODO: risky include
 #include<core/system/types.h>
 #include<system/ConfigurationSection.hpp> // TODO: risky include
 

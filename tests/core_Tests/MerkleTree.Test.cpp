@@ -4,7 +4,7 @@
 
 // core includes
 #include <adt/MerkleTree.hpp>
-#include <payloads/Transaction.hpp>
+//#include <payloads/Transaction.hpp> // Should not depend on ledger things
 #include <system/shelper.h>
 #include <system/vhelper.hpp>
 
@@ -13,6 +13,7 @@ using namespace neopt;
 
 using ::testing::Return; // testing
 
+/*
 // must move this to Utils in the future
 class MockInvokeHashTx : public Transaction
 {
@@ -45,4 +46,5 @@ TEST(MerkleTreeTest, Test_MerkleRoot_TN74)
    //EXPECT_EQ(MerkleRoot.ToString(), "0x07e5d0324398aa9ddd60362178989f2e415793393cdd4a118b35c05ad5996c9b");
    //EXPECT_EQ(1, 2);
 }
+*/
  

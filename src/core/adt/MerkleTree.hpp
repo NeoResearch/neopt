@@ -8,6 +8,7 @@
 #include <crypto/Crypto.h>
 #include <numbers/UInt256.hpp>
 #include <system/vhelper.hpp>
+#include <system/printable.h>
 
 namespace neopt {
 class MerkleTreeNode
