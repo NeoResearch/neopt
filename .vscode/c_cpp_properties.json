@@ -10,7 +10,7 @@
             },
             "includePath": [
                 "${workspaceFolder}/src/core/**",
-                "${workspaceFolder}/src/core/payloads/**",
+                "${workspaceFolder}/src/ledger/payloads/**",
                 "${workspaceFolder}/src/plugins/**",
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/src/**",
