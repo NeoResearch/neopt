@@ -14,38 +14,22 @@ using namespace neopt;
 
 using ::testing::Return; // testing
 
-/*
-// must move this to Utils in the future
-class MockInvokeHashTx : public Transaction
-{
-public:
-   MockInvokeHashTx()
-     : Transaction(TT_InvocationTransaction)
-   {
-   }
-
-   MOCK_METHOD0(getHash, UInt256());
-
-   MOCK_METHOD1(DeserializeExclusiveData, void(IBinaryReader&));
-};
 
 TEST(MerkleTreeTest, Test_MerkleRoot_TN74)
 {
    // TestNet 74
 
-   MockInvokeHashTx mockTx1;
+   // tx1 : minertx
 
-   vbyte htx1 = shelper::HexToBytes("07e5d0324398aa9ddd60362178989f2e415793393cdd4a118b35c05ad5996c9b");
+   UInt256 hTx1 = UInt256::Parse("0xf2195b0382fca1d8648fe0f9bdbf441ac4f651f614bfbf5d92ba842a9698e9f1");
+   
+   // tx2: contracttx
+   UInt256 hTx2 = UInt256::Parse("0x4feb0081f9425cab84269127bef0a871a84d4408f09923d17ebb257cd231b362");
 
-   EXPECT_CALL(mockTx1, getHash())
-     .WillOnce(Return(UInt256(htx1)));
-     //.WillOnce(Return(UInt256(htx1)));
+   vector<UInt256> hashes = {hTx1, hTx2};
+   UInt256 calcRoot = MerkleTree::ComputeRoot(hashes);
 
-   EXPECT_EQ(mockTx1.getHash().ToString(), "0x9b6c99d55ac0358b114add3c399357412e9f9878213660dd9daa984332d0e507");
-
-   //auto MerkleRoot = reader.ReadSerializable<UInt256>();
-   //EXPECT_EQ(MerkleRoot.ToString(), "0x07e5d0324398aa9ddd60362178989f2e415793393cdd4a118b35c05ad5996c9b");
-   //EXPECT_EQ(1, 2);
+   EXPECT_EQ(calcRoot.ToString(), "0x07e5d0324398aa9ddd60362178989f2e415793393cdd4a118b35c05ad5996c9b");
 }
-*/
+
  

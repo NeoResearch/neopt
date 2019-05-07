@@ -13,13 +13,13 @@
 
 #include <IInventory.hpp>
 #include <Witness.hpp>
-#include <numbers/BigInteger.h>
-#include <numbers/Fixed8.hpp>
-#include <numbers/UIntBase.hpp>
 #include <ledger/payloads/CoinReference.hpp>
 #include <ledger/payloads/TransactionAttribute.hpp>
 #include <ledger/payloads/TransactionFactory.h>
 #include <ledger/payloads/TransactionOutput.hpp>
+#include <numbers/BigInteger.h>
+#include <numbers/Fixed8.hpp>
+#include <numbers/UIntBase.hpp>
 #include <system/IComparable.h>
 #include <system/IEquatable.h>
 #include <system/ISerializable.h>

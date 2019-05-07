@@ -31,5 +31,10 @@ public:
    MOCK_METHOD1(DeserializeExclusiveData, void(IBinaryReader&));
 };
 
+   //EXPECT_CALL(mockTx1, getHash())
+   //  .WillOnce(Return(UInt256(htx1)));
+     //.WillOnce(Return(UInt256(htx1)));
+
+
  
 #endif 

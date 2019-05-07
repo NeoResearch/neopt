@@ -88,12 +88,15 @@ public:
    /// Method ParseNew receives a big-endian hex string and stores as a UInt256 little-endian 20-bytes array
    /// Example: ParseNew("0xa400ff00ff00ff00ff00ff00ff00ff00ff00ff01") should create UInt256 01ff00ff00ff00ff00ff00ff00ff00ff00ff00a4
    /// </summary>
-   static UInt256 ParseNew(string value)
+   static UInt256 Parse(string value)
    {
       if (shelper::StartsWith(value, "0x"))
          value = shelper::Substring(value, 2);
-      if (value.size() != 40)
-         NEOPT_EXCEPTION("FormatException");
+      if (value.size() != 64)
+      {
+         std::cout << "UInt256 size is" << value.size() << std::endl;
+         NEOPT_EXCEPTION("UInt256 Parse FormatException");
+      }
       //throw new FormatException();
       UInt256 UInt256(vhelper::Reverse(shelper::HexToBytes(value)));
       return std::move(UInt256);

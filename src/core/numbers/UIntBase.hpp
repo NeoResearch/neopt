@@ -13,6 +13,7 @@
 #include <system/vhelper.hpp>
 
 namespace neopt {
+
 /// <summary>
 /// Base class for little-endian unsigned integers. Two classes inherit from this: UInt160 and UInt256.
 /// Only basic comparison/serialization are proposed for these classes. For arithmetic purposes, use BigInteger class.
@@ -104,22 +105,24 @@ public:
       return IObject::ToInt32(data_bytes, 0);
    }
 
+   // cannot forward declare these... use nhelper? TODO
    /*
-      /// <summary>
-      /// Method Parse receives a big-endian hex string and stores as a UInt160 or UInt256 little-endian byte array
-      /// Example: Parse("0xa400ff00ff00ff00ff00ff00ff00ff00ff00ff01") should create UInt160 01ff00ff00ff00ff00ff00ff00ff00ff00ff00a4
-      /// </summary>
-      static UIntBase Parse(string s)
-      {
-         if (s.size() == 40 || s.size() == 42)
-            return UInt160::Parse(s);
-         else if (s.size() == 64 || s.size() == 66)
-            return UInt256::Parse(s);
-         else
-            NEOPT_EXCEPTION("FormatException");
-            //throw new FormatException();
-      }
-      */
+   /// <summary>
+   /// Method Parse receives a big-endian hex string and stores as a UInt160 or UInt256 little-endian byte array
+   /// Example: Parse("0xa400ff00ff00ff00ff00ff00ff00ff00ff00ff01") should create UInt160 01ff00ff00ff00ff00ff00ff00ff00ff00ff00a4
+   /// </summary>
+   static UIntBase* Parse(const string& s)
+   {
+      if (s.size() == 40 || s.size() == 42)
+         return UInt160::Parse(s);
+      else if (s.size() == 64 || s.size() == 66)
+         return UInt256::Parse(s);
+      else
+         NEOPT_EXCEPTION("FormatException");
+      //throw new FormatException();
+      return nullptr;
+   }
+   */
 
    /// <summary>
    /// Method Serialize writes the data_bytes array into a BinaryWriter object

@@ -19,18 +19,14 @@ namespace neopt {
 class shelper
 {
 public:
-   static bool StartsWith(const string& v, string value)
+   static bool StartsWith(const string& s, const string& prefix)
    {
-      // TODO: implement
-      NEOPT_EXCEPTION("Not implemented yet: StartsWith");
-      return false;
+      return (s.rfind(prefix, 0) == 0);
    }
 
-   static string Substring(const string& v, int from)
+   static string Substring(const string& s, int from)
    {
-      // TODO: implement
-      NEOPT_EXCEPTION("Not implemented yet: Substring");
-      return "";
+      return s.substr(from);
    }
 
    static vbyte HexToBytes(const string& hex)
