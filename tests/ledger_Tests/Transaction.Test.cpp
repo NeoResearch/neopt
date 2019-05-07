@@ -5,6 +5,9 @@
 #include <system/BinaryReader.hpp>
 #include <system/vhelper.hpp>
 
+// test includes 
+#include "TransactionUtils.hpp"
+
 using namespace std;
 using namespace neopt;
 
