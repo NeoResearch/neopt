@@ -14,9 +14,10 @@ namespace neopt {
 class ITextReader
 {
 public:
-   // what methods?
-};
+   virtual char Peek() const = 0;
 
+   virtual char Read() = 0;
+};
 }
 
 #endif

@@ -12,6 +12,7 @@
 #include <system/IEquatable.h>
 #include <system/ISerializable.h>
 #include <system/ITextReader.h>
+#include <system/StringReader.hpp>
 #include <system/mhelper.h>
 #include <system/shelper.h>
 
@@ -21,16 +22,17 @@ class JObject
 {
 public:
    //static JObject Null() = null;
-private:
-   map<string, JObject> properties;
+//private:
+public:
+   map<string, JObject*> properties;
 
 public:
    JObject& operator[](string name)
    {
-      return properties[name];
+      return *properties[name];
    }
 
-   const map<string, JObject> Properties()
+   const map<string, JObject*> Properties()
    {
       return properties;
    }
@@ -53,96 +55,6 @@ public:
    bool ContainsProperty(string key)
    {
       return mhelper::ContainsKey(properties, key);
-   }
-
-   static JObject Parse(ITextReader& reader, int max_nest = 100)
-   {
-      if (max_nest < 0)
-         NEOPT_EXCEPTION("FormatException");
-      //throw new FormatException();
-      /*
-         SkipSpace(reader);
-         char firstChar = (char)reader.Peek();
-         if (firstChar == '\"' || firstChar == '\'')
-         {
-             return JString.Parse(reader);
-         }
-         if (firstChar == '[')
-         {
-             return JArray.Parse(reader, max_nest);
-         }
-         if ((firstChar >= '0' && firstChar <= '9') || firstChar == '-')
-         {
-             return JNumber.Parse(reader);
-         }
-         if (firstChar == 't' || firstChar == 'f')
-         {
-             return JBoolean.Parse(reader);
-         }
-         if (firstChar == 'n')
-         {
-             return ParseNull(reader);
-         }
-         if (reader.Read() != '{') throw new FormatException();
-         SkipSpace(reader);
-         JObject obj = new JObject();
-         while (reader.Peek() != '}')
-         {
-             if (reader.Peek() == ',') reader.Read();
-             SkipSpace(reader);
-             string name = JString.Parse(reader).Value;
-             SkipSpace(reader);
-             if (reader.Read() != ':') throw new FormatException();
-             JObject value = Parse(reader, max_nest - 1);
-             obj.properties.Add(name, value);
-             SkipSpace(reader);
-         }
-         reader.Read();
-         return obj;
-         */
-      return JObject();
-   }
-
-   static JObject Parse(string value, int max_nest = 100)
-   {
-      /*
-         using (StringReader reader = new StringReader(value))
-         {
-             return Parse(reader, max_nest);
-         }
-         */
-      return JObject();
-   }
-
-private:
-   static JObject ParseNull(ITextReader& reader)
-   {
-      /*
-         char firstChar = (char)reader.Read();
-         if (firstChar == 'n')
-         {
-             int c2 = reader.Read();
-             int c3 = reader.Read();
-             int c4 = reader.Read();
-             if (c2 == 'u' && c3 == 'l' && c4 == 'l')
-             {
-                 return null;
-             }
-         }
-         throw new FormatException();
-         */
-      return JObject();
-   }
-
-protected:
-   static void SkipSpace(ITextReader& reader)
-   {
-      /*
-         while (reader.Peek() == ' ' || reader.Peek() == '\t' || reader.Peek() == '\r' || reader.Peek() == '\n')
-         {
-             reader.Read();
-         }
-         */
    }
 
 public:
