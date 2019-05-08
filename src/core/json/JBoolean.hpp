@@ -25,15 +25,12 @@ private:
    bool _b;
 
 public:
-   string getValue() const
-   {
-      return ""; // TODO
-   }
-
    JBoolean(bool b)
      : _b{ b }
    {
    }
+
+   // ToString()
 };
 }
 

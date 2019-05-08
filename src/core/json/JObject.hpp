@@ -22,7 +22,7 @@ class JObject
 {
 public:
    //static JObject Null() = null;
-//private:
+   //private:
 public:
    map<string, JObject*> properties;
 
@@ -52,45 +52,43 @@ public:
       return "[object Object]";
    }
 
+   virtual std::string getValue() const
+   {
+      return this->ToString();
+   }
+
    bool ContainsProperty(string key)
    {
       return mhelper::ContainsKey(properties, key);
    }
 
 public:
-   // TODO: implement as operator<<
-   string ToString()
+   virtual std::string ToString() const
    {
-      /*
-         StringBuilder sb = new StringBuilder();
-         sb.Append('{');
-         foreach (KeyValuePair<string, JObject> pair in properties)
-         {
-             sb.Append('"');
-             sb.Append(pair.Key);
-             sb.Append('"');
-             sb.Append(':');
-             if (pair.Value == null)
-             {
-                 sb.Append("null");
-             }
-             else
-             {
-                 sb.Append(pair.Value);
-             }
-             sb.Append(',');
+      //StringBuilder sb = new StringBuilder();
+      std::stringstream sb;
+      //sb.Append('{');
+      sb << '{';
+      //foreach (KeyValuePair<string, JObject> pair in properties)
+      for (auto pair = properties.begin(); pair != properties.end(); ++pair) {
+         sb << '"';
+         sb << pair->first;
+         sb << '"';
+         sb << ':';
+         if (pair->second == nullptr) {
+            sb << "null";
+         } else {
+            sb << pair->second->getValue();
          }
-         if (properties.Count == 0)
-         {
-             sb.Append('}');
-         }
-         else
-         {
-             sb[sb.Length - 1] = '}';
-         }
-         return sb.ToString();
-         */
-      return "";
+         sb << ',';
+      }
+      std::string sf = sb.str();
+      if (properties.size() == 0) {
+         sf.append("}");
+      } else {
+         sf[sf.size() - 1] = '}';
+      }
+      return sf;
    }
 
    /*

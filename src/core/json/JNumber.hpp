@@ -25,7 +25,7 @@ private:
    double _d;
 
 public:
-   string getValue() const
+   std::string ToString() const
    {
       std::stringstream ss;
       ss << _d;

@@ -25,7 +25,7 @@ private:
    std::string _s;
 
 public:
-   std::string getValue() const
+   std::string ToString() const
    {
       return _s;
    }
