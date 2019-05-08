@@ -8,7 +8,7 @@
             "name": "Debug Core Tests",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/tests/core.test",
+            "program": "${workspaceFolder}/tests/all.test",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
