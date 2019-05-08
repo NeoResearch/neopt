@@ -22,6 +22,9 @@ namespace neopt {
 class JArray : public JObject
 {
 public:
+   vector<JObject*> items;
+
+public:
    string getValue() const
    {
       return "";

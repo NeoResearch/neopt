@@ -10,6 +10,7 @@
 
 // neo core
 #include "types.h"
+#include <system/BinaryReader.hpp>
 
 using namespace std; // TODO: avoid!
 
@@ -29,6 +30,18 @@ public:
       return s.substr(from);
    }
 
+   static ushort ParseHexToShort(const string& hex)
+   {
+      vbyte vb = HexToBytes(hex);
+      BinaryReader reader(vb);
+      return reader.ReadUInt16();
+   }
+
+   static double ParseDouble(const string& sdouble)
+   {
+      return std::stod(sdouble);
+   }
+
    static vbyte HexToBytes(const string& hex)
    {
       // TODO: implement (begin 0x)
@@ -45,7 +58,6 @@ public:
 };
 
 // TODO: define all operators here that are necessary
-
 }
 
 #endif

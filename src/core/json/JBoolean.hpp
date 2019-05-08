@@ -21,10 +21,18 @@ namespace neopt {
 
 class JBoolean : public JObject
 {
+private:
+   bool _b;
+
 public:
    string getValue() const
    {
-      return "";
+      return ""; // TODO
+   }
+
+   JBoolean(bool b)
+     : _b{ b }
+   {
    }
 };
 }

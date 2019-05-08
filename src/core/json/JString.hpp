@@ -21,10 +21,18 @@ namespace neopt {
 
 class JString : public JObject
 {
+private:
+   std::string _s;
+
 public:
-   string getValue() const
+   std::string getValue() const
    {
-      return "";
+      return _s;
+   }
+
+   JString(std::string s)
+     : _s{ s }
+   {
    }
 };
 }

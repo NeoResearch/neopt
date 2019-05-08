@@ -21,10 +21,20 @@ namespace neopt {
 
 class JNumber : public JObject
 {
+private:
+   double _d;
+
 public:
    string getValue() const
    {
-      return "";
+      std::stringstream ss;
+      ss << _d;
+      return ss.str();
+   }
+
+   JNumber(double d)
+     : _d(d)
+   {
    }
 };
 }

@@ -45,6 +45,18 @@ public:
       return (char)x;
    }
 
+   // reads data from this buffer and writes on 'out'
+   virtual int Read(char* out, int index, int count)
+   {
+      for(unsigned i=0; i<count; i++)
+      {
+         char c = Read();
+         out[index+i] = c;
+      }
+      // TODO: may fail to read enough here!
+      return count;
+   }
+
    virtual char Peek() const
    {
       if (input->eof())
