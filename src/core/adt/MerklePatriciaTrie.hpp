@@ -10,51 +10,113 @@
 #include <system/vhelper.hpp>
 #include <system/printable.h>
 
+using namespace std; // TODO: remove
+
 namespace neopt {
+
+// used for encoding and node types
+enum MPTType
+{
+   MPT_NULL = 0x08,
+   MPT_branch = 0x10,
+   MPT_leaf = 0x20,
+   MPT_extension = 0x20
+};
+
+// TODO: configure if hash will be 160 or 256 (perhaps space matters here)
 class MPTNode
 {
+   private:
+   UInt256 hash;
+   MPTType type;
+   std::vector<vbyte> contents;
+
 public:
-   UInt256 Hash;
-   MerkleTreeNode* Parent;
-   MerkleTreeNode* LeftChild;
-   MerkleTreeNode* RightChild;
 
-   MerkleTreeNode()
-     : LeftChild(nullptr)
-     , RightChild(nullptr)
+   // general constructor
+   MPTNode(MPTType _type, const std::vector<vbyte>& _contents) :
+      type{_type}, contents(_contents)
    {
-      std::cout << "MerkleTreeNode()" << std::endl;
+      hash = UInt256(Crypto::Default().Hash256(this->ToArray()));
    }
 
-   MerkleTreeNode(const UInt256& _hash)
-     : Hash(_hash)
-     , LeftChild(nullptr)
-     , RightChild(nullptr)
+   // NULL node
+   MPTNode() :
+      type{MPT_NULL}
    {
-      std::cout << "MerkleTreeNode(UInt256)" << std::endl;
+      hash = UInt256(Crypto::Default().Hash256(this->ToArray()));
    }
 
-   bool IsLeaf()
+   // branch node
+   MPTNode(vector<vbyte> branches, vbyte value) : 
+      type{MPT_branch}
    {
-      return LeftChild == nullptr && RightChild == nullptr;
+      hash = UInt256(Crypto::Default().Hash256(this->ToArray()));
    }
 
-   bool IsRoot()
+   // leaf node
+   MPTNode(vbyte encodedPath, vbyte value) : 
+      type{MPT_leaf}
    {
-      return Parent == nullptr;
+      hash = UInt256(Crypto::Default().Hash256(this->ToArray()));
+   }
+
+   // extension node
+   MPTNode(vbyte encodedPath, UInt256 key) : 
+      type{MPT_extension}
+   {
+      hash = UInt256(Crypto::Default().Hash256(this->ToArray()));
+   }
+
+   int getType() const
+   { 
+      return type;
+   }
+
+   vbyte ToArray() const
+   {
+      if(type == 0)
+      {
+      // NULL node (count is zero)
+      return std::move(vbyte(1, 0x00));
+      }
+
+      return std::move(vbyte(0)); // unknown (empty node)
    }
 
    string ToString() const
    {
       stringstream ss;
-      ss << "MTNode{(this=" << this << "); " << Hash.ToString() << " ; left=" << LeftChild << " right=" << RightChild << "}";
+      ss << "MPTNode{(this=" << this << "); " << hash.ToString() << " ; type=" << getType() << ";";
+      if(type==0)
+         ss << "NULL";
+      ss << "}";
       return ss.str();
    }
 
-   static void PrintMTArray(const std::vector<MerkleTreeNode*>& L)
+   static vbyte CompactEncode(const vnibble nibbles)
+   {
+      vnibble v(nibbles);
+      bool term = v[v.size()-1] == 16; // finishing in 0x10 ? after '0Xf'
+      if(term)
+         v.pop_back(); // discard terminator
+      bool oddlen = v.size() % 2 == 1; // is odd ?
+      nibble flag = 2 * term + oddlen; // 0, 1, 2 or 3
+      if(oddlen) // odd (just insert flag)
+        v.insert(v.begin(), flag);
+      else // even (padd with extra zero)
+      {
+         vnibble adding = {flag, 0X0};
+        v.insert(v.begin(),adding.begin(), adding.end());
+      }
+    
+      return vhelper::ToBytes(v);
+   }
+
+   static void PrintMPTNodes(const std::vector<MPTNode*>& L)
    {
       stringstream ss;
-      ss << "MPTList[";
+      ss << "MPTNodes[";
       for (unsigned i = 0; i < L.size(); i++)
          ss << L[i]->ToString() << "\t";
       ss << "]";
@@ -62,6 +124,7 @@ public:
    }
 };
 
+/*
 class MerklePatriciaTrie
 {
 private:
@@ -174,41 +237,9 @@ public:
       return hashes;
    }
 
-   // TODO: TRIM?
-
-   /*
-      public void Trim(BitArray flags)
-      {
-           flags = new BitArray(flags);
-           flags.Length = 1 << (Depth - 1);
-           Trim(root, 0, Depth, flags);
-      }
-
-      private static void Trim(MerkleTreeNode node, int index, int depth, BitArray flags)
-      {
-           if (depth == 1) return;
-           if (node.LeftChild == null) return; // if left is null, then right must be null
-           if (depth == 2)
-           {
-               if (!flags.Get(index * 2) && !flags.Get(index * 2 + 1))
-               {
-                   node.LeftChild = null;
-                   node.RightChild = null;
-               }
-           }
-           else
-           {
-               Trim(node.LeftChild, index * 2, depth - 1, flags);
-               Trim(node.RightChild, index * 2 + 1, depth - 1, flags);
-               if (node.LeftChild.LeftChild == null && node.RightChild.RightChild == null)
-               {
-                   node.LeftChild = null;
-                   node.RightChild = null;
-               }
-           }
-        }
-   */
 };
+*/
+
 }
 
 #endif

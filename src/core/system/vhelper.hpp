@@ -119,7 +119,6 @@ public:
       return ToHexString(vbyte(1, b));
    }
 
-
    // vector: {9, a, b, f, d} => '9abfd' (it may be odd)
    static string ToHexString(const vnibble& v)
    {
@@ -135,6 +134,15 @@ public:
       return ToHexString(vnibble(1, b));
    }
 
+   static vbyte ToBytes(const vnibble& nibbles)
+   {
+      if (nibbles.size() % 2 == 1)
+         NEOPT_EXCEPTION("Cannot convert odd nibbles to bytes");
+      vbyte bytes(nibbles.size() / 2);
+      for (unsigned i = 0; i < bytes.size(); i++)
+         bytes[i] = 16 * byte(nibbles[2 * i]) + byte(nibbles[2 * i + 1]);
+      return std::move(bytes);
+   }
 
    static int GetVarSize(const vbyte& v)
    {
