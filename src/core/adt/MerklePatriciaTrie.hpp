@@ -23,49 +23,55 @@ enum MPTType
    MPT_extension = 0x20
 };
 
-// TODO: configure if hash will be 160 or 256 (perhaps space matters here)
 class MPTNode
 {
    private:
-   UInt256 hash;
    MPTType type;
    std::vector<vbyte> contents;
+   std::function<vbyte(const vbyte&)> fhash;
+   // = [](const UInt256& p) -> MerkleTreeNode* { return new MerkleTreeNode(p); };
+   // Crypto::Default().Hash256(this->ToArray());
+      //this->root = Build(hashes.Select(p => new MerkleTreeNode { Hash = p }).ToArray());
+   //   this->root = Build(vhelper::Select(hashes, sel));
+      
+   //= [](const UInt256& p) -> MerkleTreeNode* { return new MerkleTreeNode(p); };
 
 public:
+   vbyte hash; // usually UInt256 size, but may not be that...
 
    // general constructor
-   MPTNode(MPTType _type, const std::vector<vbyte>& _contents) :
-      type{_type}, contents(_contents)
+   MPTNode(MPTType _type, const std::vector<vbyte>& _contents, std::function<vbyte(const vbyte&)> _fhash) :
+      type{_type}, contents(_contents), fhash{_fhash}
    {
-      hash = UInt256(Crypto::Default().Hash256(this->ToArray()));
+      hash = fhash(this->ToArray());
    }
 
    // NULL node
-   MPTNode() :
-      type{MPT_NULL}
+   MPTNode(std::function<vbyte(const vbyte&)> _fhash) :
+      type{MPT_NULL}, fhash{_fhash}
    {
-      hash = UInt256(Crypto::Default().Hash256(this->ToArray()));
+      hash = fhash(this->ToArray());
    }
 
    // branch node
-   MPTNode(vector<vbyte> branches, vbyte value) : 
-      type{MPT_branch}
+   MPTNode(vector<vbyte> branches, vbyte value, std::function<vbyte(const vbyte&)> _fhash) :
+      type{MPT_branch}, fhash{_fhash}
    {
-      hash = UInt256(Crypto::Default().Hash256(this->ToArray()));
+      hash = fhash(this->ToArray());
    }
 
    // leaf node
-   MPTNode(vbyte encodedPath, vbyte value) : 
-      type{MPT_leaf}
+   MPTNode(vbyte encodedPath, vbyte value, std::function<vbyte(const vbyte&)> _fhash) :
+      type{MPT_leaf}, fhash{_fhash}
    {
-      hash = UInt256(Crypto::Default().Hash256(this->ToArray()));
+      hash = fhash(this->ToArray());
    }
 
    // extension node
-   MPTNode(vbyte encodedPath, UInt256 key) : 
-      type{MPT_extension}
+   MPTNode(vbyte encodedPath, UInt256 key, std::function<vbyte(const vbyte&)> _fhash) :
+      type{MPT_extension}, fhash{_fhash}
    {
-      hash = UInt256(Crypto::Default().Hash256(this->ToArray()));
+      hash = fhash(this->ToArray());
    }
 
    int getType() const
@@ -87,7 +93,7 @@ public:
    string ToString() const
    {
       stringstream ss;
-      ss << "MPTNode{(this=" << this << "); " << hash.ToString() << " ; type=" << getType() << ";";
+      ss << "MPTNode{(this=" << this << "); hash=" << hash << " ; type=" << getType() << ";";
       if(type==0)
          ss << "NULL";
       ss << "}";
