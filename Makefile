@@ -22,10 +22,13 @@ test-coverage:
 run:
 	./bin/neopt-cli
 
-vendor: openssl clang gtests
+vendor: openssl cryptopp clang gtests
 
 openssl:
 	cd src/core && ./linux_get_build_openssl.sh
+
+cryptopp:
+	cd src/core && ./linux_get_build_cryptopp.sh
 
 clang:
 	sudo apt install clang clang-format clang-tidy
