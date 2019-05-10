@@ -25,9 +25,11 @@ run:
 vendor: openssl cryptopp clang gtests
 
 openssl:
+	cd src/core && chmod +x linux_get_build_openssl.sh
 	cd src/core && ./linux_get_build_openssl.sh
 
 cryptopp:
+	cd src/core && chmod +x linux_get_build_cryptopp.sh
 	cd src/core && ./linux_get_build_cryptopp.sh
 
 clang:
