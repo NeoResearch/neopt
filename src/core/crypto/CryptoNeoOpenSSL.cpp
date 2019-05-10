@@ -8,6 +8,12 @@
 #include <openssl/ripemd.h>
 #include <openssl/sha.h>
 
+#include <openssl/evp.h> // sha-3 (unknown if keccak or post-keccak / NIST SHA-3)
+
+#include <crypto/cryptopp/keccak.h> // sha-3 keccak (not NIST SHA-3)
+
+#include<iostream>
+
 using namespace neopt;
 
 // first thing, declare private static variable _crypto
@@ -39,6 +45,13 @@ void
 lComputeHash256(const byte* data, int32 length, byte* output);
 void
 lComputeRIPEMD160(const byte* data, int32 length, byte* output);
+
+void
+lComputeSHA3(const unsigned char *message, size_t message_len, unsigned char **digest, unsigned int *digest_len);
+
+void
+lComputeKeccak(const unsigned char *message, size_t message_len, vbyte& digest);
+
 
 // -1=ERROR , 0= False , 1=True
 static int16
@@ -226,6 +239,23 @@ Crypto::Sha256(const vbyte& message) const
    vbyte voutput(SHA256_LENGTH);
    lComputeSHA256(message.data(), message.size(), voutput.data());
    return voutput;
+}
+
+vbyte Crypto::Sha3NIST(const vbyte& message) const
+{
+   //lComputeSHA3(message.data(), message.size(), voutput.data());
+   unsigned char *digest;
+   unsigned int digest_len;
+   lComputeSHA3(message.data(), message.size(), &digest, &digest_len);
+   vbyte voutput(digest, digest+digest_len);
+   return voutput;
+}
+
+vbyte Crypto::Sha3Keccak(const vbyte& message) const
+{
+   vbyte digest;
+   lComputeKeccak(message.data(), message.size(), digest);
+   return digest;
 }
 
 vbyte
@@ -633,6 +663,58 @@ lComputeSHA256(const byte* data, int32 length, byte* output)
    SHA256_Final(output, &c);
    OPENSSL_cleanse(&c, sizeof(c));
 }
+
+void handleErrors()
+{
+   NEOPT_EXCEPTION("ERROR IN SHA3!");
+}
+
+void
+lComputeSHA3(const unsigned char *message, size_t message_len, unsigned char **digest, unsigned int *digest_len)
+{
+  	EVP_MD_CTX *mdctx;
+
+	if((mdctx = EVP_MD_CTX_create()) == NULL)
+		handleErrors();
+
+	if(1 != EVP_DigestInit_ex(mdctx, EVP_sha256(), NULL))
+		handleErrors();
+
+	if(1 != EVP_DigestUpdate(mdctx, message, message_len))
+		handleErrors();
+
+	if((*digest = (unsigned char *)OPENSSL_malloc(EVP_MD_size(EVP_sha3_256()))) == NULL)
+		handleErrors();
+
+	if(1 != EVP_DigestFinal_ex(mdctx, *digest, digest_len))
+		handleErrors();
+
+	EVP_MD_CTX_destroy(mdctx);
+}
+
+// "official" keccak via cryptopp
+void
+lComputeKeccak(const unsigned char *message, size_t message_len, vbyte& digest)
+{
+   std::cout << "Creating Keccak" << std::endl;
+  	 CryptoPP::Keccak_256 hash;	
+    std::cout << "Update hash Keccak" << std::endl;
+    hash.Update(message, message_len);
+
+    digest.resize(hash.DigestSize());
+    hash.Final((byte*)&digest[0]);
+    /*
+    bool verified = hash.Verify((const byte*)digest.data());
+
+if (verified == true)
+    std::cout << "Verified hash over message" << std::endl;
+else
+    std::cout << "Failed to verify hash over message" << std::endl;
+    */
+
+    std::cout << "Finished Keccak" << std::endl;
+}
+
 
 void
 lComputeSHA1(byte* data, int32 length, byte* output)

@@ -4,6 +4,7 @@
 #include <crypto/Crypto.h>
 #include <crypto/ICrypto.h>
 //#include<system/vhelper.hpp>
+#include<system/shelper.h>
 
 using namespace neopt;
 
@@ -52,3 +53,19 @@ TEST(CryptoTest, Test_SignData_EmptyMessage)
    // test if signature matches public key for message
    EXPECT_EQ(crypto.VerifySignature(msg, sig, mypubkey), 1);
 }
+
+TEST(CryptoTest, Test_Keccak_Empty)
+{
+   Crypto crypto;
+   vbyte v(0); // '': empty byte array
+   EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"));
+}
+
+
+TEST(CryptoTest, Test_Keccak_UInt160)
+{
+   Crypto crypto;
+   vbyte v(20, 0x00);
+   EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("5380c7b7ae81a58eb98d9c78de4a1fd7fd9535fc953ed2be602daaa41767312a"));
+}
+

@@ -42,10 +42,8 @@ public:
    // SHA256
    virtual vbyte Sha256(const vbyte& message) const = 0;
 
-   virtual vbyte RIPEMD160(const vbyte& message) const = 0;
-
    // RIPEMD160
-   //virtual vbyte RIPEMD160(const vbyte& message) = 0;
+   virtual vbyte RIPEMD160(const vbyte& message) const = 0;
 
    // -----------------
    // proposed methods

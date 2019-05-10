@@ -6,7 +6,7 @@
 using namespace std;
 using namespace neopt;
 
-TEST(MerklePatriciaTrieTest, Test_MPT_CompactEncode)
+TEST(MerklePatriciaTrieTests, Test_MPT_CompactEncode)
 {
    // even-size: not terminator on end (0x10)
    vnibble path0  = {0x0, 0X1, 0X2, 0X3, 0X4, 0X5};
