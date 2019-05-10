@@ -55,6 +55,15 @@ public:
       }
       return bytes;
    }
+
+   static string ASCIIToHexString(const string& chars)
+   {
+      stringstream ss;
+      for (unsigned i = 0; i < chars.size(); i++)
+         ss << std::setfill('0') << std::setw(2) << std::hex << int((byte)chars[i]);
+      return ss.str();
+   }
+
 };
 
 // TODO: define all operators here that are necessary

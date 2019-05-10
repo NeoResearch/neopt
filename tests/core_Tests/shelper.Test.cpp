@@ -26,3 +26,13 @@ TEST(shelperTests, Test_shelper_SubstringFrom0x)
 {
    EXPECT_EQ(shelper::Substring("0xabcd", 2), "abcd");
 }
+
+TEST(shelperTests, Test_shelper_CharsToHexString_abc)
+{
+   EXPECT_EQ(shelper::ASCIIToHexString("abc"), "616263");
+}
+
+TEST(shelperTests, Test_shelper_ASCIIToHexString_hello)
+{
+   EXPECT_EQ(shelper::ASCIIToHexString("hello"), "68656c6c6f");
+}
