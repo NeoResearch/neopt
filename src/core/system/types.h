@@ -15,6 +15,30 @@ namespace neopt {
 // TODO: migrate to C++17 byte type
 typedef unsigned char byte;
 
+// half byte: nibble
+//typedef byte nibble;
+//typedef uint_least8_t nibble;
+struct nibble
+{
+   nibble(byte b)
+     : v{ b }
+   {
+   }
+
+   operator byte() const
+   {
+      return (byte)v;
+   }
+
+   operator int() const
+   {
+      return (int)v;
+   }
+
+   unsigned char v;
+   //unsigned char v : 4; // better not mess with bits and unaligned ints...
+};
+
 // signed short int
 typedef short int16;
 
@@ -30,8 +54,15 @@ typedef unsigned int uint32;
 // unsigned long
 typedef unsigned long ulong;
 
+// =================
+// array definitions
+// -----------------
+
 // byte array definition
 typedef std::vector<byte> vbyte;
+
+// nibble array definition
+typedef std::vector<nibble> vnibble;
 
 #define NEOPT_EXCEPTION(str)                          \
    {                                                  \

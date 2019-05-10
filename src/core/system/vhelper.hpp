@@ -119,6 +119,23 @@ public:
       return ToHexString(vbyte(1, b));
    }
 
+
+   // vector: {9, a, b, f, d} => '9abfd' (it may be odd)
+   static string ToHexString(const vnibble& v)
+   {
+      stringstream ss;
+      for (unsigned i = 0; i < v.size(); i++)
+         ss << std::setw(1) << std::hex << (int)v[i];
+      return ss.str();
+   }
+
+   // 0xa => 'a'
+   static string ToHexString(const nibble& b)
+   {
+      return ToHexString(vnibble(1, b));
+   }
+
+
    static int GetVarSize(const vbyte& v)
    {
       // TODO: implement

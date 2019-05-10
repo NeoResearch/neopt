@@ -14,6 +14,18 @@ neopt::operator<<(ostream& os, const vbyte& obj)
    return os << ss.str();
 }
 
+ostream&
+neopt::operator<<(ostream& os, const vnibble& obj)
+{
+   //'0X' prefix here does not require explicit zeroes, so every value is a nibble..
+   //'0X may be odd... e.g.: '0Xabc'
+   stringstream ss; // do not dirty 'os' with specific formatting
+   ss << "[" << obj.size() << "]0X";
+   if (obj.size() > 0)
+      ss << vhelper::ToHexString(obj);
+   return os << ss.str();
+}
+
 // how to print this?
 /*
 ostream& operator<<(ostream &os, const decimal::decimal64& obj)

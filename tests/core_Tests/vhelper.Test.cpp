@@ -148,3 +148,21 @@ TEST(vhelperTests, Test_vhelper_Skip10)
    vbyte param1 = { 0x01, 0x02, 0x03 };
    EXPECT_EQ(vhelper::Skip(param1, 10), vbyte(0));
 }
+
+TEST(vhelperTests, Test_ToHexString_nibble_0Xa23)
+{
+   vnibble param = { 0Xa, 0X2, 0X3};
+   string s = vhelper::ToHexString(param);
+
+   EXPECT_EQ(s, "a23");
+}
+
+TEST(vhelperTests, Test_nibble_byte_size)
+{
+   nibble n = 0Xa; // half byte does not exist
+   byte b   = 0x0a;
+
+   EXPECT_EQ(sizeof(nibble), 1);
+   EXPECT_EQ(sizeof(byte), 1);
+   EXPECT_EQ((byte)n, b);
+}

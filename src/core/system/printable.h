@@ -20,6 +20,9 @@ namespace neopt {
 std::ostream&
 operator<<(std::ostream& os, const vbyte& obj);
 
+std::ostream&
+operator<<(std::ostream& os, const vnibble& obj);
+
 // how to print this?
 //std::ostream& operator<<(std::ostream &os, const decimal::decimal64 &obj);
 

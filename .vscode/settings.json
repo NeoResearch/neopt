@@ -22,7 +22,7 @@
         ]
     },
     "[cpp]": {
-        "editor.tabSize" : 3,
+        "editor.tabSize": 3,
         "editor.detectIndentation": false
     },
     "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle : Mozilla , ColumnLimit : 0, IndentWidth: 3, AccessModifierOffset: -3}",
@@ -31,8 +31,9 @@
         "Debug Core Tests"
     ],
     "C_Cpp.loggingLevel": "Warning",
-    "C_Cpp.intelliSenseEngine": "Tag Parser",
+    "C_Cpp.intelliSenseEngine": "Default",
     "files.associations": {
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "iosfwd": "cpp"
     }
 }

@@ -5,6 +5,7 @@
 #include "core_Tests/BinaryWriter.Test.cpp"
 #include "core_Tests/CryptoNeoOpenSSL.Test.cpp"
 #include "core_Tests/ICrypto.Test.cpp"
+//#include "core_Tests/MerklePatriciaTrie.Test.cpp"
 #include "core_Tests/MerkleTree.Test.cpp"
 #include "core_Tests/StringReader.Test.cpp"
 #include "core_Tests/UInt160.Test.cpp"
