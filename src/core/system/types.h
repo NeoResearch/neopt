@@ -20,6 +20,11 @@ typedef unsigned char byte;
 //typedef uint_least8_t nibble;
 struct nibble
 {
+   nibble()
+     : v{ 0X0 }
+   {
+   }
+
    nibble(byte b)
      : v{ b }
    {
@@ -30,10 +35,12 @@ struct nibble
       return (byte)v;
    }
 
+   /*
    operator int() const
    {
       return (int)v;
    }
+   */
 
    unsigned char v;
    //unsigned char v : 4; // better not mess with bits and unaligned ints...

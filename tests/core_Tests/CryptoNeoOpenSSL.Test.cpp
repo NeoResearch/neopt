@@ -54,32 +54,3 @@ TEST(CryptoTest, Test_SignData_EmptyMessage)
    EXPECT_EQ(crypto.VerifySignature(msg, sig, mypubkey), 1);
 }
 
-TEST(CryptoTest, Test_Keccak_Empty)
-{
-   Crypto crypto;
-   vbyte v(0); // '': empty byte array
-   EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"));
-}
-
-
-TEST(CryptoTest, Test_Keccak_UInt160_Zero)
-{
-   Crypto crypto;
-   vbyte v(20, 0x00);
-   EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("5380c7b7ae81a58eb98d9c78de4a1fd7fd9535fc953ed2be602daaa41767312a"));
-}
-
-TEST(CryptoTest, Test_Keccak_Empty_List_RLP)
-{
-   Crypto crypto;
-   vbyte v(1, 0xc0); // empty list RLP encoding
-   EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347"));
-}
-
-TEST(CryptoTest, Test_Keccak_hello)
-{
-   Crypto crypto;
-   vbyte v = shelper::HexToBytes(shelper::ASCIIToHexString("hello"));
-   EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8"));
-}
-

@@ -134,7 +134,7 @@ public:
       return ToHexString(vnibble(1, b));
    }
 
-   static vbyte ToBytes(const vnibble& nibbles)
+   static vbyte NibblesToBytes(const vnibble& nibbles)
    {
       if (nibbles.size() % 2 == 1)
          NEOPT_EXCEPTION("Cannot convert odd nibbles to bytes");
@@ -142,6 +142,16 @@ public:
       for (unsigned i = 0; i < bytes.size(); i++)
          bytes[i] = 16 * byte(nibbles[2 * i]) + byte(nibbles[2 * i + 1]);
       return std::move(bytes);
+   }
+
+   static vnibble BytesToNibbles(const vbyte& bytes)
+   {
+      vnibble nibbles(bytes.size() * 2);
+      for (unsigned i = 0; i < bytes.size(); i++) {
+         nibbles[2 * i] = bytes[i] / 16;
+         nibbles[2 * i + 1] = bytes[i] % 16;
+      }
+      return std::move(nibbles);
    }
 
    static int GetVarSize(const vbyte& v)

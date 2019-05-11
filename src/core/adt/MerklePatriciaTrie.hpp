@@ -116,7 +116,7 @@ public:
         v.insert(v.begin(),adding.begin(), adding.end());
       }
     
-      return vhelper::ToBytes(v);
+      return vhelper::NibblesToBytes(v);
    }
 
    static void PrintMPTNodes(const std::vector<MPTNode*>& L)

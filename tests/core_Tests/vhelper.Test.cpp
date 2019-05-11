@@ -151,7 +151,7 @@ TEST(vhelperTests, Test_vhelper_Skip10)
 
 TEST(vhelperTests, Test_ToHexString_nibble_0Xa23)
 {
-   vnibble param = { 0Xa, 0X2, 0X3};
+   vnibble param = { 0Xa, 0X2, 0X3 };
    string s = vhelper::ToHexString(param);
 
    EXPECT_EQ(s, "a23");
@@ -160,21 +160,39 @@ TEST(vhelperTests, Test_ToHexString_nibble_0Xa23)
 TEST(vhelperTests, Test_nibble_byte_size)
 {
    nibble n = 0Xa; // half byte does not actually exists
-   byte b   = 0x0a;
+   byte b = 0x0a;
 
    EXPECT_EQ(sizeof(nibble), 1);
    EXPECT_EQ(sizeof(byte), 1);
    EXPECT_EQ((byte)n, b); // cast is needed
 }
 
-TEST(vhelperTests, Test_nibble_ToBytes)
+TEST(vhelperTests, Test_nibble_NibblesToBytes)
 {
    // TODO: rename type... vbyte to bytes?
-   vnibble nibbles = { 0Xa, 0X2, 0X3, 0X4};
-   vbyte bytes = vhelper::ToBytes(nibbles);
+   vnibble nibbles = { 0Xa, 0X2, 0X3, 0X4 };
+   vbyte bytes = vhelper::NibblesToBytes(nibbles);
 
    EXPECT_EQ(nibbles.size(), 4);
    EXPECT_EQ(bytes.size(), 2);
    EXPECT_EQ(bytes[0], 0xa2);
    EXPECT_EQ(bytes[1], 0x34);
+}
+
+TEST(vhelperTests, Test_nibble_NibblesToBytesToNibbles)
+{
+   vnibble nibbles = { 0Xa, 0X2, 0X3, 0X4 };
+   vbyte bytes = vhelper::NibblesToBytes(nibbles);
+   vnibble nibbles2 = vhelper::BytesToNibbles(bytes);
+
+   EXPECT_EQ(nibbles, nibbles2);
+}
+
+TEST(vhelperTests, Test_nibble_BytesToNibblesToBytes)
+{
+   vbyte bytes = { 0x01, 0x02, 0x03 };
+   vnibble nibbles = vhelper::BytesToNibbles(bytes);
+   vbyte bytes2 = vhelper::NibblesToBytes(nibbles);
+
+   EXPECT_EQ(bytes, bytes2);
 }
