@@ -69,6 +69,7 @@ TEST(MerklePatriciaTrieTests, Test_Keccak_hello)
 {
    Crypto crypto;
    vbyte v = shelper::HexToBytes(shelper::ASCIIToHexString("hello"));
+   EXPECT_EQ(v, shelper::HexToBytes("68656c6c6f"));
    EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8"));
 }
 
@@ -79,4 +80,42 @@ TEST(MerklePatriciaTrieTests, Test_MPT_CompactEncode_Leaf_0x010203)
    vnibble path = vhelper::BytesToNibbles(content);
    path.push_back(0x10); // terminator for leaves
    EXPECT_EQ(MPTNode::CompactEncode(path), vbyte({0x20, 0x01, 0x02, 0x03}));
+}
+
+TEST(MerklePatriciaTrieTests, Test_MPT_CompactEncode_Keccak_RLP_Root_Leaf_0x010203_array_hello)
+{
+   // LeafNode: [ '0x20010102', '0xc68568656c6c6f' ]
+   // path is encoded
+   // key represents an encoded array ['hello'] using RLP
+   // RLP: cd842001010287c68568656c6c6f => 4a5b19d151e796482b08a1e020f1f7ef5ea7240c0171fd629598fee612892a7b (sha3 NIST?)
+   //              or :                    15da97c42b7ed2e1c0c8dab6a6d7e3d9dc0a75580bbc4f1f29c33996d1415dcc (sha3 keccak?)
+   // cd (array with 13 size)
+   // 84 (4 bytes)
+   // encodedPath -> "0x20010102"
+   // 87 (7 bytes)
+   // key -> c68568656c6c6f -> "['hello']" (in RLP)
+   //                             hello -> 68656c6c6f
+
+   vbyte content = {0x01, 0x01, 0x02};
+   vnibble path = vhelper::BytesToNibbles(content);
+   path.push_back(0x10); // terminator for leaves
+   EXPECT_EQ(MPTNode::CompactEncode(path), vbyte({0x20, 0x01, 0x01, 0x02}));
+
+   Crypto crypto;
+   vbyte rlp(shelper::HexToBytes("cd842001010287c68568656c6c6f"));
+   EXPECT_EQ(crypto.Sha3Keccak(rlp), shelper::HexToBytes("15da97c42b7ed2e1c0c8dab6a6d7e3d9dc0a75580bbc4f1f29c33996d1415dcc"));
+}
+
+TEST(MerklePatriciaTrieTests, Test_MPT_CompactEncode_Keccak_RLP_Root_Leaf_0x010203_array_hellothere)
+{
+   // LeafNode: [ '0x20010102', '0xcb8a68656c6c6f7468657265' ]
+   // path is encoded
+   // key represents an encoded array ['hellothere'] using RLP
+   // RLP: d284200101028ccb8a68656c6c6f7468657265 => 05e13d8be09601998499c89846ec5f3101a1ca09373a5f0b74021261af85d396 (sha3 keccak?)
+   // encodedPath -> "0x20010102"
+   // key -> cb8a68656c6c6f7468657265 -> "['hellothere']" (in RLP)
+
+   Crypto crypto;
+   vbyte rlp(shelper::HexToBytes("d284200101028ccb8a68656c6c6f7468657265"));
+   EXPECT_EQ(crypto.Sha3Keccak(rlp), shelper::HexToBytes("05e13d8be09601998499c89846ec5f3101a1ca09373a5f0b74021261af85d396"));
 }
