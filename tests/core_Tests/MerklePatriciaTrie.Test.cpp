@@ -2,6 +2,7 @@
 
 // core includes
 #include <adt/MerklePatriciaTrie.hpp>
+#include <crypto/CryptoExtra.h>
 
 using namespace std;
 using namespace neopt;
@@ -40,7 +41,7 @@ TEST(MerklePatriciaTrieTests, Test_MPT_SimpleHashNull_Hash256)
 
 TEST(MerklePatriciaTrieTests, Test_Keccak_Empty)
 {
-   Crypto crypto;
+   CryptoExtra crypto;
    vbyte v(0); // '': empty byte array
    EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"));
 }
@@ -48,21 +49,21 @@ TEST(MerklePatriciaTrieTests, Test_Keccak_Empty)
 
 TEST(MerklePatriciaTrieTests, Test_Keccak_UInt160_Zero)
 {
-   Crypto crypto;
+   CryptoExtra crypto;
    vbyte v(20, 0x00);
    EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("5380c7b7ae81a58eb98d9c78de4a1fd7fd9535fc953ed2be602daaa41767312a"));
 }
 
 TEST(MerklePatriciaTrieTests, Test_Keccak_Empty_List_RLP)
 {
-   Crypto crypto;
+   CryptoExtra crypto;
    vbyte v(1, 0xc0); // empty list RLP encoding
    EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347"));
 }
 
 TEST(MerklePatriciaTrieTests, Test_Keccak_hello)
 {
-   Crypto crypto;
+   CryptoExtra crypto;
    vbyte v = shelper::HexToBytes(shelper::ASCIIToHexString("hello"));
    EXPECT_EQ(v, shelper::HexToBytes("68656c6c6f"));
    EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8"));
@@ -96,7 +97,7 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Leaf_0x010203_array_hello)
    path.push_back(0x10); // terminator for leaves
    EXPECT_EQ(MPTNode::CompactEncode(path), vbyte({0x20, 0x01, 0x01, 0x02}));
 
-   Crypto crypto;
+   CryptoExtra crypto;
    vbyte rlp(shelper::HexToBytes("cd842001010287c68568656c6c6f"));
    EXPECT_EQ(crypto.Sha3Keccak(rlp), shelper::HexToBytes("15da97c42b7ed2e1c0c8dab6a6d7e3d9dc0a75580bbc4f1f29c33996d1415dcc"));
 }
@@ -110,7 +111,7 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Leaf_0x010203_array_hellothere
    // encodedPath -> "0x20010102"
    // key -> cb8a68656c6c6f7468657265 -> "['hellothere']" (in RLP)
 
-   Crypto crypto;
+   CryptoExtra crypto;
    vbyte rlp(shelper::HexToBytes("d284200101028ccb8a68656c6c6f7468657265"));
    EXPECT_EQ(crypto.Sha3Keccak(rlp), shelper::HexToBytes("05e13d8be09601998499c89846ec5f3101a1ca09373a5f0b74021261af85d396"));
 }
@@ -124,7 +125,7 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Extension_0x101010_hash)
    // serialization RLP for this node is: e583101010a02201ab8375156f27f7542d68de944b2fbaa35b836c94e7b38acf0a0a74bbefd9
    // hash of this node is: b5e187f15f1a250e51a78561e29ccfc0a7f48e06d19ce02f98dd61159e81f71d
 
-   Crypto crypto;
+   CryptoExtra crypto;
    vbyte rlp(shelper::HexToBytes("e583101010a02201ab8375156f27f7542d68de944b2fbaa35b836c94e7b38acf0a0a74bbefd9"));
    EXPECT_EQ(crypto.Sha3Keccak(rlp), shelper::HexToBytes("b5e187f15f1a250e51a78561e29ccfc0a7f48e06d19ce02f98dd61159e81f71d"));
 }
@@ -137,7 +138,7 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Branch_2_3)
    // serialization RLP for this node is: e88080c92087c68568656c6c6fce208ccb8a68656c6c6f746865726580808080808080808080808080
    // hash of this node is: 2201ab8375156f27f7542d68de944b2fbaa35b836c94e7b38acf0a0a74bbefd9
 
-   Crypto crypto;
+   CryptoExtra crypto;
    vbyte rlp(shelper::HexToBytes("e88080c92087c68568656c6c6fce208ccb8a68656c6c6f746865726580808080808080808080808080"));
    EXPECT_EQ(crypto.Sha3Keccak(rlp), shelper::HexToBytes("2201ab8375156f27f7542d68de944b2fbaa35b836c94e7b38acf0a0a74bbefd9"));
 }
@@ -151,7 +152,7 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Branch_0_17)
    // serialization RLP for this node is: e6c93287c68568656c6c6f8080808080808080808080808080808ccb8a68656c6c6f7468657265
    // hash of this node is: 53a8d7b5a9d7054a5ac4c68f463408bba692537a03b18f53cdfa0fc15043e9b6
 
-   Crypto crypto;
+   CryptoExtra crypto;
    vbyte rlp(shelper::HexToBytes("e6c93287c68568656c6c6f8080808080808080808080808080808ccb8a68656c6c6f7468657265"));
    EXPECT_EQ(crypto.Sha3Keccak(rlp), shelper::HexToBytes("53a8d7b5a9d7054a5ac4c68f463408bba692537a03b18f53cdfa0fc15043e9b6"));
 
@@ -173,7 +174,7 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Branch_5_17)
    // serialization RLP for this node is: e68080808080ce378ccb8a68656c6c6f74686572658080808080808080808087c68568656c6c6f
    // hash of this node is: 59b8815f083017b6d2d53804bd17b72e1b8b122a57ead88253ce301d6dc602f8
 
-   Crypto crypto;
+   CryptoExtra crypto;
    vbyte rlp(shelper::HexToBytes("e68080808080ce378ccb8a68656c6c6f74686572658080808080808080808087c68568656c6c6f"));
    EXPECT_EQ(crypto.Sha3Keccak(rlp), shelper::HexToBytes("59b8815f083017b6d2d53804bd17b72e1b8b122a57ead88253ce301d6dc602f8"));
 
@@ -195,7 +196,7 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Branch_jimbo)
    // serialization RLP for this node is: f8388080808080a0002615b7c405f6f346329a284e8fb248e735cffa89432daba29e56e414df6c308080808080808080808087c68568656c6c6f
    // hash of this node is: d52faf1fde4f21753e2633685f2bac3ff1f32ab72933ece9d59f32ca6f63956d
 
-   Crypto crypto;
+   CryptoExtra crypto;
    vbyte rlp(shelper::HexToBytes("f8388080808080a0002615b7c405f6f346329a284e8fb248e735cffa89432daba29e56e414df6c308080808080808080808087c68568656c6c6f"));
    EXPECT_EQ(crypto.Sha3Keccak(rlp), shelper::HexToBytes("d52faf1fde4f21753e2633685f2bac3ff1f32ab72933ece9d59f32ca6f63956d"));
 

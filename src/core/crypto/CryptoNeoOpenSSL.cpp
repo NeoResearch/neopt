@@ -10,8 +10,6 @@
 
 #include <openssl/evp.h> // sha-3 (unknown if keccak or post-keccak / NIST SHA-3)
 
-#include <crypto/cryptopp/keccak.h> // sha-3 keccak (not NIST SHA-3)
-
 #include<iostream>
 
 using namespace neopt;
@@ -47,7 +45,7 @@ void
 lComputeRIPEMD160(const byte* data, int32 length, byte* output);
 
 void
-lComputeSHA3(const unsigned char *message, size_t message_len, unsigned char **digest, unsigned int *digest_len);
+lComputeSHA3OpenSSL(const unsigned char *message, size_t message_len, unsigned char **digest, unsigned int *digest_len);
 
 void
 lComputeKeccak(const unsigned char *message, size_t message_len, vbyte& digest);
@@ -246,17 +244,11 @@ vbyte Crypto::Sha3NIST(const vbyte& message) const
    //lComputeSHA3(message.data(), message.size(), voutput.data());
    unsigned char *digest;
    unsigned int digest_len;
-   lComputeSHA3(message.data(), message.size(), &digest, &digest_len);
+   lComputeSHA3OpenSSL(message.data(), message.size(), &digest, &digest_len);
    vbyte voutput(digest, digest+digest_len);
    return voutput;
 }
 
-vbyte Crypto::Sha3Keccak(const vbyte& message) const
-{
-   vbyte digest;
-   lComputeKeccak(message.data(), message.size(), digest);
-   return digest;
-}
 
 vbyte
 Crypto::RIPEMD160(const vbyte& message) const
@@ -670,7 +662,7 @@ void handleErrors()
 }
 
 void
-lComputeSHA3(const unsigned char *message, size_t message_len, unsigned char **digest, unsigned int *digest_len)
+lComputeSHA3OpenSSL(const unsigned char *message, size_t message_len, unsigned char **digest, unsigned int *digest_len)
 {
   	EVP_MD_CTX *mdctx;
 
@@ -692,28 +684,6 @@ lComputeSHA3(const unsigned char *message, size_t message_len, unsigned char **d
 	EVP_MD_CTX_destroy(mdctx);
 }
 
-// "official" keccak via cryptopp
-void
-lComputeKeccak(const unsigned char *message, size_t message_len, vbyte& digest)
-{
-   std::cout << "Creating Keccak" << std::endl;
-  	 CryptoPP::Keccak_256 hash;	
-    std::cout << "Update hash Keccak" << std::endl;
-    hash.Update(message, message_len);
-
-    digest.resize(hash.DigestSize());
-    hash.Final((byte*)&digest[0]);
-    /*
-    bool verified = hash.Verify((const byte*)digest.data());
-
-if (verified == true)
-    std::cout << "Verified hash over message" << std::endl;
-else
-    std::cout << "Failed to verify hash over message" << std::endl;
-    */
-
-    std::cout << "Finished Keccak" << std::endl;
-}
 
 
 void

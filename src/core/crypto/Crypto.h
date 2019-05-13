@@ -99,9 +99,6 @@ public:
 
    // Sha3 (optional) - implemented via openssl... keccak (older) or NIST SHA-3?
    vbyte Sha3NIST(const vbyte& message) const;
-
-   // Keccak "official" (not new NIST SHA-3)
-   vbyte Sha3Keccak(const vbyte& message) const;
 };
 
 }
