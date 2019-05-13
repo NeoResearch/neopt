@@ -109,6 +109,14 @@ TEST(vhelperTests, Test_ToHexString_nibble_0Xa23)
    EXPECT_EQ(s, "a23");
 }
 
+TEST(vhelperTests, Test_ToHexString_one_nibble_0Xa)
+{
+   nibble n = 0XA;
+   string s = vhelper::ToHexString(n);
+
+   EXPECT_EQ(s, "a");
+}
+
 TEST(vhelperTests, Test_nibble_byte_size)
 {
    nibble n = 0Xa; // half byte does not actually exists
