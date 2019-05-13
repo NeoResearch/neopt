@@ -216,3 +216,11 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Branch_jimbo)
    vbyte rlp3(shelper::HexToBytes("e68400010102a0d52faf1fde4f21753e2633685f2bac3ff1f32ab72933ece9d59f32ca6f63956d"));
    EXPECT_EQ(crypto.Sha3Keccak(rlp3), shelper::HexToBytes("fcb2e3098029e816b04d99d7e1bba22d7b77336f9fe8604f2adfb04bcf04a727"));
 }
+
+// neo -> 6e656f
+// neoresearch -> 6e656f7265736561726368
+// neopt -> 6e656f7074
+// neogas -> 6e656f676173
+// neoresearchcommunity -> 6e656f7265736561726368636f6d6d756e697479
+// community -> 636f6d6d756e697479
+
