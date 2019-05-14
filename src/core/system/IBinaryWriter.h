@@ -90,6 +90,15 @@ public:
       value.Serialize(*this);
    }
 
+   //  TODO: port to C# (only C++)
+   virtual void Write(const std::vector<vbyte>& value)
+   {
+      this->WriteVarInt(value.size());
+      for (unsigned i = 0; i < value.size(); i++) {
+         this->WriteVarBytes(value[i]);
+      }
+   }
+
    template<class T>
    static void WriteArray(IBinaryWriter& writer, const std::vector<T>& value)
    {
@@ -124,7 +133,6 @@ public:
       return -1; // number of bytes on buffer, or -1 if unknown
    }
 };
-
 }
 
 #endif

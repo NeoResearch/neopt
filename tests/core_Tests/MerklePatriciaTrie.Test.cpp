@@ -3,6 +3,8 @@
 // core includes
 #include <adt/MerklePatriciaTrie.hpp>
 #include <crypto/CryptoExtra.h>
+#include <system/BinaryReader.hpp>
+#include <system/BinaryWriter.hpp>
 
 using namespace std;
 using namespace neopt;
@@ -10,27 +12,26 @@ using namespace neopt;
 TEST(MerklePatriciaTrieTests, Test_MPT_CompactEncode)
 {
    // even-size: not terminator on end (0x10)
-   vnibble path0  = {0x0, 0X1, 0X2, 0X3, 0X4, 0X5};
-   EXPECT_EQ(MPTNode::CompactEncode(path0), vbyte({0x00, 0x01, 0x23, 0x45}));
+   vnibble path0 = { 0x0, 0X1, 0X2, 0X3, 0X4, 0X5 };
+   EXPECT_EQ(MPTNode::CompactEncode(path0), vbyte({ 0x00, 0x01, 0x23, 0x45 }));
 
    // odd-size: not terminator on end (0x10)
-   vnibble path1  = {0X1, 0X2, 0X3, 0X4, 0X5};
-   EXPECT_EQ(MPTNode::CompactEncode(path1), vbyte({0x11, 0x23, 0x45}));
+   vnibble path1 = { 0X1, 0X2, 0X3, 0X4, 0X5 };
+   EXPECT_EQ(MPTNode::CompactEncode(path1), vbyte({ 0x11, 0x23, 0x45 }));
 
    // even-size: terminator on end (0x10)
-   vnibble path2  = {0x0, 0xf, 0X1, 0Xc, 0Xb, 0X8, 0x10};
-   EXPECT_EQ(MPTNode::CompactEncode(path2), vbyte({0x20, 0x0f, 0x1c, 0xb8}));
+   vnibble path2 = { 0x0, 0xf, 0X1, 0Xc, 0Xb, 0X8, 0x10 };
+   EXPECT_EQ(MPTNode::CompactEncode(path2), vbyte({ 0x20, 0x0f, 0x1c, 0xb8 }));
 
    // odd-size: terminator on end (0x10)
-   vnibble path3  = {0xf, 0X1, 0Xc, 0Xb, 0X8, 0x10};
-   EXPECT_EQ(MPTNode::CompactEncode(path3), vbyte({0x3f, 0x1c, 0xb8}));
+   vnibble path3 = { 0xf, 0X1, 0Xc, 0Xb, 0X8, 0x10 };
+   EXPECT_EQ(MPTNode::CompactEncode(path3), vbyte({ 0x3f, 0x1c, 0xb8 }));
 }
-
 
 TEST(MerklePatriciaTrieTests, Test_MPT_SimpleHashNull_Hash256)
 {
    std::function<vbyte(const vbyte&)> fhash = [](const vbyte& p) -> vbyte { return Crypto::Default().Hash256(p); };
-   
+
    MPTNode node(fhash);
    std::cout << node.hash << std::endl;
    EXPECT_EQ(node.hash, shelper::HexToBytes("5df6e0e2761359d30a8275058e299fcc0381534545f55cf43e41983f5d4c9456")); // TODO: verify!
@@ -38,14 +39,12 @@ TEST(MerklePatriciaTrieTests, Test_MPT_SimpleHashNull_Hash256)
    //EXPECT_EQ(1,2);
 }
 
-
 TEST(MerklePatriciaTrieTests, Test_Keccak_Empty)
 {
    CryptoExtra crypto;
    vbyte v(0); // '': empty byte array
    EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"));
 }
-
 
 TEST(MerklePatriciaTrieTests, Test_Keccak_UInt160_Zero)
 {
@@ -69,13 +68,12 @@ TEST(MerklePatriciaTrieTests, Test_Keccak_hello)
    EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8"));
 }
 
-
 TEST(MerklePatriciaTrieTests, Test_MPT_CompactEncode_Leaf_0x010203)
 {
-   vbyte content = {0x01, 0x02, 0x03};
+   vbyte content = { 0x01, 0x02, 0x03 };
    vnibble path = vhelper::BytesToNibbles(content);
    path.push_back(0x10); // terminator for leaves
-   EXPECT_EQ(MPTNode::CompactEncode(path), vbyte({0x20, 0x01, 0x02, 0x03}));
+   EXPECT_EQ(MPTNode::CompactEncode(path), vbyte({ 0x20, 0x01, 0x02, 0x03 }));
 }
 
 TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Leaf_0x010203_array_hello)
@@ -92,10 +90,10 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Leaf_0x010203_array_hello)
    // key -> c68568656c6c6f -> "['hello']" (in RLP)
    //                             hello -> 68656c6c6f
 
-   vbyte content = {0x01, 0x01, 0x02};
+   vbyte content = { 0x01, 0x01, 0x02 };
    vnibble path = vhelper::BytesToNibbles(content);
    path.push_back(0x10); // terminator for leaves
-   EXPECT_EQ(MPTNode::CompactEncode(path), vbyte({0x20, 0x01, 0x01, 0x02}));
+   EXPECT_EQ(MPTNode::CompactEncode(path), vbyte({ 0x20, 0x01, 0x01, 0x02 }));
 
    CryptoExtra crypto;
    vbyte rlp(shelper::HexToBytes("cd842001010287c68568656c6c6f"));
@@ -115,7 +113,6 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Leaf_0x010203_array_hellothere
    vbyte rlp(shelper::HexToBytes("d284200101028ccb8a68656c6c6f7468657265"));
    EXPECT_EQ(crypto.Sha3Keccak(rlp), shelper::HexToBytes("05e13d8be09601998499c89846ec5f3101a1ca09373a5f0b74021261af85d396"));
 }
-
 
 TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Extension_0x101010_hash)
 {
@@ -217,10 +214,71 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Branch_jimbo)
    EXPECT_EQ(crypto.Sha3Keccak(rlp3), shelper::HexToBytes("fcb2e3098029e816b04d99d7e1bba22d7b77336f9fe8604f2adfb04bcf04a727"));
 }
 
+TEST(MerklePatriciaTrieTests, Test_MPT_Neo_Leaf_neo)
+{
+   // insert pair ("neo" => "smarteconomy")
+   // neo -> 6e656f / smarteconomy -> 736d61727465636f6e6f6d79
+   // Leaf Node: [ '0x206e656f', '0x736d61727465636f6e6f6d79' ]
+   // path is encoded (leaf-even 'neo')
+   // value represents a string 'smarteconomy'
+   // raw node is: 0204206e656f0c736d61727465636f6e6f6d79
+   // node hash is: cb787e430f8728a4b3019a8e71ce1f9db51e9051397221f217772055fcda0ba2
+   std::vector<vbyte> raw_node(2);
+   raw_node[0] = { 0x20, 0x6e, 0x65, 0x6f };                                     // 0x20 + 'neo' (leaf-even)
+   raw_node[1] = shelper::HexToBytes(shelper::ASCIIToHexString("smarteconomy")); // 736d61727465636f6e6f6d79
+
+   EXPECT_EQ(vhelper::ToHexString(raw_node[0]), "206e656f");
+   EXPECT_EQ(vhelper::ToHexString(raw_node[1]), "736d61727465636f6e6f6d79");
+
+   vbyte bytes;
+   BinaryWriter writer(bytes);
+   writer.Write(raw_node);
+
+   EXPECT_EQ(vhelper::ToHexString(bytes), "0204206e656f0c736d61727465636f6e6f6d79");
+
+   BinaryReader reader(bytes);
+   std::vector<vbyte> node2 = reader.ReadArrays(); // TODO: move to serializable MPTNode and avoid this method
+   EXPECT_EQ(raw_node, node2);
+   
+   Crypto crypto;
+   EXPECT_EQ(crypto.Hash256(bytes), shelper::HexToBytes("cb787e430f8728a4b3019a8e71ce1f9db51e9051397221f217772055fcda0ba2"));
+}
+
+/*
+TEST(MerklePatriciaTrieTests, Test_MPT_Neo_Branch_3)
+{
+   // hello key is 010102 / hellothere key is 01010255 / jimbojones key is 01010257
+   // Branch Node (on positions 0,17): [ 0:'', 1:'', 2:'', 3:'', 4:'', 5:some_hash ..., 15:'', 16:"['hello']" ] (17 positions)
+   // Node 5 is "some_hash", as defined above: 0x002615b7c405f6f346329a284e8fb248e735cffa89432daba29e56e414df6c30
+   // Node 16 is a key serialized RLP for "['hello']": c68568656c6c6f
+   // serialization RLP for this node is: f8388080808080a0002615b7c405f6f346329a284e8fb248e735cffa89432daba29e56e414df6c308080808080808080808087c68568656c6c6f
+   // hash of this node is: d52faf1fde4f21753e2633685f2bac3ff1f32ab72933ece9d59f32ca6f63956d
+
+   CryptoExtra crypto;
+   vbyte rlp(shelper::HexToBytes("f8388080808080a0002615b7c405f6f346329a284e8fb248e735cffa89432daba29e56e414df6c308080808080808080808087c68568656c6c6f"));
+   EXPECT_EQ(crypto.Sha3Keccak(rlp), shelper::HexToBytes("d52faf1fde4f21753e2633685f2bac3ff1f32ab72933ece9d59f32ca6f63956d"));
+
+   // if you follow path 0101025* you get
+   // Branch Node (on positions 5,7): [ 0:'', ... , 4:'', 5:[0x20, "['hellothere']"], 6:'', 7:[0x20, "['jimbojones']"], ..., 15:'', 16:'' ] (17 positions)
+   // serialization RLP for this node: ed8080808080ce208ccb8a68656c6c6f746865726580ce208ccb8a6a696d626f6a6f6e6573808080808080808080
+   // hash for this node: 002615b7c405f6f346329a284e8fb248e735cffa89432daba29e56e414df6c30
+
+   vbyte rlp2(shelper::HexToBytes("ed8080808080ce208ccb8a68656c6c6f746865726580ce208ccb8a6a696d626f6a6f6e6573808080808080808080"));
+   EXPECT_EQ(crypto.Sha3Keccak(rlp2), shelper::HexToBytes("002615b7c405f6f346329a284e8fb248e735cffa89432daba29e56e414df6c30"));
+
+   // a root extension-even node consumes 010102 and moves to this node
+   // root: [0x00010102, 0xd52faf1fde4f21753e2633685f2bac3ff1f32ab72933ece9d59f32ca6f63956d]
+   // serialization of this node: e68400010102a0d52faf1fde4f21753e2633685f2bac3ff1f32ab72933ece9d59f32ca6f63956d
+   // hash of this node: fcb2e3098029e816b04d99d7e1bba22d7b77336f9fe8604f2adfb04bcf04a727
+
+   vbyte rlp3(shelper::HexToBytes("e68400010102a0d52faf1fde4f21753e2633685f2bac3ff1f32ab72933ece9d59f32ca6f63956d"));
+   EXPECT_EQ(crypto.Sha3Keccak(rlp3), shelper::HexToBytes("fcb2e3098029e816b04d99d7e1bba22d7b77336f9fe8604f2adfb04bcf04a727"));
+}
+*/
+
 // neo -> 6e656f
 // neoresearch -> 6e656f7265736561726368
 // neopt -> 6e656f7074
 // neogas -> 6e656f676173
 // neoresearchcommunity -> 6e656f7265736561726368636f6d6d756e697479
 // community -> 636f6d6d756e697479
-

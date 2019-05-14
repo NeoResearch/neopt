@@ -136,6 +136,18 @@ public:
       return array;
    }
 
+   // specific implementation for array of bytearrays (no type)
+   // TODO: see possibility to do that on C#
+   vector<vbyte> ReadArrays(int max = 0x1000000)
+   {
+      vector<vbyte> array(this->ReadVarInt((ulong)max)); // TODO: why ulong?
+      // invoking empty constructor for all of this kind
+      for (int i = 0; i < array.size(); i++) {
+         array[i] = this->ReadVarBytes(max);
+      }
+      return array;
+   }
+
    virtual ulong ReadVarInt()
    {
       return this->ReadVarInt(types::MaxValue<ulong>());
