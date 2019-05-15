@@ -244,37 +244,44 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Neo_Leaf_neo)
    EXPECT_EQ(crypto.Hash256(bytes), shelper::HexToBytes("cb787e430f8728a4b3019a8e71ce1f9db51e9051397221f217772055fcda0ba2"));
 }
 
-/*
+
 TEST(MerklePatriciaTrieTests, Test_MPT_Neo_Branch_3)
 {
-   // hello key is 010102 / hellothere key is 01010255 / jimbojones key is 01010257
-   // Branch Node (on positions 0,17): [ 0:'', 1:'', 2:'', 3:'', 4:'', 5:some_hash ..., 15:'', 16:"['hello']" ] (17 positions)
-   // Node 5 is "some_hash", as defined above: 0x002615b7c405f6f346329a284e8fb248e735cffa89432daba29e56e414df6c30
-   // Node 16 is a key serialized RLP for "['hello']": c68568656c6c6f
-   // serialization RLP for this node is: f8388080808080a0002615b7c405f6f346329a284e8fb248e735cffa89432daba29e56e414df6c308080808080808080808087c68568656c6c6f
-   // hash of this node is: d52faf1fde4f21753e2633685f2bac3ff1f32ab72933ece9d59f32ca6f63956d
+   // neo -> 6e656f / neoresearch -> 6e656f7265736561726368 / neopt -> 6e656f7074
+   // Branch Node (on positions 0,17): [ 0:'', 1:'', ... , 6:'', 7:some_hash ..., 15:'', 16:'smarteconomy' ] (17 positions)
+   // Node 7 is "some_hash", as defined above: 2684b232f56b47207c66c49624ac980d18f0aa23d1e81cfc2aa3187a59815990
+   // Index 16 is a key serialized RLP for 'smarteconomy': 736d61727465636f6e6f6d79 (size 12, 0x0c)
+   // serialization for this node is: 1200000000000000012684b232f56b47207c66c49624ac980d18f0aa23d1e81cfc2aa3187a5981599000000000000000000c736d61727465636f6e6f6d79
+   // hash of this node is: f4cf1e4719f29f04a33c8d4273d2423c7baed9dee53ede6c168b13cc7765415e
 
-   CryptoExtra crypto;
-   vbyte rlp(shelper::HexToBytes("f8388080808080a0002615b7c405f6f346329a284e8fb248e735cffa89432daba29e56e414df6c308080808080808080808087c68568656c6c6f"));
-   EXPECT_EQ(crypto.Sha3Keccak(rlp), shelper::HexToBytes("d52faf1fde4f21753e2633685f2bac3ff1f32ab72933ece9d59f32ca6f63956d"));
+   // node type 18: 0x12
 
-   // if you follow path 0101025* you get
-   // Branch Node (on positions 5,7): [ 0:'', ... , 4:'', 5:[0x20, "['hellothere']"], 6:'', 7:[0x20, "['jimbojones']"], ..., 15:'', 16:'' ] (17 positions)
-   // serialization RLP for this node: ed8080808080ce208ccb8a68656c6c6f746865726580ce208ccb8a6a696d626f6a6f6e6573808080808080808080
-   // hash for this node: 002615b7c405f6f346329a284e8fb248e735cffa89432daba29e56e414df6c30
+   Crypto crypto;
+   vbyte branchLeaf(shelper::HexToBytes("1200000000000000012684b232f56b47207c66c49624ac980d18f0aa23d1e81cfc2aa3187a5981599000000000000000000c736d61727465636f6e6f6d79"));
+   std::cout << "NODE1 BRANCH: " << vhelper::ToHexString(crypto.Hash256(branchLeaf)) << std::endl;
+   EXPECT_EQ(crypto.Hash256(branchLeaf), shelper::HexToBytes("f4cf1e4719f29f04a33c8d4273d2423c7baed9dee53ede6c168b13cc7765415e"));
 
-   vbyte rlp2(shelper::HexToBytes("ed8080808080ce208ccb8a68656c6c6f746865726580ce208ccb8a6a696d626f6a6f6e6573808080808080808080"));
-   EXPECT_EQ(crypto.Sha3Keccak(rlp2), shelper::HexToBytes("002615b7c405f6f346329a284e8fb248e735cffa89432daba29e56e414df6c30"));
+   // if you follow path 6e656f7* you get
+   // 6e656f-7-0-74[0x2074, 'test'] => 020220740474657374
+   // 6e656f-7-2-65736561726368[0x2065736561726368, 'community] => 0208206573656172636809636f6d6d756e697479
+   // Branch Node Size 3 (0x04) (on positions 0,2): [ 0:[0x2074, 'test'] 1:'', 2:[0x2065736561726368, 'community'] ] (3 positions)
+   // serialization for this node: 04020220740474657374000208206573656172636809636f6d6d756e697479
+   // hash for this node: 2684b232f56b47207c66c49624ac980d18f0aa23d1e81cfc2aa3187a59815990
+
+   vbyte node2(shelper::HexToBytes("04020220740474657374000208206573656172636809636f6d6d756e697479"));
+   //std::cout << "NODE2 HASH: " << vhelper::ToHexString(crypto.Hash256(node2)) << std::endl;
+   EXPECT_EQ(crypto.Hash256(node2), shelper::HexToBytes("2684b232f56b47207c66c49624ac980d18f0aa23d1e81cfc2aa3187a59815990"));
 
    // a root extension-even node consumes 010102 and moves to this node
-   // root: [0x00010102, 0xd52faf1fde4f21753e2633685f2bac3ff1f32ab72933ece9d59f32ca6f63956d]
-   // serialization of this node: e68400010102a0d52faf1fde4f21753e2633685f2bac3ff1f32ab72933ece9d59f32ca6f63956d
-   // hash of this node: fcb2e3098029e816b04d99d7e1bba22d7b77336f9fe8604f2adfb04bcf04a727
+   // root: [0x006e656f, f4cf1e4719f29f04a33c8d4273d2423c7baed9dee53ede6c168b13cc7765415e]
+   // serialization of this node: 0204006e656ff4cf1e4719f29f04a33c8d4273d2423c7baed9dee53ede6c168b13cc7765415e
+   // hash of this node: 
 
-   vbyte rlp3(shelper::HexToBytes("e68400010102a0d52faf1fde4f21753e2633685f2bac3ff1f32ab72933ece9d59f32ca6f63956d"));
-   EXPECT_EQ(crypto.Sha3Keccak(rlp3), shelper::HexToBytes("fcb2e3098029e816b04d99d7e1bba22d7b77336f9fe8604f2adfb04bcf04a727"));
+   vbyte nodeRoot(shelper::HexToBytes("0204006e656ff4cf1e4719f29f04a33c8d4273d2423c7baed9dee53ede6c168b13cc7765415e"));
+   //std::cout << "ROOT HASH: " << vhelper::ToHexString(crypto.Hash256(nodeRoot)) << std::endl;
+   EXPECT_EQ(crypto.Hash256(nodeRoot), shelper::HexToBytes("c6e4fbb40ace933c9b6d693bf02e37c2259325f0197413fd3a7a0691e377f27b"));
 }
-*/
+
 
 // neo -> 6e656f
 // neoresearch -> 6e656f7265736561726368
