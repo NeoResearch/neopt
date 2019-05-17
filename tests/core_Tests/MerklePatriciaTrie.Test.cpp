@@ -11,15 +11,15 @@ using namespace neopt;
 
 TEST(MerklePatriciaTrieTests, Test_MPT_CompactEncode)
 {
-   // even-size: not terminator 
+   // even-size: not terminator
    vnibble path0 = { 0x0, 0X1, 0X2, 0X3, 0X4, 0X5 };
    EXPECT_EQ(MPTNode::CompactEncode(path0), vbyte({ 0x00, 0x01, 0x23, 0x45 }));
 
-   // odd-size: not terminator 
+   // odd-size: not terminator
    vnibble path1 = { 0X1, 0X2, 0X3, 0X4, 0X5 };
    EXPECT_EQ(MPTNode::CompactEncode(path1), vbyte({ 0x11, 0x23, 0x45 }));
 
-   // even-size: terminator 
+   // even-size: terminator
    vnibble path2 = { 0x0, 0xf, 0X1, 0Xc, 0Xb, 0X8 };
    EXPECT_EQ(MPTNode::CompactEncode(path2, true), vbyte({ 0x20, 0x0f, 0x1c, 0xb8 }));
 
@@ -28,15 +28,44 @@ TEST(MerklePatriciaTrieTests, Test_MPT_CompactEncode)
    EXPECT_EQ(MPTNode::CompactEncode(path3, true), vbyte({ 0x3f, 0x1c, 0xb8 }));
 }
 
+TEST(MerklePatriciaTrieTests, Test_MPT_CompactDecodeEncode)
+{
+   bool isLeaf; // used as in/out parameter
+
+   // even-size: not terminator
+   vbyte vpath0 = vbyte({ 0x00, 0x01, 0x23, 0x45 }); // 0 1 2 3 4 5
+   vnibble nibbles0 = MPTNode::CompactDecode(vpath0, isLeaf);
+   EXPECT_EQ(vpath0, MPTNode::CompactEncode(nibbles0, isLeaf));
+
+   // odd-size: not terminator
+   vbyte vpath1 = vbyte({ 0x11, 0x23, 0x45 }); // 1 2 3 4 5
+   vnibble nibbles1 = MPTNode::CompactDecode(vpath1, isLeaf);
+   EXPECT_EQ(vpath1, MPTNode::CompactEncode(nibbles1, isLeaf));
+
+   // even-size: terminator
+   vbyte vpath2 = vbyte({ 0x20, 0x0f, 0x1c, 0xb8 }); // 0 f 1 c b 8
+   vnibble nibbles2 = MPTNode::CompactDecode(vpath2, isLeaf);
+   EXPECT_EQ(vpath2, MPTNode::CompactEncode(nibbles2, isLeaf));
+
+   // odd-size: terminator
+   vbyte vpath3 = vbyte({ 0x3f, 0x1c, 0xb8 }); // f 1 c b 8
+   vnibble nibbles3 = MPTNode::CompactDecode(vpath3, isLeaf);
+   EXPECT_EQ(vpath3, MPTNode::CompactEncode(nibbles3, isLeaf));
+}
+
 TEST(MerklePatriciaTrieTests, Test_MPT_SimpleHashNull_Hash256)
 {
    std::function<vbyte(const vbyte&)> fhash = [](const vbyte& p) -> vbyte { return Crypto::Default().Hash256(p); };
 
    MPTNode node(fhash);
-   std::cout << node.hash << std::endl;
-   EXPECT_EQ(node.hash, shelper::HexToBytes("5df6e0e2761359d30a8275058e299fcc0381534545f55cf43e41983f5d4c9456")); // TODO: verify!
-   // TODO: THIS HASH WAS NOT TESTED YET!! Do this after some Keccak testing
-   //EXPECT_EQ(1,2);
+   //std::cout << vhelper::ToHexString(node.hash) << std::endl;
+   EXPECT_EQ(node.hash, shelper::HexToBytes("1406e05881e299367766d313e26c05564ec91bf721d31726bd6e46e60689539a"));
+
+   // null node is an empty array... but array serialization is 0x00
+   EXPECT_EQ(node.ToArray(), vbyte(1, 0x00));
+
+   Crypto crypto;
+   EXPECT_EQ(crypto.Hash256(node.ToArray()), shelper::HexToBytes("1406e05881e299367766d313e26c05564ec91bf721d31726bd6e46e60689539a"));
 }
 
 TEST(MerklePatriciaTrieTests, Test_Keccak_Empty)
@@ -237,11 +266,10 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Neo_Leaf_neo)
    BinaryReader reader(bytes);
    std::vector<vbyte> node2 = reader.ReadArrays(); // TODO: move to serializable MPTNode and avoid this method
    EXPECT_EQ(raw_node, node2);
-   
+
    Crypto crypto;
    EXPECT_EQ(crypto.Hash256(bytes), shelper::HexToBytes("cb787e430f8728a4b3019a8e71ce1f9db51e9051397221f217772055fcda0ba2"));
 }
-
 
 TEST(MerklePatriciaTrieTests, Test_MPT_Neo_Branch_3)
 {
@@ -273,13 +301,12 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Neo_Branch_3)
    // a root extension-even node consumes 010102 and moves to this node
    // root: [0x006e656f, f4cf1e4719f29f04a33c8d4273d2423c7baed9dee53ede6c168b13cc7765415e]
    // serialization of this node: 0204006e656ff4cf1e4719f29f04a33c8d4273d2423c7baed9dee53ede6c168b13cc7765415e
-   // hash of this node: 
+   // hash of this node:
 
    vbyte nodeRoot(shelper::HexToBytes("0204006e656ff4cf1e4719f29f04a33c8d4273d2423c7baed9dee53ede6c168b13cc7765415e"));
    //std::cout << "ROOT HASH: " << vhelper::ToHexString(crypto.Hash256(nodeRoot)) << std::endl;
    EXPECT_EQ(crypto.Hash256(nodeRoot), shelper::HexToBytes("c6e4fbb40ace933c9b6d693bf02e37c2259325f0197413fd3a7a0691e377f27b"));
 }
-
 
 // neo -> 6e656f
 // neoresearch -> 6e656f7265736561726368
