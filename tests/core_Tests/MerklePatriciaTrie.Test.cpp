@@ -11,21 +11,21 @@ using namespace neopt;
 
 TEST(MerklePatriciaTrieTests, Test_MPT_CompactEncode)
 {
-   // even-size: not terminator on end (0x10)
+   // even-size: not terminator 
    vnibble path0 = { 0x0, 0X1, 0X2, 0X3, 0X4, 0X5 };
    EXPECT_EQ(MPTNode::CompactEncode(path0), vbyte({ 0x00, 0x01, 0x23, 0x45 }));
 
-   // odd-size: not terminator on end (0x10)
+   // odd-size: not terminator 
    vnibble path1 = { 0X1, 0X2, 0X3, 0X4, 0X5 };
    EXPECT_EQ(MPTNode::CompactEncode(path1), vbyte({ 0x11, 0x23, 0x45 }));
 
-   // even-size: terminator on end (0x10)
-   vnibble path2 = { 0x0, 0xf, 0X1, 0Xc, 0Xb, 0X8, 0x10 };
-   EXPECT_EQ(MPTNode::CompactEncode(path2), vbyte({ 0x20, 0x0f, 0x1c, 0xb8 }));
+   // even-size: terminator 
+   vnibble path2 = { 0x0, 0xf, 0X1, 0Xc, 0Xb, 0X8 };
+   EXPECT_EQ(MPTNode::CompactEncode(path2, true), vbyte({ 0x20, 0x0f, 0x1c, 0xb8 }));
 
-   // odd-size: terminator on end (0x10)
-   vnibble path3 = { 0xf, 0X1, 0Xc, 0Xb, 0X8, 0x10 };
-   EXPECT_EQ(MPTNode::CompactEncode(path3), vbyte({ 0x3f, 0x1c, 0xb8 }));
+   // odd-size: terminator
+   vnibble path3 = { 0xf, 0X1, 0Xc, 0Xb, 0X8 };
+   EXPECT_EQ(MPTNode::CompactEncode(path3, true), vbyte({ 0x3f, 0x1c, 0xb8 }));
 }
 
 TEST(MerklePatriciaTrieTests, Test_MPT_SimpleHashNull_Hash256)
@@ -72,8 +72,7 @@ TEST(MerklePatriciaTrieTests, Test_MPT_CompactEncode_Leaf_0x010203)
 {
    vbyte content = { 0x01, 0x02, 0x03 };
    vnibble path = vhelper::BytesToNibbles(content);
-   path.push_back(0x10); // terminator for leaves
-   EXPECT_EQ(MPTNode::CompactEncode(path), vbyte({ 0x20, 0x01, 0x02, 0x03 }));
+   EXPECT_EQ(MPTNode::CompactEncode(path, true), vbyte({ 0x20, 0x01, 0x02, 0x03 }));
 }
 
 TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Leaf_0x010203_array_hello)
@@ -92,8 +91,7 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Keccak_RLP_Leaf_0x010203_array_hello)
 
    vbyte content = { 0x01, 0x01, 0x02 };
    vnibble path = vhelper::BytesToNibbles(content);
-   path.push_back(0x10); // terminator for leaves
-   EXPECT_EQ(MPTNode::CompactEncode(path), vbyte({ 0x20, 0x01, 0x01, 0x02 }));
+   EXPECT_EQ(MPTNode::CompactEncode(path, true), vbyte({ 0x20, 0x01, 0x01, 0x02 }));
 
    CryptoExtra crypto;
    vbyte rlp(shelper::HexToBytes("cd842001010287c68568656c6c6f"));

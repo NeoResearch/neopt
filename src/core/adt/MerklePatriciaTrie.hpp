@@ -100,12 +100,10 @@ public:
       return ss.str();
    }
 
-   static vbyte CompactEncode(const vnibble nibbles)
+   // compact encode vector of nibbles. if term = true, it means that node is a leaf
+   static vbyte CompactEncode(const vnibble nibbles, bool term = false)
    {
       vnibble v(nibbles);
-      bool term = v[v.size()-1] == 16; // finishing in 0x10 ? after '0Xf'
-      if(term)
-         v.pop_back(); // discard terminator
       bool oddlen = v.size() % 2 == 1; // is odd ?
       nibble flag = 2 * term + oddlen; // 0, 1, 2 or 3
       if(oddlen) // odd (just insert flag)

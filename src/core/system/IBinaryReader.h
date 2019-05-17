@@ -28,11 +28,6 @@ public:
       return -1; // -1 means 'unknown'
    }
 
-   virtual bool Good() const
-   {
-      return true;
-   }
-
    // read data directly on vector, of size 'readsize', at position 'begin' (used on UIntBase)
    virtual void Read(vector<byte>& data, int begin, int readsize)
    {
