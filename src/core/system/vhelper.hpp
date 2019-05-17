@@ -18,6 +18,7 @@
 
 // neo core hpp
 #include "BinaryReader.hpp"
+#include "BinaryWriter.hpp"
 
 namespace neopt {
 
@@ -193,6 +194,15 @@ public:
       T obj = reader.ReadSerializable<T>();
       //delete reader;
       return std::move(obj);
+   }
+
+   static vbyte ToArray(ISerializable& value)
+   {
+      vbyte data;
+      BinaryWriter writer(data);
+      value.Serialize(writer);
+      //writer.Flush(); // not needed
+      return data;
    }
 };
 }

@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include<gmock/gmock.h>
 
 // core includes
 #include <Witness.hpp>
@@ -8,7 +9,10 @@
 using namespace std;
 using namespace neopt;
 
-TEST(WitnessTest, Test_Witness_Deserialize_Two_Empty_Scripts)
+using ::testing::Return; // testing
+
+
+TEST(WitnessTests, Test_Witness_Deserialize_Two_Empty_Scripts)
 {
    string block2tn = "0000";
    vbyte param = shelper::HexToBytes(block2tn);
@@ -21,7 +25,7 @@ TEST(WitnessTest, Test_Witness_Deserialize_Two_Empty_Scripts)
    EXPECT_EQ(w.VerificationScript.size(), 0);
 }
 
-TEST(WitnessTest, Test_Witness_Deserialize_Array_Two_Empty_Scripts)
+TEST(WitnessTests, Test_Witness_Deserialize_Array_Two_Empty_Scripts)
 {
    string block2tn = "0200000000";
    vbyte param = shelper::HexToBytes(block2tn);
@@ -32,4 +36,33 @@ TEST(WitnessTest, Test_Witness_Deserialize_Array_Two_Empty_Scripts)
    EXPECT_EQ(vw.size(), 2);
    EXPECT_EQ(vw[0].InvocationScript.size(), 0);
    EXPECT_EQ(vw[1].VerificationScript.size(), 0);
+}
+
+/*
+class MockWitness : public Witness
+{
+public:
+   MockInvokeHashTx()
+     : Transaction(TT_InvocationTransaction)
+   {
+   }
+
+   MOCK_METHOD0(getHash, UInt256());
+
+   MOCK_METHOD1(DeserializeExclusiveData, void(IBinaryReader&));
+};
+*/
+
+   //EXPECT_CALL(mockTx1, getHash())
+   //  .WillOnce(Return(UInt256(htx1)));
+     //.WillOnce(Return(UInt256(htx1)));
+
+
+TEST(WitnessTests, Test_Witness_ToArray)
+{
+   Witness w;
+   w.VerificationScript = vbyte(0);
+   w.InvocationScript = vbyte(0);
+   
+   EXPECT_EQ(vhelper::ToArray(w), vbyte({0x00, 0x00}));
 }

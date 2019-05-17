@@ -156,3 +156,5 @@ TEST(vhelperTests, Test_nibble_BytesToNibblesToBytes)
 
    EXPECT_EQ(bytes, bytes2);
 }
+
+

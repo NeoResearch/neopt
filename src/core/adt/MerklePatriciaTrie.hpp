@@ -25,7 +25,7 @@ enum MPTType
 };
 */
 
-class MPTNode
+class MPTNode : public ISerializable
 {
 private:
    //MPTType type;
@@ -76,6 +76,16 @@ public:
          return std::move(vbyte(1, 0x00));
 
       return std::move(vbyte(0)); // unknown (empty node)
+   }
+
+   virtual void Deserialize(IBinaryReader& reader)
+   {
+      
+   }
+
+   virtual void Serialize(IBinaryWriter& writer) const
+   {
+
    }
 
    string ToString() const
