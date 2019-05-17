@@ -64,5 +64,5 @@ TEST(WitnessTests, Test_Witness_ToArray)
    w.VerificationScript = vbyte(0);
    w.InvocationScript = vbyte(0);
    
-   EXPECT_EQ(vhelper::ToArray(w), vbyte({0x00, 0x00}));
+   EXPECT_EQ(w.ToArray(), vbyte({0x00, 0x00}));
 }

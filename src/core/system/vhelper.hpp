@@ -195,15 +195,6 @@ public:
       //delete reader;
       return std::move(obj);
    }
-
-   static vbyte ToArray(ISerializable& value)
-   {
-      vbyte data;
-      BinaryWriter writer(data);
-      value.Serialize(writer);
-      //writer.Flush(); // not needed
-      return data;
-   }
 };
 }
 

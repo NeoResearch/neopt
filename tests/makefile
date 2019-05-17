@@ -24,7 +24,7 @@ test: clean all.test #$(FILENAME)
 
 all.test : all.Test.cpp
 	#g++ --coverage -O0 -I../src/core --std=c++11 -I$(OPENSSL_PATH)/include $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(CORE_PATH)/payloads/TransactionFactory.cpp -I$(GTEST_PATH)/include -L$(GMOCK_PATH)/gtest -L$(GMOCK_PATH) -lgtest -lgtest_main  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl $< -o $@
-	g++ --coverage -g -O0 --std=c++11 -I$(CORE_PATH) -I$(SRC_PATH) -I$(GTEST_PATH)/include -I$(GMOCK_PATH)/include -I$(OPENSSL_PATH)/include -pthread $< -o $@ $(GMOCK_PATH)/gtest/libgtest_main.a $(GMOCK_PATH)/gtest/libgtest.a $(GMOCK_PATH)/libgmock.a $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(LEDGER_PATH)/payloads/TransactionFactory.cpp $(CORE_PATH)/system/printable.cpp $(CORE_PATH)/crypto/CryptoExtra.cpp $(CORE_PATH)/crypto/cryptopp/libcryptopp.a  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl
+	g++ --coverage -g -O0 --std=c++11 -I$(CORE_PATH) -I$(SRC_PATH) -I$(GTEST_PATH)/include -I$(GMOCK_PATH)/include -I$(OPENSSL_PATH)/include -pthread $< -o $@ $(GMOCK_PATH)/gtest/libgtest_main.a $(GMOCK_PATH)/gtest/libgtest.a $(GMOCK_PATH)/libgmock.a $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(LEDGER_PATH)/payloads/TransactionFactory.cpp $(CORE_PATH)/system/printable.cpp $(CORE_PATH)/system/ISerializable.cpp $(CORE_PATH)/crypto/CryptoExtra.cpp $(CORE_PATH)/crypto/cryptopp/libcryptopp.a  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl
 
 core.test : core.Test.cpp
 	#g++ --coverage -O0 -I../src/core --std=c++11 -I$(OPENSSL_PATH)/include $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(CORE_PATH)/payloads/TransactionFactory.cpp -I$(GTEST_PATH)/include -L$(GMOCK_PATH)/gtest -L$(GMOCK_PATH) -lgtest -lgtest_main  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl $< -o $@
@@ -32,7 +32,7 @@ core.test : core.Test.cpp
 
 ledger.test : ledger.Test.cpp
 	#g++ --coverage -O0 -I../src/core --std=c++11 -I$(OPENSSL_PATH)/include $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(CORE_PATH)/payloads/TransactionFactory.cpp -I$(GTEST_PATH)/include -L$(GMOCK_PATH)/gtest -L$(GMOCK_PATH) -lgtest -lgtest_main  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl $< -o $@
-	g++ --coverage -g -O0 --std=c++11 -I$(CORE_PATH) -I$(SRC_PATH) -I$(GTEST_PATH)/include -I$(GMOCK_PATH)/include -I$(OPENSSL_PATH)/include -pthread $< -o $@ $(GMOCK_PATH)/gtest/libgtest_main.a $(GMOCK_PATH)/gtest/libgtest.a $(GMOCK_PATH)/libgmock.a $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(LEDGER_PATH)/payloads/TransactionFactory.cpp $(CORE_PATH)/system/printable.cpp -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl
+	g++ --coverage -g -O0 --std=c++11 -I$(CORE_PATH) -I$(SRC_PATH) -I$(GTEST_PATH)/include -I$(GMOCK_PATH)/include -I$(OPENSSL_PATH)/include -pthread $< -o $@ $(GMOCK_PATH)/gtest/libgtest_main.a $(GMOCK_PATH)/gtest/libgtest.a $(GMOCK_PATH)/libgmock.a $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(LEDGER_PATH)/payloads/TransactionFactory.cpp $(CORE_PATH)/system/printable.cpp $(CORE_PATH)/system/ISerializable.cpp -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl
 
 # compiling core tests	
 #%.core.test : %.Test.cpp

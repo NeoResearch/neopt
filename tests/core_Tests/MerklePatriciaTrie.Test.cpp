@@ -58,12 +58,14 @@ TEST(MerklePatriciaTrieTests, Test_MPT_SimpleHashNull_Hash256)
    std::function<vbyte(const vbyte&)> fhash = [](const vbyte& p) -> vbyte { return Crypto::Default().Hash256(p); };
 
    MPTNode node(fhash);
-   //std::cout << vhelper::ToHexString(node.hash) << std::endl;
-   EXPECT_EQ(node.hash, shelper::HexToBytes("1406e05881e299367766d313e26c05564ec91bf721d31726bd6e46e60689539a"));
 
    // null node is an empty array... but array serialization is 0x00
    EXPECT_EQ(node.ToArray(), vbyte(1, 0x00));
 
+   //std::cout << vhelper::ToHexString(node.hash) << std::endl;
+   EXPECT_EQ(node.hash, shelper::HexToBytes("1406e05881e299367766d313e26c05564ec91bf721d31726bd6e46e60689539a"));
+
+   
    Crypto crypto;
    EXPECT_EQ(crypto.Hash256(node.ToArray()), shelper::HexToBytes("1406e05881e299367766d313e26c05564ec91bf721d31726bd6e46e60689539a"));
 }
@@ -307,6 +309,8 @@ TEST(MerklePatriciaTrieTests, Test_MPT_Neo_Branch_3)
    //std::cout << "ROOT HASH: " << vhelper::ToHexString(crypto.Hash256(nodeRoot)) << std::endl;
    EXPECT_EQ(crypto.Hash256(nodeRoot), shelper::HexToBytes("c6e4fbb40ace933c9b6d693bf02e37c2259325f0197413fd3a7a0691e377f27b"));
 }
+
+
 
 // neo -> 6e656f
 // neoresearch -> 6e656f7265736561726368

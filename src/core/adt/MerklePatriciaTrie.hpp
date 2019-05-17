@@ -65,27 +65,34 @@ public:
       hash = fhash(this->ToArray());
    }
 
-   vbyte ToArray() const
+   virtual void Deserialize(IBinaryReader& reader)
+   {
+      NEOPT_EXCEPTION("MPT Node Deserialize! Not implemented");
+   }
+
+   virtual void Serialize(IBinaryWriter& writer) const
    {
       //if (type == 0) {
       // NULL node (count is zero)
       //   return std::move(vbyte(1, 0x00));
       //}
 
-      if(contents.size() == 0) // null node
-         return std::move(vbyte(1, 0x00));
+      vbyte bytes(0);
 
-      return std::move(vbyte(0)); // unknown (empty node)
-   }
+      if (contents.size() == 0) // null node
+      {
+         std::cout << "INVOKING Serialize MPT" << std::endl;
+         bytes.push_back(0x00);
+      } else if (contents.size() == 1) // hash node
+      {
+         //std::cout << "HASH NODE!!!" << std::endl;
+         NEOPT_EXCEPTION("MPT Hash Node Serialize! Not implemented");
+      } else {
+         NEOPT_EXCEPTION("MPT Serialize! Not implemented");
+      }
 
-   virtual void Deserialize(IBinaryReader& reader)
-   {
-      
-   }
-
-   virtual void Serialize(IBinaryWriter& writer) const
-   {
-
+      writer.Write(bytes);
+      //return std::move(vbyte(0)); // unknown (empty node)
    }
 
    string ToString() const
@@ -101,7 +108,7 @@ public:
    // compact encode vector of nibbles. if term = true, it means that node is a leaf
    static vbyte CompactEncode(const vnibble nibbles, bool term = false)
    {
-      std::cout <<"Encode leaf=" << term << std::endl;
+      std::cout << "Encode leaf=" << term << std::endl;
       vnibble v(nibbles);
       bool oddlen = v.size() % 2 == 1; // is odd ?
       nibble flag = 2 * term + oddlen; // 0, 1, 2 or 3
