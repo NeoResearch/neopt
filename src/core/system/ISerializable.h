@@ -2,7 +2,7 @@
 #define NEOPT_ISERIALIZABLE_H
 
 // neopt core part
-#include "types.h"
+#include "types.h" // necessary for vbyte
 //#include<system/IBinaryReader.h> // forward declaration
 //#include<system/IBinaryWriter.h> // forward declaration
 

@@ -38,6 +38,10 @@ private:
 
    //= [](const UInt256& p) -> MerkleTreeNode* { return new MerkleTreeNode(p); };
 
+   // IsBranch flag
+   // if size==2, must know if it's compact branch or path node (leaf/extension)
+   bool branch;
+
 public:
    vbyte hash; // usually UInt256 size, but may not be that...
 
@@ -70,29 +74,98 @@ public:
       NEOPT_EXCEPTION("MPT Node Deserialize! Not implemented");
    }
 
+   // compressed branch serialization technique
    virtual void Serialize(IBinaryWriter& writer) const
    {
-      //if (type == 0) {
-      // NULL node (count is zero)
-      //   return std::move(vbyte(1, 0x00));
-      //}
-
-      vbyte bytes(0);
-
-      if (contents.size() == 0) // null node
+      if (IsNullNode()) // null node
       {
-         std::cout << "INVOKING Serialize MPT" << std::endl;
-         bytes.push_back(0x00);
-      } else if (contents.size() == 1) // hash node
+         // pushes 0x00
+         writer.Write((byte)0x00);
+      } else if (IsHashNode()) // hash node
       {
-         //std::cout << "HASH NODE!!!" << std::endl;
-         NEOPT_EXCEPTION("MPT Hash Node Serialize! Not implemented");
+         // pushes 0x01
+         writer.Write((byte)0x01);
+
+         // must insert all (32) bytes from hash (no prefix needed)
+         writer.Write(contents[0]);
+      } else if (IsPathNode()) // path node (extension or leaf)
+      {
+         // pushes 0x02
+         writer.Write((byte)0x02);
+         // write encoded path as var bytes
+         writer.WriteVarBytes(contents[0]);
+         if(IsLeaf())
+            writer.WriteVarBytes(contents[1]); // key as var bytes
+         bytes.insert(bytes.end(), contents[0].begin(), contents[0].end());
+      } else if (IsBranchNode()) // branch node
+      {
+         // pushes size + 1
+         // 2: 0x03  ...  17: 0x12
+         writer.Write((byte)contents.size() + 1);
+
+         // write all elements
+         if (IsFullBranchNode()) {
+            for (unsigned i = 0; i < contents.size() - 1; i++)
+               writer.Write(contents[i]);       // already serialized
+            writer.WriteVarBytes(contents[16]); // var bytes for key
+         } else
+            for (unsigned i = 0; i < contents.size(); i++)
+               writer.Write(contents[i]); // already serialized
       } else {
-         NEOPT_EXCEPTION("MPT Serialize! Not implemented");
+         NEOPT_EXCEPTION("Unknown MPT Node Serialize! Not implemented");
       }
+   }
 
-      writer.Write(bytes);
-      //return std::move(vbyte(0)); // unknown (empty node)
+   // null node (just empty)
+   bool IsNullNode() const
+   {
+      return contents.size() == 0;
+   }
+
+   // hash node: single element is a hash ("pointer" to another node)
+   bool IsHashNode() const
+   {
+      return contents.size() == 1;
+   }
+
+   // path node: leaf or extension
+   bool IsPathNode() const
+   {
+      return (contents.size() == 2) && !this->branch;
+   }
+
+   vnibble GetPath() const
+   {
+      return vnibble();
+   }
+
+   // path node: leaf
+   bool IsLeaf() const
+   {
+      if (!IsPathNode())
+         return false;
+      bool isLeaf;
+      CompactDecode(contents[0], isLeaf);
+      return isLeaf;
+   }
+
+   // path node: extension
+   bool IsExtension() const
+   {
+      return IsPathNode() && !IsLeaf();
+   }
+
+   // branch node: 2 to 17 elements
+   bool IsBranchNode() const
+   {
+      // uses branch node flag
+      return (contents.size() >= 2) && (contents.size() <= 17) && this->branch;
+   }
+
+   // full branch node: includes all alphabet and a leaf
+   bool IsFullBranchNode() const
+   {
+      return IsBranchNode() && (contents.size() == 17);
    }
 
    string ToString() const

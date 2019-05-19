@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euxo pipefail # safer script: will fail
+
 OPENSSL_VER=openssl-1.1.1b
 
 echo "# Building $OPENSSL_VER (for Linux)"

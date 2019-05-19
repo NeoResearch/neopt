@@ -13,8 +13,6 @@
 // neo core
 #include "types.h"
 //#include<system/printable.h>
-#include "IBinaryReader.h"
-#include "ISerializable.h"
 
 // neo core hpp
 #include "BinaryReader.hpp"
