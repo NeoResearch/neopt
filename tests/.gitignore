@@ -1,7 +1,6 @@
 *~
 *.test
 *.tar.gz
-gtestlib
 *.gcda
 *.gcno
 *.core.test

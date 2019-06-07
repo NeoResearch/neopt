@@ -99,6 +99,7 @@ TEST(MerklePatriciaTrieTests, Test_Keccak_hello)
    EXPECT_EQ(crypto.Sha3Keccak(v), shelper::HexToBytes("1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8"));
 }
 
+
 TEST(MerklePatriciaTrieTests, Test_MPT_CompactEncode_Leaf_0x010203)
 {
    vbyte content = { 0x01, 0x02, 0x03 };
