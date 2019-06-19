@@ -57,6 +57,6 @@ int main(int argc, char* argv[])
    ImportBlocksSettings::FreeSettings();
 
    // finished
-   std::cout << "neopt-cli finished successfully" << std::endl;
+   std::cout << "neopt-cli2 finished successfully" << std::endl;
    return 0;
 }
