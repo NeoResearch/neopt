@@ -2,8 +2,8 @@
 
 #OPENSSL_PATH=../libopenssl
 OPENSSL_PATH=../build/openssl
-CORE_PATH=../src/core
-LEDGER_PATH=../src/ledger
+CORE_PATH=../src/core-common
+LEDGER_PATH=../src/ledger2
 SRC_PATH=../src
 GTEST_PATH=../libgtest/build/googletest
 GMOCK_PATH=../libgtest/build/googlemock

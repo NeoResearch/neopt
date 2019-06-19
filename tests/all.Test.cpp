@@ -1,7 +1,7 @@
 
 // collection of 'core' project tests
 
-#include "core.Test.cpp"
-#include "ledger.Test.cpp"
+#include "core2.Test.cpp"
+#include "ledger2.Test.cpp"
 
 // good

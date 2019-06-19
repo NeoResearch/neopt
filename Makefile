@@ -2,17 +2,18 @@ OPTIONS=-g --std=c++11 -O0 # -Ofast
 
 OPENSSL_PATH=build/openssl
 #OPENSSL_PATH=src/core/crypto/openssl
-CORE_PATH=src/core
-LEDGER_PATH=src/ledger
+CORE_PATH=src/core-common
+LEDGER_PATH=src/ledger2
+CLI_PATH=src/cli2
 SRC_PATH=src
-PLUGINS_PATH=src/plugins
+PLUGINS_PATH=src/plugins2
 
 all: test cli
 	@echo
 	@echo "sucessfully built neopt-cli on build/ directory"
 
 cli: # building neopt-cli
-	g++   $(OPTIONS)  -Isrc/cli -I$(SRC_PATH) -Isrc/core -I$(PLUGINS_PATH)/ImportBlocks -I$(OPENSSL_PATH)/include $(CORE_PATH)/crypto/CryptoNeoOpenSSL.cpp -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl  src/cli/Program.cpp  $(PLUGINS_PATH)/ImportBlocks/ImportBlocks.cpp $(PLUGINS_PATH)/ImportBlocks/ImportBlocksSettings.cpp $(LEDGER_PATH)/NeoSystem.cpp $(LEDGER_PATH)/plugin/PluginSystem.cpp  $(CORE_PATH)/system/printable.cpp $(CORE_PATH)/system/ISerializable.cpp $(LEDGER_PATH)/payloads/TransactionFactory.cpp -o bin/neopt-cli
+	g++   $(OPTIONS)  -I$(CLI_PATH) -I$(SRC_PATH) -I$(CORE_PATH) -I$(PLUGINS_PATH)/ImportBlocks -I$(OPENSSL_PATH)/include $(CORE_PATH)/crypto/CryptoNeoOpenSSL.cpp -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl $(CLI_PATH)/Program.cpp  $(PLUGINS_PATH)/ImportBlocks/ImportBlocks.cpp $(PLUGINS_PATH)/ImportBlocks/ImportBlocksSettings.cpp $(LEDGER_PATH)/NeoSystem.cpp $(LEDGER_PATH)/plugin/PluginSystem.cpp  $(CORE_PATH)/system/printable.cpp $(CORE_PATH)/system/ISerializable.cpp $(LEDGER_PATH)/payloads/TransactionFactory.cpp -o bin/neopt-cli
 
 test:
 	cd tests && $(MAKE) test
