@@ -10,12 +10,15 @@ SRC_PATH=src
 CLI_PATH=src/cli2
 NEO2_PATH=src/neo2
 
-all: test cli2
+all: test neopt-common cli2
 	@echo
 	@echo "sucessfully built neopt-cli2 on bin/ directory"
 
 cli2: # building neopt-cli
 	g++   $(OPTIONS)  -I$(CLI_PATH) -I$(SRC_PATH) -I$(NEO2_PATH) -I$(COMMON_PATH) -I$(NEO2_PATH)/plugins/ImportBlocks -I$(OPENSSL_PATH)/include $(COMMON_PATH)/crypto/CryptoNeoOpenSSL.cpp -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl $(CLI_PATH)/Program.cpp  $(NEO2_PATH)/plugins/ImportBlocks/ImportBlocks.cpp $(NEO2_PATH)/plugins/ImportBlocks/ImportBlocksSettings.cpp $(NEO2_PATH)/ledger/NeoSystem.cpp $(NEO2_PATH)/ledger/plugin/PluginSystem.cpp  $(COMMON_PATH)/system/printable.cpp $(COMMON_PATH)/system/ISerializable.cpp $(NEO2_PATH)/ledger/payloads/TransactionFactory.cpp -o bin/neopt-cli2
+
+neopt-common:
+	(cd src/common && make)
 
 test:
 	cd tests && $(MAKE) test

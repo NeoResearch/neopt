@@ -10,9 +10,6 @@
 #include <vector>
 
 // neopt core includes
-#include <IInventory.hpp>
-#include <IScriptContainer.h>
-#include <IVerifiable.hpp>
 #include <crypto/Crypto.h>
 #include <crypto/ICrypto.h>
 #include <numbers/Fixed8.hpp>
@@ -32,9 +29,6 @@ main()
    IEquatable<int>* ieq = nullptr;
    UIntBase* uint = nullptr;
    UInt160 uint160;
-   IScriptContainer* iscript = nullptr;
-   IVerifiable* iverifiable = nullptr;
-   IInventory* iinventory = nullptr;
 
    Crypto lib;
    vbyte v;

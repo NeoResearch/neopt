@@ -9,8 +9,8 @@
 #include <vector>
 
 // neo core
-#include <IVerifiable.hpp>
 #include <ProtocolSettings.hpp>
+#include <crypto/chelper.hpp>
 #include <crypto/ICrypto.h>
 #include <numbers/UInt160.hpp>
 #include <system/Buffer.hpp>

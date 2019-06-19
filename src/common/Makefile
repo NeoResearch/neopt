@@ -1,12 +1,12 @@
 OPTIONS=-O0 -g # -Ofast
 
-OPENSSL_PATH=crypto/openssl
+OPENSSL_PATH=../../build/openssl/
 
 all: lint neopt-core-test #simple testing
 
 
 neopt-core-test:
-	g++   $(OPTIONS) --std=c++11 -I. -I$(OPENSSL_PATH)/include crypto/CryptoNeoOpenSSL.cpp -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl main.cpp system/printable.cpp payloads/TransactionFactory.cpp plugin/PluginSystem.cpp -o neopt-core-test
+	g++   $(OPTIONS) --std=c++11 -I. -I$(OPENSSL_PATH)/include crypto/CryptoNeoOpenSSL.cpp -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl main.cpp system/printable.cpp system/ISerializable.cpp -o neopt-core-test
 
 # no need to build external lib for now
 withlib: libneocrypto_openssl.a
@@ -18,7 +18,7 @@ libneocrypto_openssl.a:
 lint:
 	clang-tidy main.cpp -checks=*,-fuchsia-default-arguments -- -std=c++11 -x c++ -I.
 	clang-tidy *.hpp -checks=*,-fuchsia-default-arguments,-llvm-header-guard,-google-runtime-references -- -I. -std=c++11 -x c++
-	clang-tidy *.h -checks=*,-fuchsia-default-arguments,-llvm-header-guard,-google-runtime-references -- -I. -std=c++11 -x c++
+	#clang-tidy *.h -checks=*,-fuchsia-default-arguments,-llvm-header-guard,-google-runtime-references -- -I. -std=c++11 -x c++
 	clang-tidy *.cpp -checks=*,-fuchsia-default-arguments,-llvm-header-guard,-google-runtime-references -- -I. -std=c++11 -x c++
 
 fmt:
