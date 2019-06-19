@@ -58,8 +58,9 @@ The `common` sub-project includes common data structures and cryptography techno
 
 #### neo (or neo3)
 
-The `neo` (or `neo3`) project comprises three sub-projects, related to Neo Blockchain version 3 and beyond: `cli` (command-line interface), `neo` (blockchain stuff itself) and `nvm` (NeoVM version 3). Note that `nvm` is now fully dettached from `neo` project (now a fully independent project).
-`neo` subproject includes four interdependent modules:
+The `neo` (or `neo3`) project comprises three sub-projects, related to Neo Blockchain version 3 and beyond: [cli](https://github.com/neo-project/neo-cli) (command-line interface), [neo](https://github.com/neo-project/neo) (blockchain stuff itself) and [nvm](https://github.com/neo-project/neo-vm) (NeoVM version 3). Note that `nvm` is now fully dettached from `neo`, as an independent project.
+
+`neo` sub-project includes four interdependent modules:
 
 * mempool: p2p protocol and networking
 * smart: ApplicationEngine and SmartContract
@@ -72,7 +73,7 @@ The `neo2` project comprises two sub-projects, related to Neo Blockchain version
 `neo2` subproject includes six interdependent modules:
 
 * core: main stuff
-* nvm: [neo-vm](https://github.com/neo-project/neo-vm) implementation (depends on `core` only)
+* nvm: [neo-vm](https://github.com/neo-project/neo-vm/tree/master-2.x) 2.x implementation (depends on `core` only)
 * smart: ApplicationEngine and SmartContract
 * mempool: p2p protocol and networking
 * ledger: blockchain persistance
