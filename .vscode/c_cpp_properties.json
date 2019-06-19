@@ -9,15 +9,15 @@
                 "limitSymbolsToIncludedHeaders": true
             },
             "includePath": [
-                "${workspaceFolder}/src/core/**",
-                "${workspaceFolder}/src/ledger/payloads/**",
-                "${workspaceFolder}/src/plugins/**",
+                "${workspaceFolder}/src/core2/**",
+                "${workspaceFolder}/src/ledger2/payloads/**",
+                "${workspaceFolder}/src/plugins2/**",
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/src/**",
-                "${workspaceFolder}/src/cli/**",
-                "${workspaceFolder}/src/plugins/ImportBlocks",
-                "${workspaceFolder}/tests/gtestlib/googletest/include/**",
-                "${workspaceFolder}/tests/gtestlib/googlemock/include/**"
+                "${workspaceFolder}/src/cli2/**",
+                "${workspaceFolder}/src/plugins2/ImportBlocks",
+                "${workspaceFolder}/libgtest/googletest/include/**",
+                "${workspaceFolder}/libgtest/googlemock/include/**"
             ],
             "defines": ["_DEBUG_"],
             "compilerPath": "/usr/bin/clang",
