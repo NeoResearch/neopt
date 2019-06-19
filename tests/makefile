@@ -4,10 +4,10 @@ OPENSSL_PATH=../src/core/crypto/openssl
 CORE_PATH=../src/core
 LEDGER_PATH=../src/ledger
 SRC_PATH=../src
-GTEST_PATH=../gtestlib/build/googletest
-GMOCK_PATH=../gtestlib/build/googlemock
-GTEST_INCLUDE=../gtestlib/googletest/include
-GMOCK_INCLUDE=../gtestlib/googlemock/include
+GTEST_PATH=../libgtest/build/googletest
+GMOCK_PATH=../libgtest/build/googlemock
+GTEST_INCLUDE=../libgtest/googletest/include
+GMOCK_INCLUDE=../libgtest/googlemock/include
 
 all:
 	@echo "please type 'make test'"

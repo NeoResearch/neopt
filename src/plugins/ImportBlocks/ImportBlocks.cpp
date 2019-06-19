@@ -42,7 +42,7 @@ void ImportBlocks::OnPluginsLoaded()
     _blockImporter = new BlockImporter(blockchain);
 
     // TODO: use Actor system for message passing
-    _blockImporter->Receive(BlockImporterAction::StartImport);
+    //_blockImporter->Receive(BlockImporterAction::StartImport);
 
 
     cout << "ImportBlocks plugin loaded!" << endl;
