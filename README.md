@@ -39,23 +39,51 @@ Recommended configuration for vscode:
 }
 ```
 
+#### Variable Naming Style
+The naming style for variables and methods is based on `C#` language. 
+So, CamelCase is used and `public` variables start with upper-case letters, while `private` and `local` variables start with lower-case.
+The idea is to preseve maximum compatibility with reference project (which is on C#).
+
+Anything that is beyond the scope of the reference project can use classic CamelCase `C++` naming (for example, starting variables with lower-case).
+
 #### Ensuring code style
 You can use `make lint` command to format files automatically (using `clang-format`) and also the linter to verify programming practices (using `clang-tidy`).
 
 ### Which are the main modules?
 
-The project proposal is divided into modules:
+The repository is divided into three main projects: `neo2`, `neo` and `common`.
+
+#### common
+The `common` sub-project includes common data structures and cryptography technology for Neo blockchain, in all its versions.
+
+#### neo2
+The `neo2` project comprises two sub-projects, related to Neo Blockchain version 2: `cli2` (command-line interface) and `neo2` (blockchain stuff itself). 
+`neo2` subproject includes five interdependent modules:
 
 * core: main module (should be fully independent from others)
-* vm: [neo-vm](https://github.com/neo-project/neo-vm) implementation (should depend on **core** only)
+* nvm: [neo-vm](https://github.com/neo-project/neo-vm) implementation (should depend on **core** only)
 * mempool: p2p protocol and networking
 * ledger: blockchain persistance
 * consensus: dBFT consensus
 
+#### neo (or neo3)
+
+The `neo` (or `neo3`) project comprises three sub-projects, related to Neo Blockchain version 3 and beyond: `cli` (command-line interface), `neo` (blockchain stuff itself) and `nvm` (NeoVM version 3). Note that `nvm` is now fully dettached from `neo` project (it used to be a module).
+`neo` subproject includes four interdependent modules:
+
+* core: main module (should be fully independent from others)
+* mempool: p2p protocol and networking
+* ledger: blockchain persistance
+* consensus: dBFT consensus
+
+
 ### How to build
 
+#### Dependencies
+
+First, install `openssl` and `gtest` dependencies. But don't be afraid, it is provided as a git submodule. Just type `make vendor` and be happy :)
+
 #### On Linux
-First, install `openssl` dependency (and others). But don't be afraid, for `debian-like` systems just type `make vendor` and be happy :)
 
 After that, type `make` (`make cli`) to build `neopt-cli` and put the binary on `bin` folder (tests will run automatically).
 
@@ -66,8 +94,8 @@ TODO
 
 ### Tests
 
-Tests are very important! Just go to `tests` directory and type `make tests` (after installing lib `gtest`).
-* on linux, to install gtest, just use: `cd tests && ./linux_install_gtestlib.sh` (you may need to `chmod +x` the install script)
+Tests are very important! Just go to `tests` directory and type `make tests`.
+
 * it is also important to install `lcov` (usually `apt install lcov`), so that you can also run `make coverage` and generate html coverage reports on `reports/` folder.
 
 ### Versioning
