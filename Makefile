@@ -1,6 +1,7 @@
 OPTIONS=-g --std=c++11 -O0 # -Ofast
 
-OPENSSL_PATH=src/core/crypto/openssl
+OPENSSL_PATH=build/openssl
+#OPENSSL_PATH=src/core/crypto/openssl
 CORE_PATH=src/core
 LEDGER_PATH=src/ledger
 SRC_PATH=src
@@ -25,8 +26,15 @@ run:
 vendor: openssl cryptopp clang gtests
 
 openssl:
-	cd src/core && chmod +x linux_get_build_openssl.sh
-	cd src/core && ./linux_get_build_openssl.sh
+	#cd src/core && chmod +x linux_get_build_openssl.sh
+	#cd src/core && ./linux_get_build_openssl.sh
+	mkdir -p build/openssl
+	(cd build/openssl && ../../libopenssl/config && make && make test)
+	cp -r libopenssl/include build/openssl/   # include files
+	cp build/openssl/libcrypto.a build/openssl/liblinux-openssl-crypto-x86_64.a
+	#cp -r build/openssl/include/openssl/* build/openssl/include/openssl/
+	#mv tmp_build/libcrypto.a crypto/openssl/liblinux-openssl-crypto-x86_64.a
+
 
 cryptopp:
 	cd src/core && chmod +x linux_get_build_cryptopp.sh

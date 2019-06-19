@@ -1,6 +1,7 @@
 #FILENAME :=  $(patsubst %.Test.cpp,%.core.test,$(wildcard core.tests/*.Test.cpp))
 
-OPENSSL_PATH=../src/core/crypto/openssl
+#OPENSSL_PATH=../libopenssl
+OPENSSL_PATH=../build/openssl
 CORE_PATH=../src/core
 LEDGER_PATH=../src/ledger
 SRC_PATH=../src
@@ -26,7 +27,7 @@ test: clean all.test #$(FILENAME)
 
 all.test : all.Test.cpp
 	#g++ --coverage -O0 -I../src/core --std=c++11 -I$(OPENSSL_PATH)/include $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(CORE_PATH)/payloads/TransactionFactory.cpp -I$(GTEST_PATH)/include -L$(GMOCK_PATH)/gtest -L$(GMOCK_PATH) -lgtest -lgtest_main  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl $< -o $@
-	g++ --coverage -g -O0 --std=c++11 -I$(CORE_PATH) -I$(SRC_PATH) -I$(GTEST_INCLUDE) -I$(GMOCK_INCLUDE) -I$(OPENSSL_PATH)/include -pthread $< -o $@ $(GMOCK_PATH)/gtest/libgtest_main.a $(GMOCK_PATH)/gtest/libgtest.a $(GMOCK_PATH)/libgmock.a $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(LEDGER_PATH)/payloads/TransactionFactory.cpp $(CORE_PATH)/system/printable.cpp $(CORE_PATH)/system/ISerializable.cpp $(CORE_PATH)/crypto/CryptoExtra.cpp $(CORE_PATH)/crypto/cryptopp/libcryptopp.a  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl
+	g++ --coverage -g -O0 --std=c++11 -I$(CORE_PATH) -I$(SRC_PATH) -I$(GTEST_INCLUDE) -I$(GMOCK_INCLUDE) -I$(OPENSSL_PATH)/include -pthread $< -o $@ $(GMOCK_PATH)/gtest/libgtest_main.a $(GMOCK_PATH)/gtest/libgtest.a $(GMOCK_PATH)/libgmock.a $(CORE_PATH)/crypto/CryptoNeoOpenSSL.cpp $(LEDGER_PATH)/payloads/TransactionFactory.cpp $(CORE_PATH)/system/printable.cpp $(CORE_PATH)/system/ISerializable.cpp $(CORE_PATH)/crypto/CryptoExtra.cpp $(CORE_PATH)/crypto/cryptopp/libcryptopp.a  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl
 
 core.test : core.Test.cpp
 	#g++ --coverage -O0 -I../src/core --std=c++11 -I$(OPENSSL_PATH)/include $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(CORE_PATH)/payloads/TransactionFactory.cpp -I$(GTEST_PATH)/include -L$(GMOCK_PATH)/gtest -L$(GMOCK_PATH) -lgtest -lgtest_main  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl $< -o $@
