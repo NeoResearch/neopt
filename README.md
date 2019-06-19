@@ -56,9 +56,11 @@ The repository is divided into three main parts, located on `src` folder: `neo2`
 ```
 - src\
        common (neo2 and neo3 stuff)
+
        neo    (neo3 project)
        cli    (neo3 project)
        nvm    (neo3 project)
+       
        neo2   (neo2 project)
        cli2   (neo2 project)
 ```
