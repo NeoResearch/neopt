@@ -51,7 +51,7 @@ You can use `make lint` command to format files automatically (using `clang-form
 
 ### Which are the main modules?
 
-The repository is divided into three main projects: `neo2`, `neo` and `common`.
+The repository is divided into three main projects, located on `src` folder: `neo2`, `neo` and `common`.
 
 #### common
 The `common` sub-project includes common data structures and cryptography technology for Neo blockchain, in all its versions.
@@ -68,7 +68,7 @@ The `neo2` project comprises two sub-projects, related to Neo Blockchain version
 
 #### neo (or neo3)
 
-The `neo` (or `neo3`) project comprises three sub-projects, related to Neo Blockchain version 3 and beyond: `cli` (command-line interface), `neo` (blockchain stuff itself) and `nvm` (NeoVM version 3). Note that `nvm` is now fully dettached from `neo` project (it used to be a module).
+The `neo` (or `neo3`) project comprises three sub-projects, related to Neo Blockchain version 3 and beyond: `cli` (command-line interface), `neo` (blockchain stuff itself) and `nvm` (NeoVM version 3). Note that `nvm` is now fully dettached from `neo` project (now a fully independent project).
 `neo` subproject includes four interdependent modules:
 
 * core: main module (should be fully independent from others)
