@@ -56,6 +56,17 @@ The repository is divided into three main projects, located on `src` folder: `ne
 #### common
 The `common` sub-project includes common data structures and cryptography technology for Neo blockchain, in all its versions.
 
+#### neo (or neo3)
+
+The `neo` (or `neo3`) project comprises three sub-projects, related to Neo Blockchain version 3 and beyond: `cli` (command-line interface), `neo` (blockchain stuff itself) and `nvm` (NeoVM version 3). Note that `nvm` is now fully dettached from `neo` project (now a fully independent project).
+`neo` subproject includes four interdependent modules:
+
+* mempool: p2p protocol and networking
+* smart: ApplicationEngine and SmartContract
+* ledger: blockchain persistance
+* consensus: dBFT consensus
+
+
 #### neo2
 The `neo2` project comprises two sub-projects, related to Neo Blockchain version 2: `cli2` (command-line interface) and `neo2` (blockchain stuff itself). 
 `neo2` subproject includes six interdependent modules:
@@ -64,16 +75,6 @@ The `neo2` project comprises two sub-projects, related to Neo Blockchain version
 * nvm: [neo-vm](https://github.com/neo-project/neo-vm) implementation (depends on `core` only)
 * smart: ApplicationEngine and SmartContract
 * mempool: p2p protocol and networking
-* ledger: blockchain persistance
-* consensus: dBFT consensus
-
-#### neo (or neo3)
-
-The `neo` (or `neo3`) project comprises three sub-projects, related to Neo Blockchain version 3 and beyond: `cli` (command-line interface), `neo` (blockchain stuff itself) and `nvm` (NeoVM version 3). Note that `nvm` is now fully dettached from `neo` project (now a fully independent project).
-`neo` subproject includes four interdependent modules:
-
-* mempool: p2p protocol and networking
-* smart: ApplicationEngine and SmartContract
 * ledger: blockchain persistance
 * consensus: dBFT consensus
 
