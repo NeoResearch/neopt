@@ -51,7 +51,7 @@ You can use `make lint` command to format files automatically (using `clang-form
 
 ### Which are the main modules?
 
-The repository is divided into three main projects, located on `src` folder: `neo2`, `neo` and `common`.
+The repository is divided into three main parts, located on `src` folder: `neo2`, `neo` and `common`.
 
 ```
 - src\
@@ -64,11 +64,11 @@ The repository is divided into three main projects, located on `src` folder: `ne
 ```
 
 #### common
-The `common` sub-project includes common data structures and cryptography technology for Neo blockchain, in all its versions.
+The `common` folder includes common data structures and cryptography technology for Neo blockchain, in all its versions.
 
 #### neo (or neo3)
 
-The `neo` (or `neo3`) project comprises three sub-projects, related to Neo Blockchain version 3 and beyond: [cli](https://github.com/neo-project/neo-cli) (command-line interface), [neo](https://github.com/neo-project/neo) (blockchain stuff itself) and [nvm](https://github.com/neo-project/neo-vm) (NeoVM version 3). Note that `nvm` is now fully dettached from `neo`, as an independent project.
+The `neo` (or `neo3`) project comprises three folders, related to Neo Blockchain version 3 and beyond: [cli](https://github.com/neo-project/neo-cli) (command-line interface), [neo](https://github.com/neo-project/neo) (blockchain stuff itself) and [nvm](https://github.com/neo-project/neo-vm) (NeoVM version 3). Note that `nvm` is now fully dettached from `neo`, as an independent project.
 
 
 `neo` sub-project includes four interdependent modules:
@@ -80,7 +80,7 @@ The `neo` (or `neo3`) project comprises three sub-projects, related to Neo Block
 
 
 #### neo2
-The `neo2` project comprises two sub-projects, related to Neo Blockchain version 2: `cli2` (command-line interface) and `neo2` (blockchain stuff itself). 
+The `neo2` project comprises two folders, related to Neo Blockchain version 2: `cli2` (command-line interface) and `neo2` (blockchain stuff itself). 
 `neo2` subproject includes six interdependent modules:
 
 * core: main stuff
