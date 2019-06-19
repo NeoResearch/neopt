@@ -5,9 +5,7 @@ OPENSSL_PATH=../build/openssl
 # common
 COMMON_PATH=../src/common
 # neo2
-CORE_PATH=../src/neo2/core
-LEDGER_PATH=../src/neo2/ledger
-SRC_PATH=../src/neo2
+NEO2_PATH=../src/neo2
 # gtest
 GTEST_PATH=../libgtest/build/googletest
 GMOCK_PATH=../libgtest/build/googlemock
@@ -30,7 +28,7 @@ test: clean neo2.test #$(FILENAME)
 	./neo2.test
 
 neo2.test : neo2.Test.cpp
-	g++ --coverage -g -O0 --std=c++11 -I$(CORE_PATH) -I$(COMMON_PATH) -I$(SRC_PATH) -I$(GTEST_INCLUDE) -I$(GMOCK_INCLUDE) -I$(OPENSSL_PATH)/include -pthread $< -o $@ $(GMOCK_PATH)/gtest/libgtest_main.a $(GMOCK_PATH)/gtest/libgtest.a $(GMOCK_PATH)/libgmock.a $(COMMON_PATH)/crypto/CryptoNeoOpenSSL.cpp $(LEDGER_PATH)/payloads/TransactionFactory.cpp $(COMMON_PATH)/system/printable.cpp $(COMMON_PATH)/system/ISerializable.cpp $(COMMON_PATH)/crypto/CryptoExtra.cpp $(COMMON_PATH)/crypto/cryptopp/libcryptopp.a  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl
+	g++ --coverage -g -O0 --std=c++11 -I$(COMMON_PATH) -I$(NEO2_PATH) -I$(GTEST_INCLUDE) -I$(GMOCK_INCLUDE) -I$(OPENSSL_PATH)/include -pthread $< -o $@ $(GMOCK_PATH)/gtest/libgtest_main.a $(GMOCK_PATH)/gtest/libgtest.a $(GMOCK_PATH)/libgmock.a $(COMMON_PATH)/crypto/CryptoNeoOpenSSL.cpp $(NEO2_PATH)/ledger/payloads/TransactionFactory.cpp $(COMMON_PATH)/system/printable.cpp $(COMMON_PATH)/system/ISerializable.cpp $(COMMON_PATH)/crypto/CryptoExtra.cpp $(COMMON_PATH)/crypto/cryptopp/libcryptopp.a  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl
 
 core.test : core.Test.cpp
 	#g++ --coverage -O0 -I../src/core --std=c++11 -I$(OPENSSL_PATH)/include $(OPENSSL_PATH)/../CryptoNeoOpenSSL.cpp $(CORE_PATH)/payloads/TransactionFactory.cpp -I$(GTEST_PATH)/include -L$(GMOCK_PATH)/gtest -L$(GMOCK_PATH) -lgtest -lgtest_main  -L$(OPENSSL_PATH) -llinux-openssl-crypto-x86_64 -lpthread -ldl $< -o $@
