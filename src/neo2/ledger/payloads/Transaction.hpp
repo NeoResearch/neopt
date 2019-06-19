@@ -11,7 +11,7 @@
 // neopt core part
 #include <ledger/payloads/TransactionType.h>
 
-#include <IInventory.hpp>
+#include <core/IInventory.hpp>
 #include <Witness.hpp>
 #include <ledger/payloads/CoinReference.hpp>
 #include <ledger/payloads/TransactionAttribute.hpp>

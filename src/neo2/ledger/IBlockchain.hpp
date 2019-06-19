@@ -5,8 +5,8 @@
 #include <vector>
 
 // neopt core part
-#include <IScriptContainer.h>
-#include <ISnapshot.h>
+#include <core/IScriptContainer.h>
+#include <core/ISnapshot.h>
 #include <system/ISerializable.h>
 
 #include <Witness.hpp>

@@ -9,13 +9,14 @@
                 "limitSymbolsToIncludedHeaders": true
             },
             "includePath": [
-                "${workspaceFolder}/src/core2/**",
-                "${workspaceFolder}/src/ledger2/payloads/**",
-                "${workspaceFolder}/src/plugins2/**",
+                "${workspaceFolder}/src/common/**",
+                "${workspaceFolder}/src/neo2/*",
+                "${workspaceFolder}/src/neo2/ledger/payloads/**",
+                "${workspaceFolder}/src/neo2/plugins/**",
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/src/**",
-                "${workspaceFolder}/src/cli2/**",
-                "${workspaceFolder}/src/plugins2/ImportBlocks",
+                "${workspaceFolder}/src/neo2/cli/**",
+                "${workspaceFolder}/src/neo2/plugins/ImportBlocks",
                 "${workspaceFolder}/libgtest/googletest/include/**",
                 "${workspaceFolder}/libgtest/googlemock/include/**"
             ],

@@ -5,10 +5,10 @@
 #include <vector>
 
 // neopt core part
-#include <IVerifiable.hpp>
+#include <core/IVerifiable.hpp>
 //#include<system/IEquatable.h>
 //#include<system/IComparable.h>
-#include <IInventory.hpp>
+#include <core/IInventory.hpp>
 #include <crypto/Crypto.h>
 #include <numbers/BigInteger.h>
 #include <numbers/UIntBase.hpp>

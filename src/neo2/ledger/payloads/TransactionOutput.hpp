@@ -7,8 +7,8 @@
 #include <vector>
 
 // neopt core part
-#include <IScriptContainer.h>
-#include <ISnapshot.h> // TODO: remove if possible
+#include <core/IScriptContainer.h>
+#include <core/ISnapshot.h> // TODO: remove if possible
 #include <system/ISerializable.h>
 
 #include <Witness.hpp>

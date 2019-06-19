@@ -5,10 +5,10 @@
 #include <vector>
 
 // neopt core part
-#include <ISnapshot.h> // remove if possible
-#include <IVerifiable.hpp>
+#include "ISnapshot.h" // remove if possible
+#include "IVerifiable.hpp"
 
-#include <InventoryType.h>
+#include "InventoryType.h"
 #include <numbers/UInt256.hpp>
 
 namespace neopt {

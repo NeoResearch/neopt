@@ -8,9 +8,9 @@
 
 // neopt core part
 // vscode intellisense bug: 'ISerializable' not found with angled notation, use quotes instead... (???)
-#include "system/ISerializable.h"
-#include <IScriptContainer.h>
-#include <ISnapshot.h> // TODO: remove if possible
+#include <system/ISerializable.h>
+#include "IScriptContainer.h"
+#include "ISnapshot.h" // TODO: remove if possible
 
 #include <Witness.hpp>
 #include <crypto/Crypto.h>

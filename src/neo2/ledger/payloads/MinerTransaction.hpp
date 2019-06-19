@@ -5,7 +5,7 @@
 #include <vector>
 
 // neopt core part
-#include <IInventory.hpp>
+#include <core/IInventory.hpp>
 #include <Witness.hpp>
 #include <numbers/BigInteger.h>
 #include <numbers/Fixed8.hpp>

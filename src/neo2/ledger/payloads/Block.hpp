@@ -6,7 +6,7 @@
 #include <vector>
 
 // neopt core part
-#include <IInventory.hpp>
+#include <core/IInventory.hpp>
 #include <numbers/BigInteger.h>
 #include <numbers/UIntBase.hpp>
 #include <ledger/payloads/BlockBase.hpp>
