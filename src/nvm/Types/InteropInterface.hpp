@@ -1,5 +1,5 @@
-#ifndef NEOPT_NVM_TYPES_ARRAY_HPP
-#define NEOPT_NVM_TYPES_ARRAY_HPP
+#ifndef NEOPT_NVM_TYPES_INTEROP_HPP
+#define NEOPT_NVM_TYPES_INTEROP_HPP
 
 // c++ standard part
 #include <vector>
@@ -42,10 +42,11 @@ public:
       this._object = value;
    }
 
-   bool Equals(const StackItem& other) override
+   virtual bool Equals(const StackItem* pother) override 
    {
-      if (this == &other)
+      if (pother == nullptr)
          return true;
+      const StackItem& other = *pother;
       if (!(other.type == SIT_Interop))
          return false;
       Interop<T>& i = (Interop<T>&)other;
@@ -72,4 +73,4 @@ public:
 } // namespace nvm
 } // namespace neopt
 
-#endif // NEOPT_NVM_TYPES_ARRAY_HPP
+#endif // NEOPT_NVM_TYPES_INTEROP_HPP

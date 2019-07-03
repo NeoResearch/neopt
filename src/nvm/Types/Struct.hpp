@@ -59,8 +59,11 @@ public:
       return nullptr;
    }
  
-   bool Equals(const StackItem& other) override
+   virtual bool Equals(const StackItem* pother) override 
    {
+      if (pother == nullptr)
+         return true;
+      const StackItem& other = *pother;
       /*
             if (other is null) return false;
             Stack<StackItem> stack1 = new Stack<StackItem>();

@@ -77,8 +77,11 @@ public:
    }
 */
 
-   virtual bool Equals(const StackItem& other) override 
+   virtual bool Equals(const StackItem* pother) override 
    {
+      if (pother == nullptr)
+         return true;
+      const StackItem& other = *pother;
       return this == &other; // only pointer comparison here?
    }
 

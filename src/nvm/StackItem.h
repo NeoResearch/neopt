@@ -28,7 +28,14 @@ public:
       return nullptr; //new StackItem(vbyte(0));
    }
 
-   virtual bool Equals(const StackItem& other) = 0;
+   // helper method to decide which type is collection. Array? Map? Struct?
+   virtual bool IsCollection() const
+   {
+      return false;
+   }
+
+   // From IEquatable
+   virtual bool Equals(const StackItem* other) = 0;
 
    /*
    virtual bool Equals(object obj) override

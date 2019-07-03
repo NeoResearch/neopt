@@ -28,8 +28,16 @@ public:
       this->value = value;
    }
 
-   bool Equals(const StackItem& other) override
+   // default constructor
+   ByteArray()
    {
+   }
+
+   bool Equals(const StackItem* pother) override
+   {
+      if (pother == nullptr)
+         return true;
+      const StackItem& other = *pother;
       if (this == &other)
          return true;
       vbyte bytes_other;
@@ -47,7 +55,7 @@ public:
 
    bool GetBoolean() const override
    {
-      if (value.size() > ExecutionEngineLimits::MaxSizeForBigInteger())
+      if (value.size() > ExecutionEngineLimits::getMaxSizeForBigInteger())
          return true;
       return value.size() == 1 ? value[0] != 0x00 : true;
    }

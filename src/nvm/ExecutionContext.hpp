@@ -62,7 +62,7 @@ public:
       return GetInstruction(InstructionPointer + CurrentInstruction().Size());
    }
 
-   nvm::Script CallingScript; // get?
+   nvm::Script* CallingScript; // get?
 
    /// <summary>
    /// Constructor
@@ -71,14 +71,14 @@ public:
    /// <param name="callingScript">The calling script</param>
    /// <param name="rvcount">Number of items to be returned</param>
 public: // (internal?)
-   ExecutionContext(nvm::Script script, nvm::Script callingScript, int rvcount)
+   ExecutionContext(nvm::Script script, nvm::Script* callingScript, int rvcount)
      : ExecutionContext(script, callingScript, rvcount, RandomAccessStack<StackItem>(), RandomAccessStack<StackItem>())
    {
    }
 
 private:
    // copy based stack (TODO: improve or change this)
-   ExecutionContext(nvm::Script script, nvm::Script callingScript, int rvcount, RandomAccessStack<StackItem> stack, RandomAccessStack<StackItem> alt)
+   ExecutionContext(nvm::Script script, nvm::Script* callingScript, int rvcount, RandomAccessStack<StackItem> stack, RandomAccessStack<StackItem> alt)
    {
       this->RVCount = rvcount;
       this->Script = script;
@@ -90,7 +90,7 @@ private:
 public: // (internal?)
    ExecutionContext* Clone()
    {
-      return new ExecutionContext(Script, Script, 0, EvaluationStack, AltStack);
+      return new ExecutionContext(Script, new nvm::Script(Script), 0, EvaluationStack, AltStack);
    }
 
 private:

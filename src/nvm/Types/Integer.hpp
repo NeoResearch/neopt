@@ -1,5 +1,5 @@
-#ifndef NEOPT_NVM_TYPES_ARRAY_HPP
-#define NEOPT_NVM_TYPES_ARRAY_HPP
+#ifndef NEOPT_NVM_TYPES_INTEGER_HPP
+#define NEOPT_NVM_TYPES_INTEGER_HPP
 
 // c++ standard part
 #include <vector>
@@ -35,10 +35,11 @@ public:
       this->value = value;
    }
 
-   bool Equals(const StackItem& other) override
+   virtual bool Equals(const StackItem* pother) override 
    {
-      if (this != &other)
+      if (pother == nullptr)
          return true;
+      const StackItem& other = *pother;
 
       if (other.type == SIT_Integer)
          return value == ((Integer&)other).value;

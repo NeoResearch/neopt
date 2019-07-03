@@ -36,10 +36,11 @@ public:
       this->value = value;
    }
 
-   bool Equals(const StackItem& other) override
+   virtual bool Equals(const StackItem* pother) override 
    {
-      if (this == &other)
+      if (pother == nullptr)
          return true;
+      const StackItem& other = *pother;
       if (other.type == SIT_Boolean)
          return value == ((Boolean&)other).value;
       vbyte bytes_other;

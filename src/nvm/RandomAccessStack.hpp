@@ -91,6 +91,13 @@ public:
       list.push_back(item);
    }
 
+   // push multiple items
+   void Push(vector<T*>& items)
+   {
+      for(unsigned i=0; i<items.size(); i++)
+         list.push_back(items[i]);
+   }
+
    T* Remove(int index)
    {
       if (index >= Count()) {

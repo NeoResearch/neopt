@@ -84,6 +84,7 @@
         "typeinfo": "cpp",
         "utility": "cpp",
         "new": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "queue": "cpp"
     }
 }
