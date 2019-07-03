@@ -10,8 +10,6 @@
 #include <system/printable.h>
 #include <system/vhelper.hpp>
 
-#include "StackItem.h"
-
 using namespace std; // TODO: remove
 
 namespace neopt {

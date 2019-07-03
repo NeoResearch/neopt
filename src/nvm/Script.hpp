@@ -42,6 +42,11 @@ public:
       return (nvm::OpCode)_value[index];
    }
 
+   // default constructor
+   Script()
+   {
+   }
+
    /// <summary>
    /// Constructor
    /// </summary>
