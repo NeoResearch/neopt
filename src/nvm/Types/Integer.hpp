@@ -16,7 +16,7 @@ using namespace std; // TODO: remove
 
 namespace neopt {
 namespace nvm {
-class Integer : StackItem // TODO: , ICollection   , IList<StackItem>
+class Integer : public StackItem // TODO: , ICollection   , IList<StackItem>
 {
 
 private:
@@ -70,7 +70,7 @@ public:
 
    vbyte GetByteArray() const override
    {
-      return value.IsZero() ? ZeroBytes : value.ToByteArray();
+      return value.IsZero() ? ZeroBytes() : value.ToByteArray();
    }
 
 private:

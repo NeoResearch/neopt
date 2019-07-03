@@ -16,7 +16,7 @@ using namespace std; // TODO: remove
 
 namespace neopt {
 namespace nvm {
-class InteropInterface : StackItem // TODO: , ICollection   , IList<StackItem>
+class InteropInterface : public StackItem // TODO: , ICollection   , IList<StackItem>
 {
 
 public:
@@ -31,7 +31,7 @@ public:
 };
 
 template<class T>
-class Interop : InteropInterface
+class Interop : public InteropInterface
 {
 private:
    T* _object;

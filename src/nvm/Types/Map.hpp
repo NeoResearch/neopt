@@ -17,7 +17,7 @@ using namespace std; // TODO: remove
 
 namespace neopt {
 namespace nvm {
-class Map : StackItem // TODO: , ICollection   , IList<StackItem>
+class Map : public StackItem // TODO: , ICollection   , IList<StackItem>
 {
 private:
    Dictionary<StackItem, StackItem> dictionary;

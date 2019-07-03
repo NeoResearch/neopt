@@ -1,5 +1,5 @@
-#ifndef NEOPT_NVM_STACKITEMTYPE_HPP
-#define NEOPT_NVM_STACKITEMTYPE_HPP
+#ifndef NEOPT_NVM_STACKITEMTYPE_H
+#define NEOPT_NVM_STACKITEMTYPE_H
 
 // c++ standard part
 #include <vector>
@@ -61,4 +61,4 @@ enum StackItemType
 } // namespace nvm
 } // namespace neopt
 
-#endif // NEOPT_NVM_STACKITEMTYPE_HPP
+#endif // NEOPT_NVM_STACKITEMTYPE_H

@@ -17,7 +17,7 @@ using namespace std; // TODO: remove
 
 namespace neopt {
 namespace nvm {
-class ByteArray : StackItem // TODO: , ICollection   , IList<StackItem>
+class ByteArray : public StackItem // TODO: , ICollection   , IList<StackItem>
 {
 private:
    vbyte value;

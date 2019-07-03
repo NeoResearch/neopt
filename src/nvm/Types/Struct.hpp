@@ -18,7 +18,7 @@ using namespace std; // TODO: remove
 
 namespace neopt {
 namespace nvm {
-class Struct : Array // TODO: , ICollection   , IList<StackItem>
+class Struct : public Array // TODO: , ICollection   , IList<StackItem>
 {
 public:
    // Struct() : this(new List<StackItem>()) { }
@@ -58,7 +58,7 @@ public:
       NEOPT_EXCEPTION("IMPLEMENT STRUCT VMTYPE")
       return nullptr;
    }
-
+ 
    bool Equals(const StackItem& other) override
    {
       /*

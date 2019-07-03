@@ -1,5 +1,5 @@
-#ifndef NEOPT_NVM_STACKITEM_HPP
-#define NEOPT_NVM_STACKITEM_HPP
+#ifndef NEOPT_NVM_STACKITEM_H
+#define NEOPT_NVM_STACKITEM_H
 
 // c++ standard part
 #include <vector>
@@ -142,4 +142,4 @@ public:
 } // namespace nvm
 } // namespace neopt
 
-#endif // NEOPT_NVM_STACKITEM_HPP
+#endif // NEOPT_NVM_STACKITEM_H

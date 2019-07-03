@@ -16,7 +16,7 @@ using namespace std; // TODO: remove
 
 namespace neopt {
 namespace nvm {
-class Array : StackItem // TODO: , ICollection   , IList<StackItem>
+class Array : public StackItem // TODO: , ICollection   , IList<StackItem>
 {
 protected:
    std::vector<StackItem*> _array;
@@ -77,7 +77,7 @@ public:
    }
 */
 
-   bool Equals(const StackItem& other) override 
+   virtual bool Equals(const StackItem& other) override 
    {
       return this == &other; // only pointer comparison here?
    }

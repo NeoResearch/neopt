@@ -16,7 +16,7 @@ using namespace std; // TODO: remove
 
 namespace neopt {
 namespace nvm {
-class Boolean : StackItem // TODO: , ICollection   , IList<StackItem>
+class Boolean : public StackItem // TODO: , ICollection   , IList<StackItem>
 {
 private:
    static const vbyte TRUE()
