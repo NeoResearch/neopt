@@ -21,8 +21,18 @@ public:
    const static BigInteger Zero;
    const static BigInteger MinusOne;
 
+   BigInteger(); // zero
    BigInteger(int32 value);
    BigInteger(const BigInteger& value);
+
+   // byte data in little-endian format
+   BigInteger(vbyte data);
+
+   bool operator==(const BigInteger& big);
+
+   bool IsZero() const;
+
+   vbyte ToByteArray() const;
 
    // what is needed here?
 };
