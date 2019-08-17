@@ -1,6 +1,3 @@
-[submodule "libgtest"]
-	path = libgtest
-	url = ./libgtest
 [submodule "libopenssl"]
 	path = libopenssl
 	url = ./libopenssl/
