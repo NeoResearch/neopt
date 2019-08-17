@@ -20,6 +20,8 @@ reused on other projects (on other languages too).
 #### C++ Standard
 Currently, C++11 is adopted, in order to keep the best compatibility between conversors and compilers. However, it is recommended to migrate to C++17 as soon as possible, if this does not break compatibility with any existing modules and tools.
 
+Let's please follow the [CppCoreGuidelines](https://github.com/isocpp/CppCoreGuidelines).
+
 #### vscode IDE
 If using vscode IDE, it is recommended to install the following extensions:
 * C/C++ (currently 0.23.0-insiders2)
